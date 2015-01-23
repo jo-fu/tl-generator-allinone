@@ -173,7 +173,6 @@ app
 			if(docNr > 0){ $scope.singleSents.forEach( function(s){ nrSents = nrSents+s.length; }) }
 
 			$scope.timexes = CreateArray.makeArray($scope.timexes,data,nrIds,nrSents)
-			console.log($scope.timexes)
 			$scope.singleSents[$scope.docNr] = CreateArray.recreateText(data, $sce, nrSents,nrIds);
 			$scope.updateD3Tl($scope.timexes,"newDoc",$scope.clickingCircle)
 
