@@ -1,0 +1,11 @@
+<?xml version="1.0" ?><DOC>
+<BODY>
+<TITLE>UBC history</TITLE>
+<DATE_TIME>2014-12-23</DATE_TIME>
+
+
+<SENTENCES>
+
+['  In <TIMEX2 VAL="1877">1877</TIMEX2>, only six years after British Columbia joined Canada, Superintendent of Education John Jessop submitted a proposal for the formation of a provincial university.', '[18] There were 576 male students and 386 female students in the <TIMEX2 VAL="1920TO21">1920-21</TIMEX2> <TIMEX2>winter</TIMEX2> session, but only 64 academic staff, including 6 women.', '[19] In the early part of <TIMEX2 VAL="19CENTURY">the 20th century</TIMEX2>, professional education expanded beyond the traditional fields of theology, law and medicine.', 'UBC provided no degrees in these areas, but was beginning to offer degrees in new professional areas such as engineering, agriculture, nursing, and school teaching.', 'Graduate training based on the German-inspired American model of specialized course work and the completion of a research thesis was introduced, with students completing M.A.', 'degrees in natural sciences, social sciences, and humanities.', '[15]  Students march down Granville street during the Great Trek In <TIMEX2 VAL="1922">1922</TIMEX2>, the <TIMEX2 VAL="PRESENT_REF">now</TIMEX2> twelve-hundred-strong student body embarked on a  QUOTE Build the University QUOTE  campaign.', 'Students marched in the streets of Vancouver to draw attention to their plight, enlist popular support, and embarrass the government.']
+
+</SENTENCES>
