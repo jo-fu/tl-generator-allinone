@@ -73,10 +73,11 @@
         ending = maxTime;
         //console.log(ending)
       }
-
-
+      // Only one date on TL
       if(beginning == ending){ beginning = beginning - 157784630000; ending = ending + 157784630000 }
-      if( beginning == 0 || beginning == "XXXX" && ending == -90000000000000 ){ beginning = 0; ending = 1420834205000 }
+      // No date on TL
+      if(beginning == 946684800000 && ending == 1420070400000 ){ beginning = 946684800000; ending = 1451606400000 }
+      
       scaleFactor = (1/(ending - beginning)) * (width - margin.left - margin.right);
 
       // draw the axis
@@ -147,7 +148,7 @@
                 else{ return "#fff"}
                 })
               .attr("fill", function(){
-                if(docNr==-1){ return "#333" }
+                if(docNr==-1){ return "#999" }
                 else{
                   if(isDate){ return "rgb("+colorDate[0]+")"; }
                   else{ return "rgba("+colorDate[0]+",0.5)"; }

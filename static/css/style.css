@@ -30,7 +30,7 @@ html {
 .ctlBtns {
   width: 25px;
   height: 25px;
-  margin: 10px 2px 10px 10px;
+  margin: 5px 2px 10px 10px;
   border: 1px solid #efefef;
   background-repeat: no-repeat;
   float: left;
@@ -46,6 +46,18 @@ html {
   -moz-box-shadow: 0px 0px 0px #666666;
   -webkit-box-shadow: 0px 0px 0px #666666;
   margin: 12px 0px 8px 12px; }
+
+#addDoc, #addDate {
+  background-image: url(../img/add.png);
+  margin: 5px; }
+
+#addDate {
+  position: absolute;
+  top: 250px;
+  left: 10px; }
+
+#addDoc:active, #addDate:active {
+  margin: 8px 2px 2px 8px; }
 
 #leftBox #view_switch {
   width: 100%;
@@ -141,17 +153,11 @@ html {
 #leftBox #listData ul > li > span {
   color: #000; }
 
-#topBox #addDoc {
-  background-image: url(../img/addDoc.png); }
 #topBox #selectBox {
   position: absolute;
   top: 40px;
   left: 11px;
   z-index: 1; }
-#topBox #addFreeformText {
-  background-image: url(../img/addFft.png); }
-#topBox #addDate {
-  background-image: url(../img/add.png); }
 #topBox #mergeDates {
   background-image: url(../img/merge.png); }
 #topBox #deleteAll {
@@ -284,7 +290,7 @@ html {
 
 .selected {
   stroke: #ff6138;
-  stroke-width: 6; }
+  stroke-width: 3px; }
 
 .datelabel {
   display: none;
@@ -359,7 +365,7 @@ html {
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 11;
   padding: 20px; }
   #inputOverlay #closeInput {

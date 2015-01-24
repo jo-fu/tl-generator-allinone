@@ -162,7 +162,7 @@ app
 	$scope.addDocument = function(val,source){
 		$scope.docNr++
 		docNr++
-		
+		closeInput($scope.selectedFile)
 		function processInput(data){
         		$scope.myfile = data;
 			$scope.files.push(data);
@@ -188,6 +188,7 @@ app
 		}
 		// Document Uploaded
 		else{
+			val = $scope.selectedFile;
 			$scope.uploadDoc=false;
 			$scope.fileNames[$scope.docNr] = val;
 			var indexOfFileInArray = $scope.tempFiles.indexOf(val);
@@ -396,10 +397,7 @@ app.service('CreateTimeline' , function(){
 			else{ return "timelineItem date"+classes }
 		})
 		.attr("id", function(d){ return "timelineItem_"+ d.id })
-		.attr("fill" , function(d){
-			if(action == "add"){ return "#333" }
-			else{ return getColor(d) }
-			})
+		.attr("fill" , function(d){ return getColor(d) })
 		.attr("stroke" , function(d){
 			if(d.typ=="duration"){ return getColor(d) }
 			else{  return "#fff" }
@@ -418,33 +416,58 @@ app.service('CreateTimeline' , function(){
 	d.forEach(function (time, i) {
 		if(time.visible){
 			var sT = time.times[0].starting_time;
-			if (!isNaN(sT) && sT < minTime || (minTime === 0)){ minTime = time.times[0].starting_time; }
-			if (time.times[0].ending_time > maxTime) maxTime = time.times[0].ending_time;
+			if (!isNaN(sT) && sT < minTime){ minTime = time.times[0].starting_time; }
+			var eT = time.times[0].ending_time;
+			if (!isNaN(eT) && eT > maxTime) maxTime = time.times[0].ending_time;
             }
 	});
 	var beginning = minTime;
 	var ending = maxTime;
-
 	// If only one date on TL, readjust beginning and ending
 	if(beginning == ending){
 		beginning = beginning - 157784630000
 		ending = ending + 157784630000
 	}
-	// If no date on timeline, show 1970 century till today
-	if(beginning == "XXXX" && ending == -90000000000000 ){
+	// If no date on timeline, show 2000 till today
+	if((beginning == "XXXX" || beginning == 946684800000) && ending == -90000000000000 ){
 		beginning = 946684800000
-		ending = 1420834205000
+		ending = 1451606400000
 	}
-	//console.log("Beg: "+beginning+", End: "+ending)
+	
 	var width = $("#rightBox").width() - 50;
+	
 	var xScale = d3.time.scale()
 			.domain([beginning, ending])
 			.range([margin.left, width - margin.right]);	
-	var xAxis = d3.svg.axis().scale(xScale).ticks(15).tickSize(15)
+	
+
+	// ZOOMIN IN & SCROLLING ?????
+	/*if (zoomfactor != 1) {
+		console.log(zoomfactor)
+        var move = function() {
+          var x = Math.min(0, Math.max(width - width*zoomfactor, d3.event.translate[0]));
+          zoom.translate([x, 0]);
+          d3.select("#timeline")
+          .attr("transform", "translate(" + x + ",0)")
+          scroll(x*scaleFactor, xScale);
+        };
+
+        var zoom = d3.behavior.zoom().x(xScale).on("zoom", move);
+
+        d3.select("#timeline")
+          .attr("class", "scrollable")
+          .call(zoom);
+      }*/
+      var xAxis = d3.svg.axis().scale(xScale).ticks(15).tickSize(15)
 	d3.select("svg").selectAll("g.axis").call(xAxis);
 
       // READJUSTING PATHS
-      scaleFactor = (1/(ending - beginning)) * (width - margin.left - margin.right);
+      if(beginning == 0) beginning = 1
+      if(ending == 0) ending = 1
+
+      //console.log("Beg: "+beginning+", End: "+ending)
+
+      scaleFactor = (1/(ending - beginning)) * (width - margin.left - margin.right)
   	//d.forEach( function(datum, index){
 	var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition();
 

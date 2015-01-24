@@ -1,5 +1,7 @@
 var circleSize = 20;
 
+var zoomfactor = 2;
+
 var beginning = 0;
 var scaleFactor;
 var itemHeight = 20;
@@ -213,7 +215,8 @@ var clickList = function(id){
 
 function getCirclePath(datum,beginning,scaleFactor){
   var cx = parseInt(getXPos(datum,beginning,scaleFactor));
-  if(isNaN(cx)){ cx = 150
+
+  if(isNaN(cx) && datum.val != "1970"){ cx = 150
     console.log("datum: "+datum.val+" beg: "+beginning+", sF: "+scaleFactor)
     }
   var cy = parseInt(getYPos(datum));
@@ -237,10 +240,10 @@ function getYPos(d) {
     var pos = margin.top + itemHeight + 4;
     var hasCount = (d.count != 1);
     if(isDate){
-      if(hasCount){ return pos - ((d.count-1)*itemHeight/1.5) }
+      if(hasCount){ return pos - ((d.count-1)*itemHeight+2) }
       else{ return pos }  
     }
-    else{ return 280 }
+    else{ return 270 }
 }
 
 function getLinePath(datum,beginning,scaleFactor){
@@ -270,7 +273,12 @@ function getColor(d){
     if(isDate){ return "rgb("+colorDate[dN]+")"; }
     else{ return "rgba("+colorDate[dN]+",0.8)"; }
   }
-  else{ return "#333" }
+  // Vague or undefined dates
+  else{
+    var currActiveBtn = $(".activeBtn").attr("id")
+    if(!currActiveBtn || currActiveBtn=="button_list"){ return "#999" }
+    if(currActiveBtn){ return "rgb("+colorDate[currActiveBtn.split("_")[1]]+")"}
+    }
 }
 
 
@@ -319,8 +327,15 @@ function download(filename, text) {
 function destroyClickedElement(event) { document.body.removeChild(event.target); }
 function triggerUpload(){ $('#uploadFile').click() }
 
-function openInput(){ $("#inputOverlay").fadeIn(300); }
+function openInput(){
+    $("#inputOverlay").fadeIn(300);
+    $(document).on("keydown" , exitOverlay )
+}
+
+function exitOverlay(e){ if(e.keyCode == 27){ closeInput() } }
+
 function closeInput(){
+  $(document).off("keydown",exitOverlay)
   $("#inputOverlay").fadeOut(300);
   $('#inputOverlay input[name="title"]').val("")
   $('#inputOverlay input[name="date"]').val("")

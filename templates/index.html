@@ -8,7 +8,7 @@
   <script src="{{ url_for('static', filename='js/lib/d3.min.js')}}" charset="utf-8"></script>
   <script src="{{ url_for('static', filename='js/lib/d3-timeline.js')}}" charset="utf-8"></script>
 
-  <script src="//code.angularjs.org/1.2.28/angular.js"></script>
+  <script src="{{ url_for('static', filename='js/lib/angular.js')}}"></script>
   <script src="{{ url_for('static', filename='js/angularScript.js')}}"></script>
 
   <script src="{{ url_for('static', filename='js/script.js')}}"></script>
@@ -33,6 +33,11 @@
         <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
       </div>
       <div id="button_list" class="docBtn" ng-click="switchView( 'list' )" style="background-color:#efefef;">List View</div>
+
+    <div id="addDoc" class="ctlBtns" title="Add a new document" onclick="openInput()"></div>
+
+    
+
     </div>
     <!-- Text Viewer -->
     <div id="txtViewer">
@@ -65,14 +70,6 @@
   <div id="topBox">
 
 <!-- Upper left Toolbox -->
-    <div id="addFreeformText" class="ctlBtns" title="Add a freeform text" onclick="openInput()"></div>
-
-    <div id="addDoc" class="ctlBtns" title="Add a new document" ng-click="uploadDoc=!uploadDoc"></div>
-    <div id="selectBox" ng-if="uploadDoc">
-     <ul><li ng-repeat="file in tempFiles" ng-click="addDocument(file)"> {{file}} </li></ul>
-    </div>
-
-    <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
 
     <div id="mergeDates" class="ctlBtns" ng-if="severalSelected" title="Merge these dates" ng-click="mergeDates()"></div>
 
@@ -103,7 +100,9 @@
     
     <div id="timeline">
         <p style="text-align:center;"><i>Please select a document or add dates manually.</i></p>
-      </div>
+        <!-- Absolute  positioned Add Date Button -->  
+    </div>
+    <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
 
       <!-- General Timeline information -->
       <div class="display" ng-show="!dateSelected">
@@ -217,6 +216,9 @@
 <div id="inputOverlay">
     <div id="closeInput" onclick="closeInput()"></div>
     <div id="inputContainer">
+      
+
+
       <h1>Please paste in your Information</h1>
       <label for="title">Title</label><br>
       <input type="text" size="50" name="title" placeholder="Document Title"> <br>
@@ -225,12 +227,27 @@
       <input type="date" size="50" name="date"> <br>
 
       <label for="content">Content</label><br>
-      <textarea name="content" id="content" rows="15" placeholder="Drop the content here." cols="43"></textarea><br>
+      <textarea name="content" id="content" rows="10" placeholder="Drop the content here." cols="43"></textarea><br>
 
       <label for="source">Source</label><br>
       <input type="text" size="50" name="source">
 
-      <button ng-click="getTimexes()">Gimme the Timexes!</button>
+      <button ng-click="getTimexes()">Find temporal expressions!</button>
+
+
+      <h1>Or choose an example file</h1>
+      <select
+        ng-model="selectedFile"
+        ng-change="addDocument(selectedFile)"
+        ng-options="file as file for file in tempFiles">>
+        <option> </option>
+        <!--option  ng-repeat="file in tempFiles" ng-click="addDocument(file)" value="{{file}}" ng>{{file}}</option-->
+      </select>
+
+      <!--div id="addDoc" class="ctlBtns" title="Add a new document" ng-click="uploadDoc=!uploadDoc"></div>
+      <div id="selectBox" ng-if="uploadDoc">
+      <ul><li ng-repeat="file in tempFiles" ng-click="addDocument(file)"> {{file}} </li></ul>
+      </div-->
     </div>
 </div>
 {% endraw %}
