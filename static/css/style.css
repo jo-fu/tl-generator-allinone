@@ -383,3 +383,20 @@ html {
     margin: 0 auto; }
   #inputOverlay h1 {
     font-size: 20px; }
+  #inputOverlay .loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 12; }
+    #inputOverlay .loading img {
+      width: 80px;
+      height: 85px;
+      position: absolute;
+      top: 50%;
+      margin-top: -42px;
+      left: 50%;
+      margin-left: -40px; }

@@ -244,6 +244,10 @@
         <!--option  ng-repeat="file in tempFiles" ng-click="addDocument(file)" value="{{file}}" ng>{{file}}</option-->
       </select>
 
+
+      <div class="loading">
+        <img src="../static/img/waiting.gif">
+      </div>
       <!--div id="addDoc" class="ctlBtns" title="Add a new document" ng-click="uploadDoc=!uploadDoc"></div>
       <div id="selectBox" ng-if="uploadDoc">
       <ul><li ng-repeat="file in tempFiles" ng-click="addDocument(file)"> {{file}} </li></ul>

@@ -209,4 +209,8 @@ html{
   #closeInput{ position:absolute; top:0px; right:0; height:50px; width:50px; background-image:url(../img/closeInput.png); background-repeat:no-repeat; background-position:center; cursor:pointer;}
   #inputContainer{ width:360px; margin: 0 auto; }
   h1{ font-size:20px; }
+  .loading{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.7); z-index:12;
+    img{ width:80px; height:85px; position:absolute; top:50%; margin-top:-42px; left:50%; margin-left:-40px; }
+  }
+
 }
