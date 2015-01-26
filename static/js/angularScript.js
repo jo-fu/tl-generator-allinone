@@ -30,12 +30,13 @@ app
 	// PYTHON CALL
 	$scope.getTimexes = function(){
 		var myData = preprocessing()
-		$.getJSON('/dothenlp', { myData: myData }, function(data) {
+		console.log(myData)
+		$.post('/dothenlp', { myData: myData }, function(data) {
 			var mynewdata = data.result;
 			//console.log(mynewdata)
 			closeInput()
 			$scope.addDocument(mynewdata,"fromInput")
-			});
+			}, "json");
 		}
 
 	$scope.showDateInfo = function(txObject){ return CreateTimeline.showDateInfo(txObject) }
