@@ -196,6 +196,28 @@
           <!-- Preview Mode -->
           <div ng-switch-default ng-click="enableEdit('c')"><p>{{ dateInfo[0].sent }}</p></div>
         </ng-switch>
+        <br><br>
+        <div id="addMediaBtn" ng-click="addMedia=true">Add Media</div>
+        <!-- Media -->
+        <!-- Source -->
+        <div ng-if="addMedia">
+            <ng-switch on="editMediaSource" id="mediaSource" class="editorfield">
+              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['source']" onkeypress='validate(event)' unfocus="disableEdit('ms')"></input>
+              <div class="media" ng-switch-default ng-click="enableEdit('ms')"><p>{{ dateInfo[0].medium["source"] }}</p></div>
+            </ng-switch>
+
+            <!-- Credit -->
+            <ng-switch on="editMediaCredit" id="mediaCredit" class="editorfield">
+              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['credit']" onkeypress='validate(event)' unfocus="disableEdit('mcr')"></input>
+              <div class="media" ng-switch-default ng-click="enableEdit('mcr')"><p>{{ dateInfo[0].medium["credit"] }}</p></div>
+            </ng-switch>
+
+            <!-- Caption -->
+            <ng-switch on="editMediaCaption" id="mediaCaption" class="editorfield">
+              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['caption']" onkeypress='validate(event)' unfocus="disableEdit('mca')"></input>
+              <div class="media" ng-switch-default ng-click="enableEdit('mca')"><p>{{ dateInfo[0].medium["caption"] }}</p></div>
+            </ng-switch>
+        </div>
 
         <div id="tools">
           <!--div class="tool" id="tool_edit">Edit</div>
@@ -218,31 +240,32 @@
     <div id="inputContainer">
       
 
+      <div style="background-color:#efefef; padding:20px; margin:0 0 30px 0;">
+        <h1>Insert your text here</h1>
+        <label for="title"><b>Title</b></label><br>
+        <input type="text" size="60" name="title" placeholder="Document Title"> <br>
 
-      <h1>Please paste in your Information</h1>
-      <label for="title">Title</label><br>
-      <input type="text" size="50" name="title" placeholder="Document Title"> <br>
+        <label class="optional" for="date">Date</label>
+        <input type="date" size="50" name="date"> <br><br>
 
-      <label for="date">Date</label><br>
-      <input type="date" size="50" name="date"> <br>
+        <label for="content"><b>Content</b></label><br>
+        <textarea name="content" id="content" rows="10" placeholder="Drop the content here." cols="43"></textarea><br>
 
-      <label for="content">Content</label><br>
-      <textarea name="content" id="content" rows="10" placeholder="Drop the content here." cols="43"></textarea><br>
+        <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
+        <br>
+        <div class="btn" ng-click="getTimexes()" style="margin: 0 auto;">Go!</div>
+      </div>
 
-      <label for="source">Source</label><br>
-      <input type="text" size="50" name="source">
-
-      <button ng-click="getTimexes()">Find temporal expressions!</button>
-
-
-      <h1>Or choose an example file</h1>
-      <select
-        ng-model="selectedFile"
-        ng-change="addDocument(selectedFile)"
-        ng-options="file as file for file in tempFiles">>
-        <option> </option>
-        <!--option  ng-repeat="file in tempFiles" ng-click="addDocument(file)" value="{{file}}" ng>{{file}}</option-->
-      </select>
+      <div style="background-color:#efefef; text-align:center; padding:10px; margin:30px 0 0 0;">
+      <p>Or choose from an example file</p>
+        <select
+          ng-model="selectedFile"
+          ng-change="addDocument(selectedFile)"
+          ng-options="file as file for file in tempFiles">>
+          <option> </option>
+          <!--option  ng-repeat="file in tempFiles" ng-click="addDocument(file)" value="{{file}}" ng>{{file}}</option-->
+        </select>
+      </div>
 
 
       <div class="loading">
@@ -254,6 +277,9 @@
       </div-->
     </div>
 </div>
+
+<div id="saved">Current status was stored.</div>
+
 {% endraw %}
 </body>
 </html>

@@ -134,6 +134,10 @@ html{
   h2{ font-size: 15px; text-decoration: underline; color:#333; }
   p{ font-size: 12px; font-weight:normal; }
   input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; text-align:center; }
+  .media p{ font-size:0.8em; }
+  #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; width: 100px; font-weight: bold; margin: 15px auto; font-size: 0.7em; padding: 3px; color: #333; 
+    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; }
+  #addMediaBtn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow; }
   .addDimension{ padding: 7px 0 0; cursor:pointer; color:#999; background-position: center top; vertical-align:bottom;
     background-image:url(../img/editAdd.png); background-repeat:no-repeat; font-size:8px; }
   #displayDate input{ font-size: 18px; }
@@ -208,9 +212,15 @@ html{
 #inputOverlay{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.9); z-index:11; padding:20px;
   #closeInput{ position:absolute; top:0px; right:0; height:50px; width:50px; background-image:url(../img/closeInput.png); background-repeat:no-repeat; background-position:center; cursor:pointer;}
   #inputContainer{ width:360px; margin: 0 auto; }
-  h1{ font-size:20px; }
+  h1{ font-size:20px; margin:0 0 15px 0; }
+  .optional{ color:#666; font-style:italic; font-size:0.8em; }
   .loading{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.7); z-index:12;
     img{ width:80px; height:85px; position:absolute; top:50%; margin-top:-42px; left:50%; margin-left:-40px; }
   }
-
+  .btn{ margin:0 auto; border:1px solid #efefef; background-color:#fff; cursor:pointer; width: 50px; text-align: center; height: 30px; line-height:30px;
+    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; }
+  .btn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow;
+    margin: 2px 0px 0px 2px; }
 }
+
+#saved{ display:none; position:fixed; bottom:0; right:0; color:#999; font-size:10px; padding:3px 5px 3px 25px; font-style:italic; background-image:url(../img/check.png); background-repeat:no-repeat; background-position:left;}

@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <!-- Zip File Creation Library -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-    <script type="text/javascript" src="js/lib/jszip.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jquery-latest.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jszip.min.js')}}"></script>
 
     <style>
       html, body { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
@@ -89,7 +89,7 @@
 
 
       </script>
-      <script type="text/javascript" src="js/storyjs-embed.js"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/storyjs-embed.js')}}"></script>
       <!-- END Timeline Embed-->
   </body>
 </html>

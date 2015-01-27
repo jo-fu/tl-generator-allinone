@@ -231,7 +231,10 @@ function getCirclePath(datum,beginning,scaleFactor){
 function getXPos(d,beg,scale) {
   var isDate = !isNaN(d.times[0].starting_time);
   if(isDate) var newXPos = margin.left + (d.times[0].starting_time - beg) * scale;
-  else var newXPos = margin.left + (d.count-1) * (itemHeight+10)
+  else{
+    var newXPos = margin.left + (d.count-1) * (itemHeight+10)
+    console.log(d.count)
+  } 
   return newXPos;
   }
 
@@ -343,31 +346,37 @@ function closeInput(){
   $('#inputOverlay input[name="source"]').val("")
 }
 
+function cleanUpInput(input){
+  cleanedUp = input
+              .replace(/–/g, "-")
+              .replace(/’/g, " APOSTROPHE ")
+              .replace(/&/g, " AND ")
+              .replace(/"/g, " QUOTE ")
+              .replace(/[^\x00-\x7F]/g, "");
+  return cleanedUp;
+}
+
 /* PYTHON AJAX REQUEST */
 function preprocessing(){
-  var title = $('#inputOverlay input[name="title"]').val().replace(/[^\x00-\x7F]/g, "");
+
+  var title = cleanUpInput($('#inputOverlay input[name="title"]').val());
+  if(!title) title = "No title"
   var doc = $('#inputOverlay input[name="date"]').val();
+  if(!doc){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
 
-    // If no DCT given - use today
-    if(!doc){
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
-        var yyyy = today.getFullYear();
+    if(dd<10) { dd='0'+dd }
+    if(mm<10) { mm='0'+mm }
 
-        if(dd<10) { dd='0'+dd }
-        if(mm<10) { mm='0'+mm }
+    today = yyyy+'-'+mm+'-'+dd;
+    doc = today;
+  }
 
-        today = yyyy+'-'+mm+'-'+dd;
-        doc = today;
-    }
-
-  var content = $('#inputOverlay textarea[name="content"]').val()
-            .replace("&", "and")
-            .replace(/–/g, "-")
-            .replace(/’/g, " APOSTROPHE ")
-            .replace(/"/g, " QUOTE ")
-            .replace(/[^\x00-\x7F]/g, "");
+  var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
+            
   // What to do with the source??
   
   var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+

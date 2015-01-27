@@ -140,6 +140,9 @@ app
 
 		if(el=="d"){ $scope.editSubtitle = true;}
 		else if(el=="c"){ $scope.editContent = true;}
+		else if(el=="ms"){ $scope.editMediaSource = true;}
+		else if(el=="mcr"){ $scope.editMediaCredit = true;}
+		else if(el=="mca"){ $scope.editMediaCaption = true;}
 
 		$(".editorfield").keypress(function(){
 			if($(this).keyCode == 13){ $scope.disableEdit(el); }
@@ -154,9 +157,19 @@ app
 		}
 		else if(el=="c"){
 			$scope.editContent = false;
-			if($scope.dateInfo.length>0){
-				$scope.timexes[$scope.currIndex].sent = $scope.dateInfo[0].sent;
-			}
+			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].sent = $scope.dateInfo[0].sent; }
+		}
+		else if(el=="ms"){
+			$scope.editMediaSource = false;
+			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaSource = $scope.dateInfo[0].medium["source"]; }
+		}
+		else if(el=="mcr"){
+			$scope.editMediaCredit = false;
+			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaCredit = $scope.dateInfo[0].medium["Credit"]; }
+		}
+		else if(el=="mca"){
+			$scope.editMediaCaption = false;
+			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaCaption = $scope.dateInfo[0].medium["caption"]; }
 		}
 	}
 
@@ -218,13 +231,19 @@ app
 	}
 
 	$scope.loadData = function(source){ $scope = DateExporting.loadData(source,$scope,$sce,CreateArray,CreateTimeline) }
-	$scope.saveState = function(){ DateExporting.saveState($scope) }
+	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
 	$scope.exportAsJson = function(){ $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr) }
 	
 	$(window).bind( "resize" , function() {
 		if(this.id) clearTimeout(this.id);
 		this.id = setTimeout($scope.updateD3Tl($scope.timexes, "resize"), 500);
 	});
+
+	window.setInterval(function(){
+  		// Only autosave when there were changes??
+  		//console.log("autosave")
+  		$scope.saveState($scope, "autosave")
+	}, 60000);
 })
 
 // DIRECTIVES
@@ -311,7 +330,12 @@ app.service('CreateTimeline' , function(){
 		dateInfo.subtitle = datum.sub;
 		dateInfo.sent = datum.sent;
 		dateInfo.typ = datum.typ;
-
+		
+		dateInfo.medium = []
+		dateInfo.medium["source"] = datum.mediaSource;
+		dateInfo.medium["credit"] = datum.mediaCredit;
+		dateInfo.medium["caption"] = datum.mediaCaption;
+console.log(datum.mediaCaption)
 		// Save current values
 		dateInfo.currId = datum.id;
 		dateInfo.currSent = datum.sentNr;
@@ -323,6 +347,10 @@ app.service('CreateTimeline' , function(){
 		dateInfo.subtitle = datum.sub;
 		dateInfo.sent = datum.sent;
 		dateInfo.typ = datum.typ;
+		dateInfo.medium = []
+		dateInfo.medium["source"] = datum.mediaSource;
+		dateInfo.medium["credit"] = datum.mediaCredit;
+		dateInfo.medium["caption"] = datum.mediaCaption;
 
 		// Save current values
 		dateInfo.currId = datum.id;
@@ -563,6 +591,7 @@ app.service('CreateArray', function(SplitSents){
 					sent : thisS , sub : "Title", sentNr : sentNr , val : thisVal ,
 					title : thisVal, mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
+					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
 					visible : true
 					};
 				
@@ -576,6 +605,7 @@ app.service('CreateArray', function(SplitSents){
 					sent : thisS , sub : "I am a time period" , sentNr : sentNr , val : durTitle ,
 					title : durTitle , mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
+					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
 					visible : true
 					};
 				}
@@ -588,6 +618,7 @@ app.service('CreateArray', function(SplitSents){
 					sent : thisS , sub : subt, sentNr : sentNr , val : temporarySolution ,
 					title : "0000" , mod : thisMod , count : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
+					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
 					visible : true
 					};
 				}
@@ -878,11 +909,21 @@ app.service('DateHandling', function(){
 
 	this.addDate = function($scope,CreateTimeline){
 		var number = $scope.timexes.length;
+
+		var currDoc = -1;
+		var aT = $(".activetab").attr("id")
+		if(aT){
+			aT = aT.split("_")[1]
+			if(aT!="list"){ currDoc = aT }
+			console.log(currDoc)
+		}
 		
+
 		var newDate = {
-			id : number , timex : "manually added" , docNr : -1,
+			id : number , timex : "manually added" , docNr : currDoc,
 			sent : "manually added" , sub : "Optional Title", sentNr : -1 , typ : "date", 
 			val : "XXXX" , title : "0000", mod : "" , count : 1 ,
+			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
 			times : [{ starting_time : "XXXX" , ending_time : "XXXX"}], visible : true
 			}
 		$scope.timexes.push(newDate);
@@ -1038,10 +1079,16 @@ app.service('DateExporting', function(){
 				// Check if enddate needed
 				if(el.typ!="date"){ var endDate = eD.getUTCFullYear() + ',' + (eD.getUTCMonth()+1) + ',' + eD.getUTCDate(); }
 				else{ endDate = "" }
-				//console.log(startDate)
-				// Check if time is specified
-				//if(startDate.indexOf("T00:00:00.000Z") >= 0){ startDate = startDate.split("T00:")[0] }
-				//if(endDate.indexOf("T00:00:00.000Z") >= 0){ endDate = endDate.split("T00:")[0] }
+
+				// Media
+				if(el.mediaSource!= "Enter URL"){ var mS = el.mediaSource }
+				else{ var mS = " " }
+
+				if(el.mediaCredit!= "Credit"){ var mCr = el.mediaCredit }
+				else{ var mCr = " " }
+
+				if(el.mediaCaption!= "Caption"){ var mCa = el.mediaCaption }
+				else{ var mCa = " " }
 
 /* We need to know modality of the date - year / year,month / year,month,day etc.*/
 				dateEls.push({
@@ -1050,7 +1097,11 @@ app.service('DateExporting', function(){
 					"headline" : el.sub ,
 					"text" : el.sent,
 					"tag" : filenames[el.docNr],
-					"asset" : { }
+					"asset" : {
+						"media": mS,
+                    			"credit": mCr,
+                    			"caption": mCa
+                    		}
 					})
 			}
 			
@@ -1068,10 +1119,11 @@ app.service('DateExporting', function(){
 		// Write data to local storage
 		//console.log(tlObject)
 		localStorage.setItem('myTlData', JSON.stringify(tlObject));
+		console.log(tlObject)
 		return tlObject;
 	}
 
-	this.saveState = function($scope){
+	this.saveState = function($scope, auto){
 		
 		var savedData = {
 			tlDescr : $scope.tlDescr,
@@ -1081,9 +1133,9 @@ app.service('DateExporting', function(){
 		}
 
 		var saveData = JSON.stringify(savedData)
-
 		localStorage.setItem('savedData', saveData);
-		download($scope.tlDescr[0]+".tl", saveData)
+		$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
+		//if(!auto){ download($scope.tlDescr[0]+".tl", saveData) }
 		//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
 	}
 	this.triggerUploading = function(){ $("#uploadFile").click() }
