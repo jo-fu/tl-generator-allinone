@@ -5,7 +5,7 @@ app
 	
 	$scope.docNr = -1;
 	//$scope.tempFiles = ["england","usa","canada","denmark"]
-	$scope.tempFiles = ["policy/england","policy/usa","policy/canada","policy/denmark","iceland", "journalism", "london", "nasa", "newspapers", "nlp" ,"ubc","policy"]
+	$scope.tempFiles = ["iceland", "journalism", "london", "nasa", "newspapers", "nlp" ,"ubc","policy"]
 	$scope.fileNames = []
 	//$scope.fileNames[$scope.docNr] = "today"
 	$scope.myfile;
@@ -792,6 +792,7 @@ app.service('DateHandling', function(){
 
 	this.makeSelection = function($scope, sentNr, d, origin){
 		$scope.editDate = false;
+		$scope.addMedia = false;
 		
 		if(sentNr===false){ sentNr = -1 }
 
