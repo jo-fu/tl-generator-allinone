@@ -149,21 +149,27 @@ function dateConversion(d,mod){
     // Duration e.g. 1980DECADE
     else if(d.indexOf("DECADE")>0){
 
-      // TODO: CHECK FOR MOD (if "mid" etc)
-
+      // CHECK FOR MOD (if "mid"/"late"/"early" etc)
       var startDate = d.substr(0,4);
-      var start = new Date(startDate).getTime();
-      if(mod=="MID"){ var delta = 5; }
+      if(mod=="LATE"){ startDate = (parseInt(startDate)+5).toString(); var delta = 10 }
+      else if(mod=="MID"){ startDate = (parseInt(startDate)+3).toString(); var delta = 7; }
+      else if(mod=="EARLY"){ var delta = 2; }
       else{ var delta = 10 }
+
+      var start = new Date(startDate).getTime();
       var endDate = (parseInt(d.substr(0,4))+delta).toString();
       var end = new Date(endDate).getTime();
       }
     // Duration e.g. 19CENTURY
     else if(d.indexOf("CENTURY")>0){
       var startDate = d.substr(0,2)+"00"
-      var start = new Date(startDate).getTime();
-      if(mod=="MID"){ var delta = 50; }
+
+      if(mod=="LATE"){ startDate = (parseInt(startDate)+50).toString(); var delta = 100 }
+      else if(mod=="MID"){ startDate = (parseInt(startDate)+30).toString(); var delta = 70; }
+      else if(mod=="EARLY"){ var delta = 20; }
       else{ var delta = 100 }
+
+      var start = new Date(startDate).getTime();
       var endDate = (parseInt(d.substr(0,2)+"00")+delta).toString()
       var end = new Date(endDate).getTime();
     }
@@ -231,10 +237,7 @@ function getCirclePath(datum,beginning,scaleFactor){
 function getXPos(d,beg,scale) {
   var isDate = !isNaN(d.times[0].starting_time);
   if(isDate) var newXPos = margin.left + (d.times[0].starting_time - beg) * scale;
-  else{
-    var newXPos = margin.left + (d.count-1) * (itemHeight+10)
-    console.log(d.count)
-  } 
+  else{ var newXPos = margin.left + (d.count-1) * (itemHeight+10) } 
   return newXPos;
   }
 
@@ -350,9 +353,26 @@ function cleanUpInput(input){
   cleanedUp = input
               .replace(/–/g, "-")
               .replace(/’/g, " APOSTROPHE ")
-              .replace(/&/g, " AND ")
+              .replace(/'/g, " APOSTROPHE ")
               .replace(/"/g, " QUOTE ")
-              .replace(/[^\x00-\x7F]/g, "");
+              .replace(/ü/g, "&uuml;").replace(/Ü/g, "&Uuml;")
+              .replace(/ä/g, "&auml;").replace(/Ä/g, "&Auml;")
+              .replace(/ö/g, "&ouml;").replace(/Ö/g, "&Ouml;")
+              .replace(/ß/g, "&szlig")
+              .replace(/€/g, "&euro;")
+              .replace(/§/g, "&sect;")
+              .replace(/[ÀÁÂÃÅ]/g,"A")
+              .replace(/[âàáæãåā]/g,"a")
+              .replace(/[ÈÉÊË]/g,"E")
+              .replace(/[éèêëė]/g,"e")
+              .replace(/[ÔÒÓÕŒØŌ]/g,"O")
+              .replace(/[ôòóõœøō]/g,"o")
+              .replace(/[ÛÙÚŪ]/g,"U")
+              .replace(/[ûùúū]/g,"u")
+              .replace(/[ç]/g,"c")
+              .replace(/&/g, " AND ") // to also replace the HTML special chars
+              // All the rest is replaced with ?
+              .replace(/[^\x00-\x7F]/g, "?");
   return cleanedUp;
 }
 
@@ -361,8 +381,9 @@ function preprocessing(){
 
   var title = cleanUpInput($('#inputOverlay input[name="title"]').val());
   if(!title) title = "No title"
-  var doc = $('#inputOverlay input[name="date"]').val();
-  if(!doc){
+
+  var dct = $('#inputOverlay input[name="date"]').val();
+  if(!dct){
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
@@ -372,17 +393,15 @@ function preprocessing(){
     if(mm<10) { mm='0'+mm }
 
     today = yyyy+'-'+mm+'-'+dd;
-    doc = today;
+    dct = today;
   }
 
   var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
-            
-  // What to do with the source??
   
   var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
     "\n<TITLE>"+title+"</TITLE>"+
-    "\n<DATE_TIME>"+doc+"</DATE_TIME>"+
-    "\n<TEXT>\n\n"+content+"\n\n</TEXT>\n"+
+    "\n<DATE_TIME>"+dct+"</DATE_TIME>"+
+    "\n<TEXT>"+content+"</TEXT>\n"+
     "</BODY>\n</DOC>"
 
     return jsonout

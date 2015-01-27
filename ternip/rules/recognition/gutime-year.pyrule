@@ -27,7 +27,7 @@ class rule(Rule):
             else:
                 year = int(match.group(3))
 
-            if year > 1649 and year < 2100\
+            if year > 1150 and year < 2100\
                and re.match(self._prep_re(r'<\w+~.+>(<(daylight|standard)~.+>)?<time~.+>'), match.string[match.end():],
                 re.I) == None\
             and re.match(self._prep_re(r'<.*?~NNP>'), match.string[match.end():], re.I) == None:

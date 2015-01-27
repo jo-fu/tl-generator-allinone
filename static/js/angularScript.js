@@ -39,17 +39,12 @@ app
 		    contentType: 'application/json;charset=UTF-8',
 		    success: function(data){
 		        $(".loading").fadeOut(300)
+		        //console.log(data)
 		        closeInput()
 			  $scope.addDocument(data.result,"fromInput")
 		    }
 		})
-		/*$.post('/dothenlp', myData, function(data) {
-			var mynewdata = data.result;
-			//console.log(mynewdata)
-			closeInput()
-			$scope.addDocument(mynewdata,"fromInput")
-			}, "json");*/
-		}
+	}
 
 	$scope.showDateInfo = function(txObject){ return CreateTimeline.showDateInfo(txObject) }
 
@@ -268,7 +263,8 @@ app
 	this.splitthem = function(d){
 		var sents = d.split("<SENTENCES>")[1]
 		sents = sents.split("</SENTENCES>")[0]
-		sents = sents.split("', '");
+		//sents = sents.split("', '");
+		sents = sents.split(/[\"\'],.?[\"\']/);
 		return sents;
 	}
 })
@@ -335,7 +331,7 @@ app.service('CreateTimeline' , function(){
 		dateInfo.medium["source"] = datum.mediaSource;
 		dateInfo.medium["credit"] = datum.mediaCredit;
 		dateInfo.medium["caption"] = datum.mediaCaption;
-console.log(datum.mediaCaption)
+
 		// Save current values
 		dateInfo.currId = datum.id;
 		dateInfo.currSent = datum.sentNr;
@@ -579,7 +575,9 @@ app.service('CreateArray', function(SplitSents){
 
 				// Sentence withough TIMEX2 Tags
 				thisS = thisS.replace(/<TIMEX2( [^>]*)>/g , "")
-				thisS = thisS.replace(/<\/TIMEX2>/g , "")
+					.replace(/<\/TIMEX2>/g , "")
+					.replace(/&quot;/g , "\"")
+					.replace(/\<br\>/g , " ")
 
 				var sentNr = s + nrSents;
 				// Only add when transformable
@@ -674,17 +672,6 @@ app.service('CreateArray', function(SplitSents){
 });
 
 app.service('DateHandling', function(){
-
-	this.getTimexes = function(callback){
-		var myData = preprocessing()
-		$.getJSON('/dothenlp', { myData: myData }, function(data) {
-			var mynewdata = data.result;
-			//console.log(mynewdata)
-			closeInput()
-			callback(mynewdata,"fromInput")
-		});
-		
-	}
 	
 
 	this.checkSize = function(d){
@@ -1136,7 +1123,8 @@ app.service('DateExporting', function(){
 		var saveData = JSON.stringify(savedData)
 		localStorage.setItem('savedData', saveData);
 		$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
-		//if(!auto){ download($scope.tlDescr[0]+".tl", saveData) }
+		
+		if(!auto){ download($scope.tlDescr[0]+".tl", saveData) }
 		//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
 	}
 	this.triggerUploading = function(){ $("#uploadFile").click() }
