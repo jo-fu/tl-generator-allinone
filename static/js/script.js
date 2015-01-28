@@ -352,9 +352,9 @@ function closeInput(){
 function cleanUpInput(input){
   cleanedUp = input
               .replace(/–/g, "-")
-              .replace(/’/g, " APOSTROPHE ")
-              .replace(/'/g, " APOSTROPHE ")
-              .replace(/"/g, " QUOTE ")
+              .replace(/’/g, " _APOSTROPHE_ ")
+              .replace(/'/g, " _APOSTROPHE_ ")
+              .replace(/"/g, " _QUOTE_ ")
               .replace(/ü/g, "&uuml;").replace(/Ü/g, "&Uuml;")
               .replace(/ä/g, "&auml;").replace(/Ä/g, "&Auml;")
               .replace(/ö/g, "&ouml;").replace(/Ö/g, "&Ouml;")
@@ -370,7 +370,7 @@ function cleanUpInput(input){
               .replace(/[ÛÙÚŪ]/g,"U")
               .replace(/[ûùúū]/g,"u")
               .replace(/[ç]/g,"c")
-              .replace(/&/g, " AND ") // to also replace the HTML special chars
+              .replace(/&/g, " _AND_ ") // to also replace the HTML special chars
               // All the rest is replaced with ?
               .replace(/[^\x00-\x7F]/g, "?");
   return cleanedUp;
@@ -397,7 +397,10 @@ function preprocessing(){
   }
 
   var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
-  
+  //console.log(content.length)
+  if(content.length==0){
+    content = cleanUpInput("<i>You have to enter some text, otherwise we can't find any temporal expressions.</i>")
+  }
   var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
     "\n<TITLE>"+title+"</TITLE>"+
     "\n<DATE_TIME>"+dct+"</DATE_TIME>"+

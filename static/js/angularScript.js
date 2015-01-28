@@ -30,6 +30,7 @@ app
 	// PYTHON CALL
 	$scope.getTimexes = function(){
 		var myData = preprocessing()
+
 		thisData = { 'myData' : myData }
 		$(".loading").fadeIn(300)
 		$.ajax({
@@ -197,7 +198,14 @@ app
 			$scope.singleSents[$scope.docNr] = CreateArray.recreateText(data, $sce, nrSents,nrIds);
 			$scope.updateD3Tl($scope.timexes,"newDoc",$scope.clickingCircle)
 
+			// Adjust DOM
 			$("#button_"+docNr).css("background-color", "rgb("+colorDate[docNr]+")")
+			
+			
+			setTimeout( function(){
+				var pT = $("#docSwitcher").height() + 10
+				$("#leftBox .sidebar").css("padding-top", pT )
+			} , 500 )
 
 			if(source=="fromInput"){ $scope.$apply($scope) }
         	}

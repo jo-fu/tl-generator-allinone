@@ -70,6 +70,8 @@ html {
   top: -2px;
   left: 0px;
   z-index: 10;
+  height: auto;
+  min-height: 40px;
   /*.docBtn_0{ background-color: $doc0; }
   .docBtn_1{ background-color: $doc1; }
   .docBtn_2{ background-color: $doc2; }*/ }
