@@ -575,6 +575,7 @@ app.service('CreateArray', function(SplitSents){
 
 				// Sentence withough TIMEX2 Tags
 				thisS = thisS.replace(/<TIMEX2( [^>]*)>/g , "")
+					.replace(/<TIMEX2>/g , "")
 					.replace(/<\/TIMEX2>/g , "")
 					.replace(/&quot;/g , "\"")
 					.replace(/\<br\>/g , " ")
@@ -1061,7 +1062,7 @@ app.service('DateExporting', function(){
 			// Include all elements that are visible and ON the timeline
 			if(el.visible && el.typ!="neither"){
 				var sD = new Date(el.times[0].starting_time)
-				var startDate = sD.getUTCFullYear() + ',' + (sD.getUTCMonth()+1) + ',' + sD.getUTCDate();
+				var startDate = sD.getUTCFullYear() + ',' + (sD.getUTCMonth()) + ',' + sD.getUTCDate();
 
 				var eD = new Date(el.times[0].ending_time)
 				// Check if enddate needed
@@ -1069,14 +1070,21 @@ app.service('DateExporting', function(){
 				else{ endDate = "" }
 
 				// Media
-				if(el.mediaSource!= "Enter URL"){ var mS = el.mediaSource }
-				else{ var mS = " " }
-
 				if(el.mediaCredit!= "Credit"){ var mCr = el.mediaCredit }
 				else{ var mCr = " " }
 
 				if(el.mediaCaption!= "Caption"){ var mCa = el.mediaCaption }
 				else{ var mCa = " " }
+
+				if(el.mediaSource!= "Enter URL"){
+					var mS = el.mediaSource
+					var thisMedia = {
+						"media": mS,
+                    			"credit": mCr,
+                    			"caption": mCa
+                    		}
+				}
+				else{ var thisMedia = {} }
 
 /* We need to know modality of the date - year / year,month / year,month,day etc.*/
 				dateEls.push({
@@ -1085,11 +1093,7 @@ app.service('DateExporting', function(){
 					"headline" : el.sub ,
 					"text" : el.sent,
 					"tag" : filenames[el.docNr],
-					"asset" : {
-						"media": mS,
-                    			"credit": mCr,
-                    			"caption": mCa
-                    		}
+					"asset" : thisMedia
 					})
 			}
 			
