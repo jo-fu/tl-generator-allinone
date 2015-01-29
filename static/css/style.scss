@@ -70,6 +70,8 @@ html{
     }
   #listData{
     .listEl{ cursor:pointer; }
+    .listEl .subtitle{ display:none; font-size:0.8em; padding-bottom:10px; color:#666; }
+    .listEl:hover .subtitle, .highlighted .subtitle{ display:block; }
     ul > .doc_0 { color: $doc0; }
     ul > .doc_1 { color: $doc1; }
     ul > .doc_2 { color: $doc2; }
@@ -132,6 +134,7 @@ html{
 
   h1{ font-size: 18px; }
   h2{ font-size: 15px; text-decoration: underline; color:#333; }
+  .hltx{ color: $highlightColor; font-weight:bold; }
   p{ font-size: 12px; font-weight:normal; }
   input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; text-align:center; }
   .media p{ font-size:0.8em; }

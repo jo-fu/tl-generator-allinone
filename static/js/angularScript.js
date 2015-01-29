@@ -169,6 +169,12 @@ app
 		}
 	}
 
+	$scope.highlightTimex = function(text, search) {
+		if (!search) { return $sce.trustAsHtml(text); }
+		// It's called 3 times... WHY?
+    		return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="hltx">$&</span>'));
+	};
+
 	// TOOLS
 	$scope.deleteDate = function(nr){ $scope.timexes = DateHandling.deleteDate($scope,nr) }
 	$scope.recoverDate = function(){ $scope.timexes = DateHandling.recoverDate($scope) }
@@ -334,6 +340,7 @@ app.service('CreateTimeline' , function(){
 		dateInfo.subtitle = datum.sub;
 		dateInfo.sent = datum.sent;
 		dateInfo.typ = datum.typ;
+		dateInfo.timex = datum.timex;
 		
 		dateInfo.medium = []
 		dateInfo.medium["source"] = datum.mediaSource;
@@ -351,6 +358,8 @@ app.service('CreateTimeline' , function(){
 		dateInfo.subtitle = datum.sub;
 		dateInfo.sent = datum.sent;
 		dateInfo.typ = datum.typ;
+		dateInfo.timex = datum.timex;
+
 		dateInfo.medium = []
 		dateInfo.medium["source"] = datum.mediaSource;
 		dateInfo.medium["credit"] = datum.mediaCredit;
@@ -456,7 +465,7 @@ app.service('CreateTimeline' , function(){
 	}
 	
 	// RESCALING AXIS
-	var minTime = 946684800000;
+	var minTime = 1451606400000;
 	var maxTime = -90000000000000; // Because 0 = 1970
 	d.forEach(function (time, i) {
 		if(time.visible){
@@ -533,9 +542,17 @@ app.service('CreateTimeline' , function(){
 	/* In case there will be any difference between move and delete */
 	if(action=="resize"){ d3.select("#timeline").select("svg").attr("width", $("#rightBox").width() - 50) }
 
-	/*else if(action=="move"){
-		paths.style("fill" , function(d){ return getColor(d) })
-	}*/
+	else if(action=="move" || action == "unitChange"){
+		paths
+		.attr("stroke" , function(d){
+			if(d.typ=="duration"){ return getColor(d) }
+			else{  return "#fff" }
+		})
+		.attr("stroke-width" , function(d){
+			if(d.typ=="duration"){ return 4 }
+			else{  return 2 }
+		})
+	}
 	else if(action=="recover"){ }
 
 	return d;
@@ -567,8 +584,7 @@ app.service('CreateArray', function(SplitSents){
 
 	            	// Get: ID, Timex, Surrounding Sentence, Value, Mod, Count (=1)
 	            	var x = nTimexes[n]
-	            	var thistempex = x.match(/<TIMEX2( MOD=\"[^<]*\")?( VAL=\"[^<]*\")?(.*)?>[^<]*/)[0] + "</TIMEX2>";
-	            	
+	            	var thistempex = x.split(/\<TIMEX2.*?\>/)[1].replace("&#039;","'");
 	            	// Check if VAL
 	            	if(x.indexOf("VAL") >= 0){ var thisVal = x.match(/VAL=\"([^<]*)\"/)[1] }
 	            	else{ var thisVal = x.split(">")[1]; }
@@ -587,6 +603,7 @@ app.service('CreateArray', function(SplitSents){
 					.replace(/<\/TIMEX2>/g , "")
 					.replace(/&quot;/g , "\"")
 					.replace(/\<br\>/g , " ")
+					.replace("&#039;" , "'")
 
 				var sentNr = s + nrSents;
 				// Only add when transformable
@@ -596,7 +613,7 @@ app.service('CreateArray', function(SplitSents){
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "date",
 					sent : thisS , sub : "Title", sentNr : sentNr , val : thisVal ,
-					title : thisVal, mod : thisMod , count : 1 ,
+					title : prettifyDate(thisVal), mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
 					visible : true
@@ -862,11 +879,14 @@ app.service('DateHandling', function(){
 		$scope.dateInfo.forEach( function(d){ d3.select("#timelineItem_"+d.currId).classed("selected" , true) })
 		if($scope.dateInfo.length!=0){ $scope.dateSelected = true }
 		else{ $scope.dateSelected = false }
-		// --> NO EXTRA FCT NEEDED!!!
+
 		
-		if(origin=="fromCircle") $scope.$apply( $scope.dateSelected );
-		// WHY DO I NEED APPLY - should update automatically
-      	// --> Because Click on Circle is no ng-click (probably...)
+		if(origin=="fromCircle") $scope.$apply( $scope.dateSelected ); // apply needed, cecause Click on Circle is no ng-click
+      	
+      	// ARROW KEYS
+      	//if($scope.dateSelected){ $(document).on("keydown" , function(e){ arrowKeys(e) } ) }
+      	//else{ $(document).off("keydown" , arrowKeys() ) }
+
       	return $scope;
 	}
 
@@ -1070,11 +1090,11 @@ app.service('DateExporting', function(){
 			// Include all elements that are visible and ON the timeline
 			if(el.visible && el.typ!="neither"){
 				var sD = new Date(el.times[0].starting_time)
-				var startDate = sD.getUTCFullYear() + ',' + (sD.getUTCMonth()) + ',' + sD.getUTCDate();
-
+				var startDate = sD.getUTCFullYear() + ',' + sD.getUTCMonth() + ',' + sD.getUTCDate();
+				console.log(startDate)
 				var eD = new Date(el.times[0].ending_time)
 				// Check if enddate needed
-				if(el.typ!="date"){ var endDate = eD.getUTCFullYear() + ',' + (eD.getUTCMonth()+1) + ',' + eD.getUTCDate(); }
+				if(el.typ!="date"){ var endDate = eD.getUTCFullYear() + ',' + eD.getUTCMonth() + ',' + eD.getUTCDate(); }
 				else{ endDate = "" }
 
 				// Media
@@ -1119,7 +1139,7 @@ app.service('DateExporting', function(){
 		// Write data to local storage
 		//console.log(tlObject)
 		localStorage.setItem('myTlData', JSON.stringify(tlObject));
-		console.log(tlObject)
+
 		return tlObject;
 	}
 
