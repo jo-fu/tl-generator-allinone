@@ -34,6 +34,7 @@ var colorDate = [
 
 $(document).on('keyup keydown', function(e){
   shifted = e.shiftKey;
+
   if(shifted){ $('#leftBox, #timeline').addClass("nouserselect") }
   else{ $('#leftBox, #timeline').removeClass("nouserselect") }
   });
@@ -313,7 +314,6 @@ function getColor(d){
 function validate(event,el) {
 
   var key = window.event ? event.keyCode : event.which;
-
   if(event.key == "Enter" || key == 13){
     //console.log("Enter!");
     if(!el){ $("#check").trigger('click') }

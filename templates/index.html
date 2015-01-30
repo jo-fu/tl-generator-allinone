@@ -113,7 +113,7 @@
 
         <!-- Editable TL Title -->
         <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
-          <input ng-switch-when="true" size="50" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
+          <input ng-switch-when="true" size="30" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
           <div ng-switch-default ng-click="enableEdit('d')"><h2>{{ tlDescr[0] }}</h2></div>
         </ng-switch>
     
@@ -121,7 +121,7 @@
         <!-- Editable Content -->
         <ng-switch on="editContent" id="displayContent">
           <!-- Edit Mode -->
-          <textarea rows="5" cols="30" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
+          <textarea rows="4" cols="36" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
           <!-- Preview Mode -->
           <div ng-switch-default ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
         </ng-switch>
@@ -196,7 +196,7 @@
         <!-- Editable Content -->
         <ng-switch on="editContent" id="displayContent">
           <!-- Edit Mode -->
-          <textarea rows="15" cols="60" ng-switch-when="true" ng-model="$parent.dateInfo[0].sent" unfocus="disableEdit('c')"></textarea>
+          <textarea rows="15" cols="36" ng-switch-when="true" ng-model="$parent.dateInfo[0].sent" unfocus="disableEdit('c')"></textarea>
           <!-- Preview Mode -->
           <div ng-switch-default ng-click="enableEdit('c')">
             <p ng-bind-html="highlightTimex(dateInfo[0].sent, dateInfo[0].timex)"></p>
@@ -259,7 +259,7 @@
         <input type="date" size="50" name="date"> <br><br>
 
         <label for="content"><b>Content</b></label><br>
-        <textarea name="content" id="content" rows="10" placeholder="Drop the content here." cols="43"></textarea><br>
+        <textarea name="content" id="content" rows="10" cols="43" placeholder="Drop the content here."></textarea><br>
 
         <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
         <br>
@@ -289,6 +289,7 @@
 </div>
 
 <div id="saved">Current status was stored.</div>
+<div id="guide"><a href="http://www.cs.ubc.ca/~jfulda/tl-generator/tl-generator-docu.pdf" target="_blank">PDF Guide</a></div>
 
 {% endraw %}
 

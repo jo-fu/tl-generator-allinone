@@ -337,9 +337,11 @@ app.service('CreateTimeline' , function(){
 this.buildTl = function($scope){
 
   	d3.select("body").on("keydown", function() {
-  	var key = d3.event.keyCode
-        if(key == 39 || key == 40){ $scope.arrowKey("next") }
-        else if(key == 37 || key == 38){ $scope.arrowKey("prev") }
+	  	var key = d3.event.keyCode
+	  	if (!$("input, textarea").is(":focus")) {
+	      	if(key == 39 || key == 40){ $scope.arrowKey("next") }
+	      	else if(key == 37 || key == 38){ $scope.arrowKey("prev") }
+	  	}
 	});
 
   	var chart = d3.timeline();
