@@ -103,6 +103,9 @@
         <p style="text-align:center;"><i>Please select a document or add dates manually.</i></p>
         <!-- Absolute  positioned Add Date Button -->  
     </div>
+    <div id="prevDate" class="ctlBtns" title="Go to the previous date" ng-click="arrowKey('prev','btn')"></div>
+    <div id="nextDate" class="ctlBtns" title="Go to the next date" ng-click="arrowKey('next','btn')"></div>
+
     <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
 
       <!-- General Timeline information -->
@@ -185,7 +188,7 @@
 
         <!-- Editable Subtitle -->
         <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
-          <input ng-switch-when="true" ng-model="$parent.dateInfo[0].subtitle" onkeypress='validate(event,"sub")' unfocus="disableEdit('d')"></input>
+          <input ng-switch-when="true" ng-model="$parent.dateInfo[0].subtitle" onkeypress='validate(event,this)' unfocus="disableEdit('d')"></input>
           <div ng-switch-default ng-click="enableEdit('d')"><h2>{{ dateInfo[0].subtitle }}</h2></div>
         </ng-switch>
     
@@ -199,25 +202,29 @@
             <p ng-bind-html="highlightTimex(dateInfo[0].sent, dateInfo[0].timex)"></p>
           </div>
         </ng-switch>
-        <br><br>
-        <div id="addMediaBtn" ng-click="addMedia=true">Add Media</div>
+        <br>
+
+        <div id="addMedia">
+          <div id="addMediaBtn" ng-click="addMedia=true"> {{ dateInfo[0].medium['hasMedia'] | iif : "Has" : "Add" }} Media</div>
+          <div id="mediaIndicator" ng-class="{ hasMedia: dateInfo[0].medium['hasMedia'] } "></div>
+        </div>
         <!-- Media -->
         <!-- Source -->
         <div ng-if="addMedia">
             <ng-switch on="editMediaSource" id="mediaSource" class="editorfield">
-              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['source']" onkeypress='validate(event)' unfocus="disableEdit('ms')"></input>
+              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['source']" onkeypress='validate(event,this)' unfocus="disableEdit('ms')"></input>
               <div class="media" ng-switch-default ng-click="enableEdit('ms')"><p>{{ dateInfo[0].medium["source"] }}</p></div>
             </ng-switch>
 
             <!-- Credit -->
             <ng-switch on="editMediaCredit" id="mediaCredit" class="editorfield">
-              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['credit']" onkeypress='validate(event)' unfocus="disableEdit('mcr')"></input>
+              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['credit']" onkeypress='validate(event,this)' unfocus="disableEdit('mcr')"></input>
               <div class="media" ng-switch-default ng-click="enableEdit('mcr')"><p>{{ dateInfo[0].medium["credit"] }}</p></div>
             </ng-switch>
 
             <!-- Caption -->
             <ng-switch on="editMediaCaption" id="mediaCaption" class="editorfield">
-              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['caption']" onkeypress='validate(event)' unfocus="disableEdit('mca')"></input>
+              <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['caption']" onkeypress='validate(event,this)' unfocus="disableEdit('mca')"></input>
               <div class="media" ng-switch-default ng-click="enableEdit('mca')"><p>{{ dateInfo[0].medium["caption"] }}</p></div>
             </ng-switch>
         </div>

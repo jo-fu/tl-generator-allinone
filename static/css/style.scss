@@ -21,7 +21,8 @@ $doc9: rgb(255,127,0);
 $doc10: rgb(106,61,154);
 $doc11: rgb(177,89,40);
 
-$highlightColor:#FF6138;
+$highlightColor:rgb(255, 97, 56);
+$highlightColorHalf:rgba(255, 97, 56, 0.4);
 
 
 html{
@@ -42,6 +43,9 @@ html{
     margin: 12px 0px 8px 12px; }
 #addDoc, #addDate{ background-image:url(../img/add.png); margin:5px; }
 #addDate{ position:absolute; top:250px; left:10px;}
+#prevDate, #nextDate{ position:absolute; top:105px; background-image:url(../img/arrows.png) }
+#prevDate{ left:10px; background-position:left; }
+#nextDate{ right:10px; background-position:right; }
 #addDoc:active, #addDate:active{ margin:8px 2px 2px 8px; }
 
 
@@ -138,9 +142,13 @@ html{
   p{ font-size: 12px; font-weight:normal; }
   input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; text-align:center; }
   .media p{ font-size:0.8em; }
-  #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; width: 100px; font-weight: bold; margin: 15px auto; font-size: 0.7em; padding: 3px; color: #333; 
-    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; }
-  #addMediaBtn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow; }
+  #addMedia{ width: 80px; height: $btnsSize + 10;  margin: 15px auto; 
+      #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; color: #333; 
+    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; float:left; }
+      #addMediaBtn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow; }
+      #mediaIndicator{ width:$btnsSize; height:$btnsSize; background-image:url(../img/hasMedia.png); margin-top:-24px; margin-left:100px; }
+      .hasMedia{ background-position: right; }
+    }
   .addDimension{ padding: 7px 0 0; cursor:pointer; color:#999; background-position: center top; vertical-align:bottom;
     background-image:url(../img/editAdd.png); background-repeat:no-repeat; font-size:8px; }
   #displayDate input{ font-size: 18px; }
@@ -162,6 +170,7 @@ html{
     cursor: pointer;
     }
 .selected{ stroke: $highlightColor; stroke-width: 3px; }
+.selectedSec{ stroke: $highlightColorHalf; stroke-width: 3px;  }
 
 .datelabel{ display: none; text-align: center; }
 .visible{ display: block; }

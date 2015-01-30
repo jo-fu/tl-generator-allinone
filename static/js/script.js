@@ -38,8 +38,8 @@ $(document).on('keyup keydown', function(e){
   else{ $('#leftBox, #timeline').removeClass("nouserselect") }
   });
 
-function arrowKeys(e){
-  
+var arrowKeys = function(e){
+  console.log("arrow")
     switch(e.which) {
         case 37: return -1 // left
         break;
@@ -316,13 +316,13 @@ function validate(event,el) {
 
   if(event.key == "Enter" || key == 13){
     //console.log("Enter!");
-    if(el=="sub"){ $("#displaySubtitle input").blur() }
-    else{ $("#check").trigger('click')}
+    if(!el){ $("#check").trigger('click') }
+    else{ el.blur() }
   }
 
   if(!el){
-    if (event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 46 ||
-        event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 88) {
+    if (key == 8 || key == 9 || key == 46 ||
+        key == 37 || key == 39 || key == 88) {
         
         return true;
     }

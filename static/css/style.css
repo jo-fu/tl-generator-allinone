@@ -56,6 +56,19 @@ html {
   top: 250px;
   left: 10px; }
 
+#prevDate, #nextDate {
+  position: absolute;
+  top: 105px;
+  background-image: url(../img/arrows.png); }
+
+#prevDate {
+  left: 10px;
+  background-position: left; }
+
+#nextDate {
+  right: 10px;
+  background-position: right; }
+
 #addDoc:active, #addDate:active {
   margin: 8px 2px 2px 8px; }
 
@@ -263,23 +276,34 @@ html {
   text-align: center; }
 #bottomBox .media p {
   font-size: 0.8em; }
-#bottomBox #addMediaBtn {
-  border: 1px solid #efefef;
-  background-color: #fff;
-  cursor: pointer;
-  width: 100px;
-  font-weight: bold;
-  margin: 15px auto;
-  font-size: 0.7em;
-  padding: 3px;
-  color: #333;
-  box-shadow: 2px 2px 0px #666666;
-  -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666; }
-#bottomBox #addMediaBtn:active {
-  box-shadow: 0px 0px 0px #666666;
-  -moz-box-shadow: 0px 0px 0px #666666;
-  -webkit-box-shadow: 0px 0px 0px #666666; }
+#bottomBox #addMedia {
+  width: 80px;
+  height: 35px;
+  margin: 15px auto; }
+  #bottomBox #addMedia #addMediaBtn {
+    border: 1px solid #efefef;
+    background-color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.7em;
+    padding: 3px 8px;
+    color: #333;
+    box-shadow: 2px 2px 0px #666666;
+    -moz-box-shadow: 2px 2px 0px #666666;
+    -webkit-box-shadow: 2px 2px 0px #666666;
+    float: left; }
+  #bottomBox #addMedia #addMediaBtn:active {
+    box-shadow: 0px 0px 0px #666666;
+    -moz-box-shadow: 0px 0px 0px #666666;
+    -webkit-box-shadow: 0px 0px 0px #666666; }
+  #bottomBox #addMedia #mediaIndicator {
+    width: 25px;
+    height: 25px;
+    background-image: url(../img/hasMedia.png);
+    margin-top: -24px;
+    margin-left: 100px; }
+  #bottomBox #addMedia .hasMedia {
+    background-position: right; }
 #bottomBox .addDimension {
   padding: 7px 0 0;
   cursor: pointer;
@@ -321,6 +345,10 @@ html {
 
 .selected {
   stroke: #ff6138;
+  stroke-width: 3px; }
+
+.selectedSec {
+  stroke: rgba(255, 97, 56, 0.4);
   stroke-width: 3px; }
 
 .datelabel {

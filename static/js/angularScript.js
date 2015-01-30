@@ -134,15 +134,14 @@ app
 			$scope.dateInfo[0].dateArray = DateHandling.checkSize($scope.timexes[$scope.currIndex].val)
 		} else{ $scope.editDate = false; }
 
-		if(el=="d"){ $scope.editSubtitle = true;}
-		else if(el=="c"){ $scope.editContent = true;}
-		else if(el=="ms"){ $scope.editMediaSource = true;}
-		else if(el=="mcr"){ $scope.editMediaCredit = true;}
-		else if(el=="mca"){ $scope.editMediaCaption = true;}
+		if(el=="d"){ $scope.editSubtitle = true; var thisid = "#displaySubtitle input"}
+		else if(el=="c"){ $scope.editContent = true; }
+		else if(el=="ms"){ $scope.editMediaSource = true; var thisid = "#mediaSource input"  }
+		else if(el=="mcr"){ $scope.editMediaCredit = true; var thisid = "#mediaCredit input"}
+		else if(el=="mca"){ $scope.editMediaCaption = true; var thisid = "#mediaCaption input"}
 
-		$(".editorfield").keypress(function(){
-			if($(this).keyCode == 13){ $scope.disableEdit(el); }
-		});
+		//TODO: tabbing through input fields
+		if(thisid) setTimeout( function(){ $(thisid).select() } , 50 )
 	}
 	$scope.disableEdit = function(el) {
 		if(el=="d"){
@@ -157,7 +156,16 @@ app
 		}
 		else if(el=="ms"){
 			$scope.editMediaSource = false;
-			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaSource = $scope.dateInfo[0].medium["source"]; }
+			if($scope.dateInfo.length>0){
+				// If date has Media source --> Indicate that it has Media
+				var newSource = $scope.dateInfo[0].medium["source"];
+				if (newSource != "Enter URL" && newSource != "" && newSource != "x"){
+					
+					$scope.timexes[$scope.currIndex].hasMedia = true;
+					$('#mediaIndicator').addClass("hasMedia")
+				}
+				$scope.timexes[$scope.currIndex].mediaSource = newSource; }
+
 		}
 		else if(el=="mcr"){
 			$scope.editMediaCredit = false;
@@ -167,6 +175,7 @@ app
 			$scope.editMediaCaption = false;
 			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaCaption = $scope.dateInfo[0].medium["caption"]; }
 		}
+		return $scope;
 	}
 
 	$scope.highlightTimex = function(text, search) {
@@ -243,6 +252,44 @@ app
 	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
 	$scope.exportAsJson = function(){ $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr) }
 	
+	$scope.arrowKey = function(dir,btn){
+		if($scope.dateSelected){
+			
+			var listLength = $('#listData li').length
+			var currListEl = parseInt($("#listEl_" + $scope.currIndex).index()) + 1
+			var newEl = $("#listData li:nth-child("+ (parseInt(currListEl)+1) +")").attr("id")
+
+
+			if(dir=="next"){
+				if(currListEl==listLength){ var newIndex = 1 }
+				else{ var newIndex = parseInt(currListEl)+1 }
+				var newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				
+				// If not visible go one further
+				while (!$scope.timexes[newListEl].visible) {
+					if(newIndex==listLength){ newIndex = 1 }
+					else{ newIndex++ }
+					newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				}
+			}
+			else if(dir=="prev"){
+				if(currListEl==1){ var newIndex = listLength }
+				else{ var newIndex = parseInt(currListEl)-1 }
+				var newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				// If not visible go one further
+				while (!$scope.timexes[newListEl].visible) {
+					if(newIndex==1){ newIndex = listLength }
+					else{ newIndex-- }
+					newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				}
+			}
+			if(btn){ var origin = "arrowBtn"}
+			else{ var origin = "arrowKey"}
+			$scope.makeSelection($scope.timexes[newListEl].sentNr, $scope.timexes[newListEl], origin)
+		}
+		
+	}
+
 	$(window).bind( "resize" , function() {
 		if(this.id) clearTimeout(this.id);
 		this.id = setTimeout($scope.updateD3Tl($scope.timexes, "resize"), 500);
@@ -284,7 +331,14 @@ app
 })
 app.service('CreateTimeline' , function(){
 
-  this.buildTl = function($scope){
+this.buildTl = function($scope){
+
+  	d3.select("body").on("keydown", function() {
+  	var key = d3.event.keyCode
+        if(key == 39 || key == 40){ $scope.arrowKey("next") }
+        else if(key == 37 || key == 38){ $scope.arrowKey("prev") }
+	});
+
   	var chart = d3.timeline();
   	chart
 	// !!! ticks have to be adjusted to input data
@@ -332,48 +386,38 @@ app.service('CreateTimeline' , function(){
   }
 
 
-  this.showDateInfo = function(datum){
+this.showDateInfo = function(datum){
+  	
   	var dateInfo = {}
+
   	if(datum.typ=="date"){
 	  	dateInfo.val = datum.val;
 	  	dateInfo.title = checkIfDate(datum.val);
-		dateInfo.subtitle = datum.sub;
-		dateInfo.sent = datum.sent;
-		dateInfo.typ = datum.typ;
-		dateInfo.timex = datum.timex;
-		
-		dateInfo.medium = []
-		dateInfo.medium["source"] = datum.mediaSource;
-		dateInfo.medium["credit"] = datum.mediaCredit;
-		dateInfo.medium["caption"] = datum.mediaCaption;
-
-		// Save current values
-		dateInfo.currId = datum.id;
-		dateInfo.currSent = datum.sentNr;
-		return dateInfo	
   	}
   	else{
   		dateInfo.val = datum.title;
-  		dateInfo.title = checkIfDate(datum.title);
-		dateInfo.subtitle = datum.sub;
-		dateInfo.sent = datum.sent;
-		dateInfo.typ = datum.typ;
-		dateInfo.timex = datum.timex;
-
-		dateInfo.medium = []
-		dateInfo.medium["source"] = datum.mediaSource;
-		dateInfo.medium["credit"] = datum.mediaCredit;
-		dateInfo.medium["caption"] = datum.mediaCaption;
-
-		// Save current values
-		dateInfo.currId = datum.id;
-		dateInfo.currSent = datum.sentNr;
-		return dateInfo
+  		dateInfo.title = checkIfDate(datum.title);	
 	}
+
+	dateInfo.subtitle = datum.sub;
+	dateInfo.sent = datum.sent;
+	dateInfo.typ = datum.typ;
+	dateInfo.timex = datum.timex;	
+
+	dateInfo.medium = []
+	dateInfo.medium["source"] = datum.mediaSource;
+	dateInfo.medium["credit"] = datum.mediaCredit;
+	dateInfo.medium["caption"] = datum.mediaCaption;
+	dateInfo.medium["hasMedia"] = datum.hasMedia;
+	
+	// Save current values
+	dateInfo.currId = datum.id;
+	dateInfo.currSent = datum.sentNr;
   	
+  	return dateInfo
   }
 
-  this.highlightCircle = function(arr,origin){
+/*this.highlightCircle = function(arr,origin){
   	if(arr.length==0){
   		d3.selectAll(".timelineItem").classed("selected",false);
   		var dateSelected = false;
@@ -381,7 +425,8 @@ app.service('CreateTimeline' , function(){
   	else{
 	  	if(origin=="fromSent"){
 	  		d3.selectAll(".timelineItem").classed("selected",false);
-	  		arr.forEach(function(datum){
+	  		arr.forEach(function(datum,i){
+	  			console.log(i)
 	  			var thisSent = datum.currSent;
 	  			d3.selectAll(".timelineItem_sent_"+thisSent).classed("selected",true);
 	  			})
@@ -395,7 +440,8 @@ app.service('CreateTimeline' , function(){
 		  	}
 			else{
 		  		d3.selectAll(".timelineItem").classed("selected",false);
-		  		arr.forEach(function(datum){
+		  		arr.forEach(function(datum,i){
+		  			console.log("From where: "+i)
 		  			var thisId = datum.currId;
 		  			d3.select("#timelineItem_"+thisId).classed("selected",true);
 		  			})
@@ -405,9 +451,9 @@ app.service('CreateTimeline' , function(){
 		}
 	}
 	return dateSelected
-  }
+  }*/
 
-  this.highlightSent = function(arr,docNr){
+this.highlightSent = function(arr,docNr){
   	$(".timex").removeClass("highlighted");
   	
   	if(arr.length>0){
@@ -418,7 +464,7 @@ app.service('CreateTimeline' , function(){
   	}
   }
 
-  this.scrollToSent = function(thisid,sent,thisDocNr,view){
+this.scrollToSent = function(thisid,sent,thisDocNr,view){
   	if(view=="text"){ var thisDiv = "#txtData_"+thisDocNr; var thisEl = "#timeSent_"+sent }
     	else{ var thisDiv = "#listData"; var thisEl = "#listEl_"+thisid }
     	var h = $(thisDiv).height() / 2;
@@ -426,7 +472,7 @@ app.service('CreateTimeline' , function(){
     	$(thisDiv).animate({ scrollTop: topPos }, 300);
   }
 
-  this.updateD3Tl = function(tx, action, clickFct, nr){
+this.updateD3Tl = function(tx, action, clickFct, nr){
 	// Check for duplicates, but don't reorder, because that would mess up D3 elements
 	var d = checkDuplicatesWithoutOrdering(tx);
 
@@ -615,7 +661,7 @@ app.service('CreateArray', function(SplitSents){
 					sent : thisS , sub : "Title", sentNr : sentNr , val : thisVal ,
 					title : prettifyDate(thisVal), mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
-					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
+					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true
 					};
 				
@@ -629,7 +675,7 @@ app.service('CreateArray', function(SplitSents){
 					sent : thisS , sub : "I am a time period" , sentNr : sentNr , val : durTitle ,
 					title : durTitle , mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
-					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
+					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true
 					};
 				}
@@ -642,7 +688,7 @@ app.service('CreateArray', function(SplitSents){
 					sent : thisS , sub : subt, sentNr : sentNr , val : temporarySolution ,
 					title : "0000" , mod : thisMod , count : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
-					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
+					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true
 					};
 				}
@@ -694,7 +740,6 @@ app.service('CreateArray', function(SplitSents){
 	//console.log("Now we have "+sentNr+" sentences")
 	return txSents;
   }
-
 });
 
 app.service('DateHandling', function(){
@@ -819,6 +864,9 @@ app.service('DateHandling', function(){
 			$scope.currIndex = $scope.timexes.indexOf(d);
 		}
 
+		// Should not be needed - but DOM not updating after Media Input change...
+		if(!$scope.timexes[$scope.currIndex].hasMedia) $('#mediaIndicator').removeClass("hasMedia")
+
 		for(var i=0; i<numberNewElement;i++){
 			if(origin=="fromSent"){ var thisD = d[i]; }
 			else{ var thisD = d; }
@@ -875,17 +923,20 @@ app.service('DateHandling', function(){
 		$scope.dateInfo.forEach( function(d){ $("#listEl_"+d.currId).addClass("highlighted") })
 
 	   // Highlighting Circle
-	   	d3.selectAll(".timelineItem").classed("selected", false)
-		$scope.dateInfo.forEach( function(d){ d3.select("#timelineItem_"+d.currId).classed("selected" , true) })
+	   	d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec", false)
+		$scope.dateInfo.forEach( function(d,i){
+			// First Selection is primar selection
+			if(i==0){ d3.select("#timelineItem_"+d.currId).classed("selected" , true) }
+			else{ d3.select("#timelineItem_"+d.currId).classed("selectedSec" , true) }
+		}) 
 		if($scope.dateInfo.length!=0){ $scope.dateSelected = true }
 		else{ $scope.dateSelected = false }
-
 		
-		if(origin=="fromCircle") $scope.$apply( $scope.dateSelected ); // apply needed, cecause Click on Circle is no ng-click
+		if(origin=="fromCircle" || origin=="arrowKey") $scope.$apply( $scope.dateSelected ); // apply needed, because Click on Circle is no ng-click
       	
       	// ARROW KEYS
-      	//if($scope.dateSelected){ $(document).on("keydown" , function(e){ arrowKeys(e) } ) }
-      	//else{ $(document).off("keydown" , arrowKeys() ) }
+      	//if($scope.dateSelected){ $(document).on("keydown" , arrowKeys ) }
+      	//else{ $(document).off("keydown" , arrowKeys ) }
 
       	return $scope;
 	}
@@ -902,12 +953,12 @@ app.service('DateHandling', function(){
 		else{
 			$scope.dateInfo.forEach( function(el){
 				var thisIndex = el.currId
-				d3.select("#timelineItem_"+el.currId).classed("selected",false);
-				$(".timex").removeClass("highlighted");
+				d3.select("#timelineItem_"+el.currId).classed("selected",false).classed("selectedSec",false);
+				//$(".timex, .listEl").removeClass("highlighted");
 				$scope.timexes[thisIndex].visible = false;
 			})	
 		}
-		
+		$(".timex, .listEl").removeClass("highlighted");
 		$scope.updateD3Tl($scope.timexes, "delete");
 		$scope.severalSelected = false;
 
@@ -940,13 +991,13 @@ app.service('DateHandling', function(){
 			id : number , timex : "manually added" , docNr : currDoc,
 			sent : "manually added" , sub : "Optional Title", sentNr : -1 , typ : "date", 
 			val : "XXXX" , title : "0000", mod : "" , count : 1 ,
-			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" ,
+			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 			times : [{ starting_time : "XXXX" , ending_time : "XXXX"}], visible : true
 			}
 		$scope.timexes.push(newDate);
 		$scope.currIndex = number;
 		
-		d3.selectAll(".timelineItem").classed("selected", false)
+		d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec",false)
 		$scope.updateD3Tl($scope.timexes, "add", $scope.clickingCircle);
 		$scope.dateInfo = [];
 		$scope.dateInfo.push({ currId : number });
@@ -1081,6 +1132,12 @@ app.service('DateHandling', function(){
 	}
 });
 
+app.filter('iif', function () {
+   return function(input, trueValue, falseValue) {
+        return input ? trueValue : falseValue;
+   };
+})
+
 app.service('DateExporting', function(){
 
 	this.exportAsJson = function(txs,filenames,tlDescr){
@@ -1104,7 +1161,7 @@ app.service('DateExporting', function(){
 				if(el.mediaCaption!= "Caption"){ var mCa = el.mediaCaption }
 				else{ var mCa = " " }
 
-				if(el.mediaSource!= "Enter URL"){
+				if(el.hasMedia){
 					var mS = el.mediaSource
 					var thisMedia = {
 						"media": mS,
