@@ -159,7 +159,8 @@ app
 			if($scope.dateInfo.length>0){
 				// If date has Media source --> Indicate that it has Media
 				var newSource = $scope.dateInfo[0].medium["source"];
-				if (newSource != "Enter URL" && newSource != "" && newSource != "x"){
+				if(newSource == ""){ newSource = "Enter URL"; $scope.dateInfo[0].medium["source"] = newSource }
+				if (newSource != "Enter URL" && newSource != "x"){
 					
 					$scope.timexes[$scope.currIndex].hasMedia = true;
 					$('#mediaIndicator').addClass("hasMedia")
@@ -169,11 +170,13 @@ app
 		}
 		else if(el=="mcr"){
 			$scope.editMediaCredit = false;
-			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaCredit = $scope.dateInfo[0].medium["Credit"]; }
+			if($scope.dateInfo[0].medium["credit"].length > 0){ $scope.timexes[$scope.currIndex].mediaCredit = $scope.dateInfo[0].medium["credit"]; }
+			else{ $scope.dateInfo[0].medium["credit"] = "Credit" }
 		}
 		else if(el=="mca"){
 			$scope.editMediaCaption = false;
-			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].mediaCaption = $scope.dateInfo[0].medium["caption"]; }
+			if($scope.dateInfo[0].medium["caption"].length > 0){ $scope.timexes[$scope.currIndex].mediaCaption = $scope.dateInfo[0].medium["caption"]; }
+			else{ $scope.dateInfo[0].medium["caption"] = "Caption" }
 		}
 		return $scope;
 	}
