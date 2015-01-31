@@ -298,9 +298,10 @@ app
 		this.id = setTimeout($scope.updateD3Tl($scope.timexes, "resize"), 500);
 	});
 
+
 	window.setInterval(function(){
-  		// Only autosave when there were changes??
-  		//console.log("autosave")
+  		// TODO: Only autosave when there were changes??
+  		// Or when window is in focus
   		$scope.saveState($scope, "autosave")
 	}, 60000);
 })
@@ -1151,23 +1152,37 @@ app.service('DateExporting', function(){
 		txs.forEach( function(el){
 			// Include all elements that are visible and ON the timeline
 			if(el.visible && el.typ!="neither"){
-				var sD = new Date(el.times[0].starting_time)
-				var startDate = sD.getUTCFullYear() + ',' + sD.getUTCMonth() + ',' + sD.getUTCDate();
-				console.log(startDate)
-				var eD = new Date(el.times[0].ending_time)
-				// Check if enddate needed
-				if(el.typ!="date"){ var endDate = eD.getUTCFullYear() + ',' + eD.getUTCMonth() + ',' + eD.getUTCDate(); }
+				
+				//var sD = new Date(el.times[0].starting_time)
+				var d = el.title
+				var sD = d.split(" - ")[0]
+				//console.log("start date split length: "+sD.length)
+				if(sD.length==4){ var startDate = sD }
+				else if(sD.length==6){ var startDate = sD.substr(0,4)+","+sD.substr(4,2) }
+				else if(sD.length==8){ var startDate = sD.substr(0,4)+","+sD.substr(4,2)+","+sD.substr(6,2) }
+				else if(sD.length>8){ var startDate = sD.substr(0,4)+","+sD.substr(4,2)+","+sD.substr(6,2)+","+sD.substr(8,2)+","+sD.substr(10) }
+
+				// duration
+				if(el.typ=="duration"){
+					var eD = d.split(" - ")[1]
+					if(eD.length==4){ var endDate = eD }
+					else if(eD.length==6){ var endDate = eD.substr(0,4)+","+eD.substr(4,2) }
+					else if(eD.length==8){ var endDate = eD.substr(0,4)+","+eD.substr(4,2)+","+eD.substr(6,2) }
+					else if(eD.length>8){ var endDate = eD.substr(0,4)+","+eD.substr(4,2)+","+eD.substr(6,2)+","+eD.substr(8,2)+","+eD.substr(10) }
+				}
 				else{ endDate = "" }
+				//console.log("Start: "+startDate+", End: "+endDate)
+				
 
 				// Media
-				if(el.mediaCredit!= "Credit"){ var mCr = el.mediaCredit }
-				else{ var mCr = " " }
-
-				if(el.mediaCaption!= "Caption"){ var mCa = el.mediaCaption }
-				else{ var mCa = " " }
-
 				if(el.hasMedia){
 					var mS = el.mediaSource
+					if(el.mediaCredit!= "Credit"){ var mCr = el.mediaCredit }
+					else{ var mCr = " " }
+
+					if(el.mediaCaption!= "Caption"){ var mCa = el.mediaCaption }
+					else{ var mCa = " " }
+
 					var thisMedia = {
 						"media": mS,
                     			"credit": mCr,
