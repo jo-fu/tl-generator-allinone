@@ -1151,10 +1151,10 @@ app.service('DateExporting', function(){
 
 		txs.forEach( function(el){
 			// Include all elements that are visible and ON the timeline
-			if(el.visible && el.title!="0000"){
-				
+
+			if(el.visible && el.val!="XXXX"){
 				//var sD = new Date(el.times[0].starting_time)
-				var d = el.title
+				var d = el.val
 				var sD = d.split(" - ")[0]
 				//console.log("start date split length: "+sD.length)
 				if(sD.length==4){ var startDate = sD }
