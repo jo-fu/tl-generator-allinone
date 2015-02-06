@@ -1151,7 +1151,7 @@ app.service('DateExporting', function(){
 
 		txs.forEach( function(el){
 			// Include all elements that are visible and ON the timeline
-			if(el.visible && el.typ!="neither"){
+			if(el.visible && el.title!="0000"){
 				
 				//var sD = new Date(el.times[0].starting_time)
 				var d = el.title
