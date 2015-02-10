@@ -379,7 +379,9 @@ function cleanSubtitle(val){
       .replace(/&#39;/g , "\'")
       .replace(/\<br\>/g , " ")
       .replace(/\[.*?\]/g, "")
-  newval.trim();
+
+  newval = newval.trim();
+  
   return newval;
 }
 

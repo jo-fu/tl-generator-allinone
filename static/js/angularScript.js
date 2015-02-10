@@ -22,7 +22,7 @@ app
 	if (localStorage.getItem("savedData") === null) { $scope.prevData = false }
 	else{ $scope.prevData = localStorage.getItem("savedData") }
 	
-	$scope.tlDescr = ["Timeline Generator", "Insert a short desciption for your timeline here"]
+	$scope.tlDescr = ["Timeline Generator", "<i>Insert a short description for your timeline here</i>"]
 
 	// Building TL without any dates on it
 	CreateTimeline.buildTl($scope)
@@ -145,9 +145,13 @@ app
 	$scope.disableEdit = function(el) {
 		if(el=="d"){
 			$scope.editSubtitle = false;
-			if($scope.dateInfo.length>0){
+			if($scope.dateInfo[0].subtitle.length>0){
+				console.log("Sub: "+$scope.dateInfo[0].subtitle.length)
 				$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
 			}
+			else{
+				$scope.dateInfo[0].subtitle = " "
+				$scope.timexes[$scope.currIndex].sub = " " }
 		}
 		else if(el=="c"){
 			$scope.editContent = false;
