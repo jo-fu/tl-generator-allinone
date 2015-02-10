@@ -370,12 +370,24 @@ function closeInput(){
   $('#inputOverlay input[name="source"]').val("")
 }
 
+function cleanSubtitle(val){
+
+  var newval = val.replace(/<TIMEX2( [^>]*)>/g , "")
+      .replace(/<TIMEX2>/g , "")
+      .replace(/<\/TIMEX2>/g , "")
+      .replace(/&quot;/g , "\"")
+      .replace(/&#39;/g , "\'")
+      .replace(/\<br\>/g , " ")
+      .replace(/\[.*?\]/g, "")
+  newval.trim();
+  return newval;
+}
+
 function cleanUpInput(input){
   cleanedUp = input
-              .replace(/–/g, "-")
-              .replace(/’/g, " _APOSTROPHE_ ")
-              .replace(/'/g, " _APOSTROPHE_ ")
-              .replace(/"/g, " _QUOTE_ ")
+              .replace(/–|—/g, "-")
+              .replace(/’|'/g, "_APOSTROPHE_")
+              .replace(/"|“|”/g, "_QUOTE_")
               .replace(/ü/g, "&uuml;").replace(/Ü/g, "&Uuml;")
               .replace(/ä/g, "&auml;").replace(/Ä/g, "&Auml;")
               .replace(/ö/g, "&ouml;").replace(/Ö/g, "&Ouml;")
@@ -391,7 +403,9 @@ function cleanUpInput(input){
               .replace(/[ÛÙÚŪ]/g,"U")
               .replace(/[ûùúū]/g,"u")
               .replace(/[ç]/g,"c")
-              .replace(/&/g, " _AND_ ") // to also replace the HTML special chars
+              // Add a full stop to end of paragraph if not there 
+              .replace(/([\w\d])\s*\n/g,"$1.\n\n")
+              .replace(/&/g, "_AND_") // to also replace the HTML special chars
               // All the rest is replaced with ?
               .replace(/[^\x00-\x7F]/g, "?");
   return cleanedUp;

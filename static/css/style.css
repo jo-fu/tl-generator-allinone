@@ -1,5 +1,6 @@
 html {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  background-color: #efefef; }
 
 #leftBox {
   position: absolute;
@@ -27,6 +28,15 @@ html {
     width: 100%;
     background-color: #efefef; }
 
+.ctl {
+  margin: 10px;
+  padding: 5px 10px;
+  background-color: #fff;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #666666;
+  -moz-box-shadow: 2px 2px 0px #666666;
+  -webkit-box-shadow: 2px 2px 0px #666666; }
+
 .ctlBtns {
   width: 25px;
   height: 25px;
@@ -41,7 +51,7 @@ html {
   -moz-box-shadow: 2px 2px 0px #666666;
   -webkit-box-shadow: 2px 2px 0px #666666; }
 
-.ctlBtns:active {
+.ctlBtns:active, .ctl:active {
   box-shadow: 0px 0px 0px #666666;
   -moz-box-shadow: 0px 0px 0px #666666;
   -webkit-box-shadow: 0px 0px 0px #666666;
@@ -222,12 +232,12 @@ html {
   margin: 4px 0 0 2px; }
 
 #bottomBox .display {
-  width: 500px;
+  width: 400px;
   text-align: center;
   font-size: 0.5;
   height: auto;
   left: 50%;
-  margin-left: -250px;
+  margin-left: -200px;
   margin-top: 20px;
   position: relative; }
   #bottomBox .display #name {
@@ -259,18 +269,21 @@ html {
   font-size: 9px;
   background-color: #efefef;
   text-align: center; }
-#bottomBox h1 {
+#bottomBox h1, #bottomBox .datetitle {
   font-size: 18px; }
-#bottomBox h2 {
+#bottomBox h2, #bottomBox .subtitle {
   font-size: 15px;
-  text-decoration: underline;
   color: #333; }
 #bottomBox .hltx {
   color: #ff6138;
   font-weight: bold; }
-#bottomBox p {
+#bottomBox p, #bottomBox .content {
   font-size: 12px;
   font-weight: normal; }
+#bottomBox .label {
+  font-size: 0.8em;
+  color: #999;
+  font-weight: bold; }
 #bottomBox input {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   text-align: center; }

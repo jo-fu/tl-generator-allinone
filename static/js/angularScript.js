@@ -5,7 +5,7 @@ app
 	
 	$scope.docNr = -1;
 	//$scope.tempFiles = ["england","usa","canada","denmark"]
-	$scope.tempFiles = ["iceland", "journalism", "london", "nasa", "newspapers", "nlp" ,"ubc","policy"]
+	$scope.tempFiles = ["iceland", "journalism", "nasa", "newspapers", "ubc"]
 	$scope.fileNames = []
 	//$scope.fileNames[$scope.docNr] = "today"
 	$scope.myfile;
@@ -22,7 +22,7 @@ app
 	if (localStorage.getItem("savedData") === null) { $scope.prevData = false }
 	else{ $scope.prevData = localStorage.getItem("savedData") }
 	
-	$scope.tlDescr = ["My pretty timeline", "Please give me a short desciption"]
+	$scope.tlDescr = ["Timeline Generator", "Insert a short desciption for your timeline here"]
 
 	// Building TL without any dates on it
 	CreateTimeline.buildTl($scope)
@@ -40,7 +40,6 @@ app
 		    contentType: 'application/json;charset=UTF-8',
 		    success: function(data){
 		        $(".loading").fadeOut(300)
-		        //console.log(data)
 		        closeInput()
 			  $scope.addDocument(data.result,"fromInput")
 		    }
@@ -202,12 +201,28 @@ app
 	$scope.addDocument = function(val,source){
 		$scope.docNr++
 		docNr++
-		closeInput($scope.selectedFile)
+		//closeInput($scope.selectedFile)
+		closeInput()
 		function processInput(data){
         		$scope.myfile = data;
 			$scope.files.push(data);
 			dct = getDCT(data);
 			
+			var docTitle = data.match(/<TITLE>([^<]*)<\/TITLE>/)[1]
+			docTitle = cleanSubtitle(docTitle)
+
+			if($scope.tlDescr[0] == "Timeline Generator" && docNr==0){
+				$scope.tlDescr[0] = docTitle
+			}
+			else if($scope.tlDescr[0] == $scope.fileNames[0] && docNr==1){
+				$scope.tlDescr[0] = $scope.tlDescr[0] + " & " + docTitle
+			}
+			else if($scope.tlDescr[0] == $scope.fileNames[0] + " & " + $scope.fileNames[1] ){
+				$scope.tlDescr[0] = "Comparing Several Documents"
+			}
+			
+			$scope.fileNames[$scope.docNr] = docTitle;
+
 			var nrIds = $scope.timexes.length
 			var nrSents = 0;
 			if(docNr > 0){ $scope.singleSents.forEach( function(s){ nrSents = nrSents+s.length; }) }
@@ -229,20 +244,17 @@ app
         	}
 
 		// Handmade Input
-		if(source=="fromInput"){
-			$scope.fileNames[$scope.docNr] = docNr+": "+val.match(/<TITLE>([^<]*)<\/TITLE>/)[1];
-			processInput(val)
-		}
+		if(source=="fromInput"){ processInput(val) }
 		// Document Uploaded
 		else{
-			val = $scope.selectedFile;
+			//val = $scope.selectedFile;
 			$scope.uploadDoc=false;
-			$scope.fileNames[$scope.docNr] = val;
+			//$scope.fileNames[$scope.docNr] = val;
 			var indexOfFileInArray = $scope.tempFiles.indexOf(val);
 			$scope.tempFiles.splice(indexOfFileInArray, 1);
 			// UPLOAD FILE
 			$http
-			.get("static/data/" + $scope.fileNames[$scope.docNr]+".txt")
+			.get("static/data/" + val + ".txt")
 			.success(function(data, status, headers, config) {
 		          	if (data && status === 200) { processInput(data) }
 		          	else{ console.log("Couldn't read data"); }
@@ -621,8 +633,13 @@ app.service('CreateArray', function(SplitSents){
 	// Look into each sentence to see if there are TIMEX2s
 	for(var s = 0; s<sents.length; s++){
 		var thisS = sents[s];
+		
+
 		if(s==0){ thisS = thisS.split("['")[1] }
 		if(s==(sents.length-1)){ thisS = thisS.split("']")[0] }
+		
+		
+
 		// If there is a timex in the sentence:
 		if(thisS.indexOf("TIMEX2") >= 0){
 	      	// How many Timexes?
@@ -650,12 +667,9 @@ app.service('CreateArray', function(SplitSents){
 				var d = dateConversion(thisVal,thisMod)
 
 				// Sentence withough TIMEX2 Tags
-				thisS = thisS.replace(/<TIMEX2( [^>]*)>/g , "")
-					.replace(/<TIMEX2>/g , "")
-					.replace(/<\/TIMEX2>/g , "")
-					.replace(/&quot;/g , "\"")
-					.replace(/\<br\>/g , " ")
-					.replace("&#039;" , "'")
+				thisS = cleanSubtitle(thisS)
+				
+				var sub = thisS.split(' ').slice(0,5).join(' ');
 
 				var sentNr = s + nrSents;
 				// Only add when transformable
@@ -664,7 +678,7 @@ app.service('CreateArray', function(SplitSents){
 
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "date",
-					sent : thisS , sub : "Title", sentNr : sentNr , val : thisVal ,
+					sent : thisS , sub : sub, sentNr : sentNr , val : thisVal ,
 					title : prettifyDate(thisVal), mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
@@ -678,7 +692,7 @@ app.service('CreateArray', function(SplitSents){
 					var durTitle = d.startDate +" - "+d.endDate;
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "duration",
-					sent : thisS , sub : "I am a time period" , sentNr : sentNr , val : durTitle ,
+					sent : thisS , sub : sub , sentNr : sentNr , val : durTitle ,
 					title : durTitle , mod : thisMod , count : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
@@ -688,10 +702,10 @@ app.service('CreateArray', function(SplitSents){
 				// If Value is no date
 				else{
 					var temporarySolution = "XXXX"
-					var subt = "I am not properly defined yet"
+					//var subt = "I am not properly defined yet"
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "neither",
-					sent : thisS , sub : subt, sentNr : sentNr , val : temporarySolution ,
+					sent : thisS , sub : sub, sentNr : sentNr , val : temporarySolution ,
 					title : "0000" , mod : thisMod , count : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,

@@ -134,6 +134,7 @@
       <!-- Single dates information -->
       <div class="display" ng-show="dateSelected && timexes[currIndex].visible">
         
+       <div style="margin-bottom:25px;">
         <!-- Editable Date -->
         <ng-switch on="editDate" id="displayDate" class="editorfield">
           
@@ -181,24 +182,33 @@
           <!-- END EDIT MODE -->
 
           <div ng-switch-default ng-click="enableEdit('t')">
-              <h1>{{ dateInfo[0].title }}</h1>
+            <span class="label">Date:</span>
+            <span class="datetitle ctl">{{ dateInfo[0].title }}<span>
           </div>
         </ng-switch>
+      </div>
 
-
+      <div style="margin-bottom:25px;">
         <!-- Editable Subtitle -->
         <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
           <input ng-switch-when="true" ng-model="$parent.dateInfo[0].subtitle" onkeypress='validate(event,this)' unfocus="disableEdit('d')"></input>
-          <div ng-switch-default ng-click="enableEdit('d')"><h2>{{ dateInfo[0].subtitle }}</h2></div>
+          <div ng-switch-default ng-click="enableEdit('d')">
+            <span class="label">Title:</span>
+            <span class='subtitle ctl'>{{ dateInfo[0].subtitle }}</span>
+          </div>
         </ng-switch>
+      </div>
     
 
         <!-- Editable Content -->
         <ng-switch on="editContent" id="displayContent">
           <!-- Edit Mode -->
+          <span class="label">Content:<br></span>
+
           <textarea rows="15" cols="36" ng-switch-when="true" ng-model="$parent.dateInfo[0].sent" unfocus="disableEdit('c')"></textarea>
           <!-- Preview Mode -->
-          <div ng-switch-default ng-click="enableEdit('c')">
+          
+          <div class="content ctl" ng-switch-default ng-click="enableEdit('c')">
             <p ng-bind-html="highlightTimex(dateInfo[0].sent, dateInfo[0].timex)"></p>
           </div>
         </ng-switch>
