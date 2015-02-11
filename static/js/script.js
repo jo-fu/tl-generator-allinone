@@ -39,26 +39,6 @@ $(document).on('keyup keydown', function(e){
   else{ $('#leftBox, #timeline').removeClass("nouserselect") }
   });
 
-var arrowKeys = function(e){
-  console.log("arrow")
-    switch(e.which) {
-        case 37: return -1 // left
-        break;
-
-        case 38: return -1 // up
-        break;
-
-        case 39: return 1 // right
-        break;
-
-        case 40: return 1 // down
-        break;
-
-        default: return; // exit this handler for other keys
-    }
-    //e.preventDefault(); // prevent the default action (scroll / move caret)
-}
-
 function getDCT(file){ return file.match(/<DATE_TIME>([^<]*)<\/DATE_TIME>/)[1] }
 
 function orderArray(t){

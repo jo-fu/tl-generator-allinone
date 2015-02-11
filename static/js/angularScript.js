@@ -357,6 +357,13 @@ this.buildTl = function($scope){
 	  	if (!$("input, textarea").is(":focus")) {
 	      	if(key == 39 || key == 40){ $scope.arrowKey("next") }
 	      	else if(key == 37 || key == 38){ $scope.arrowKey("prev") }
+	      	// Delete Element
+	      	else if(key == 8 || key == 46){
+	      		event.preventDefault();
+	      		$scope.deleteDate("one");
+	      		// Editor doesn't hide event when deleted over key
+	      		console.log($scope.dateSelected)
+	      	}
 	  	}
 	});
 
@@ -967,7 +974,7 @@ app.service('DateHandling', function(){
 	}
 
 	this.deleteDate = function($scope,nr){
-		
+
 		$scope.dateSelected = false;
 
 		if(nr=="one"){
@@ -979,7 +986,6 @@ app.service('DateHandling', function(){
 			$scope.dateInfo.forEach( function(el){
 				var thisIndex = el.currId
 				d3.select("#timelineItem_"+el.currId).classed("selected",false).classed("selectedSec",false);
-				//$(".timex, .listEl").removeClass("highlighted");
 				$scope.timexes[thisIndex].visible = false;
 			})	
 		}

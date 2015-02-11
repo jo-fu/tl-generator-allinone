@@ -81,12 +81,20 @@ def decade_nums(dec):
 
 
 # Season to TIDES identifiers
+#_season = {
+#    "spring": "SP",
+#    "summer": "SU",
+#    "autumn": "FA",
+#    "fall": "FA",
+#    "winter": "WI"
+#}
+# Season to TIDES identifiers
 _season = {
-    "spring": "SP",
-    "summer": "SU",
-    "autumn": "FA",
-    "fall": "FA",
-    "winter": "WI"
+    "spring": "03",
+    "summer": "07",
+    "autumn": "10",
+    "fall": "10",
+    "winter": "12"
 }
 
 

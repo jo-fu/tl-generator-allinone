@@ -72,6 +72,8 @@
 
 <!-- Upper left Toolbox -->
 
+    <h1 id="tlc" ng-if="!severalSelected">TimeLineCurator</h1>
+
     <div id="mergeDates" class="ctlBtns" ng-if="severalSelected" title="Merge these dates" ng-click="mergeDates()"></div>
 
     <div id="deleteAll" class="ctlBtns" ng-if="severalSelected" title="Delete these dates" ng-click="deleteDate('all')"></div>

@@ -185,6 +185,14 @@ html {
 #leftBox #listData ul > li > span {
   color: #000; }
 
+#topBox #tlc {
+  position: absolute;
+  left: 10px;
+  top: 0px;
+  font-size: 20px;
+  font-weight: lighter;
+  color: #999;
+  margin: 10px; }
 #topBox #selectBox {
   position: absolute;
   top: 40px;
