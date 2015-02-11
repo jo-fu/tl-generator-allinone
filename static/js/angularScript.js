@@ -22,7 +22,7 @@ app
 	if (localStorage.getItem("savedData") === null) { $scope.prevData = false }
 	else{ $scope.prevData = localStorage.getItem("savedData") }
 	
-	$scope.tlDescr = ["Timeline Generator", "<i>Insert a short description for your timeline here</i>"]
+	$scope.tlDescr = ["Timeline Generator", "Insert a short description for your timeline here"]
 
 	// Building TL without any dates on it
 	CreateTimeline.buildTl($scope)
@@ -146,7 +146,6 @@ app
 		if(el=="d"){
 			$scope.editSubtitle = false;
 			if($scope.dateInfo[0].subtitle.length>0){
-				console.log("Sub: "+$scope.dateInfo[0].subtitle.length)
 				$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
 			}
 			else{
@@ -529,6 +528,8 @@ this.updateD3Tl = function(tx, action, clickFct, nr){
 			else{  return 2 }
 		})
 		.on("click", function (d) { clickFct(d) })
+		//.append('title')
+    		//.text("xxx")
 		
 	}
 	
@@ -606,6 +607,7 @@ this.updateD3Tl = function(tx, action, clickFct, nr){
 			}
 			else{ return 0 }
 		})
+		
 
 	/* In case there will be any difference between move and delete */
 	if(action=="resize"){ d3.select("#timeline").select("svg").attr("width", $("#rightBox").width() - 50) }
@@ -692,7 +694,6 @@ app.service('CreateArray', function(SplitSents){
 				}
 				// If Value is DURATION
 				else if(d.typ=="duration"){
-					var temporarySolution = "XXXX"
 					var durTitle = d.startDate +" - "+d.endDate;
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "duration",
@@ -710,7 +711,7 @@ app.service('CreateArray', function(SplitSents){
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "neither",
 					sent : thisS , sub : sub, sentNr : sentNr , val : temporarySolution ,
-					title : "0000" , mod : thisMod , count : 1 ,
+					title : "XXXX" , mod : thisMod , count : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true

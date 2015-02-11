@@ -267,7 +267,10 @@ function getYPos(d) {
     var pos = margin.top + itemHeight + 4;
     var hasCount = (d.count != 1);
     if(isDate){
-      if(hasCount){ return pos - ((d.count-1)*itemHeight+2) }
+      if(hasCount){
+        if(d.count<6){ return pos - ((d.count-1)*itemHeight+2) }
+        else{ return pos - 5*itemHeight+2 }
+      }
       else{ return pos }  
     }
     else{ return 270 }
@@ -379,9 +382,14 @@ function cleanSubtitle(val){
       .replace(/&#39;/g , "\'")
       .replace(/\<br\>/g , " ")
       .replace(/\[.*?\]/g, "")
+      .replace(/&lt;/g,"<")
+      .replace(/&gt;/g,">")
+      .replace(/&uuml;/g, "ü").replace(/&Uuml;/g, "Ü")
+      .replace(/&auml;/g, "ä").replace(/&Auml;/g, "Ä")
+      .replace(/&ouml;/g, "ö").replace(/&Ouml;/g, "Ö")
 
   newval = newval.trim();
-  
+
   return newval;
 }
 
@@ -407,9 +415,11 @@ function cleanUpInput(input){
               .replace(/[ç]/g,"c")
               // Add a full stop to end of paragraph if not there 
               .replace(/([\w\d])\s*\n/g,"$1.\n\n")
+              .replace(/</g,"&lt;")
+              .replace(/>/g,"&gt;")
               .replace(/&/g, "_AND_") // to also replace the HTML special chars
               // All the rest is replaced with ?
-              .replace(/[^\x00-\x7F]/g, "?");
+              .replace(/[^\x00-\x7F]/g, "...");
   return cleanedUp;
 }
 

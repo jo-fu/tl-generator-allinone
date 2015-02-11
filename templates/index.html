@@ -173,7 +173,7 @@
 
             <span class="ctlBtns" title="Apply changes" id="check" ng-click="checkThisDate()"></span>
 
-            <span title="Add a second date to create a time span" ng-if="dateInfo[0].typ=='date'" class="changeUnit ctlBtns" ng-click="changeUnit('toDur')"></span>
+            <span title="Add a second date to create a time span" ng-if="dateInfo[0].typ=='date'||dateInfo[0].typ=='neither'" class="changeUnit ctlBtns" ng-click="changeUnit('toDur')"></span>
             <span title="Make it an event instead of a time span" ng-if="dateInfo[0].typ=='duration'" class="changeUnit ctlBtns durtodate" ng-click="changeUnit('toDate')"></span>
 
           <!--/div-->

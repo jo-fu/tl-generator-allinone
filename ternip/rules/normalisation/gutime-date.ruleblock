@@ -18,7 +18,7 @@ Match: \d\d?[\/\.]\d\d?[\/\.]\d\d(\d\d)?
 Value: date_to_iso({#0})
 
 ---
-# 3 - WHY IS THAT NOT NORMALIZED?
+# 3
 
 Type: date
 Tokenise: null
