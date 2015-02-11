@@ -131,6 +131,7 @@ app
 		if(el=="t"){
 			$scope.editDate = true;
 			$scope.dateInfo[0].dateArray = DateHandling.checkSize($scope.timexes[$scope.currIndex].val)
+			var thisid = "#startdateYear"
 		} else{ $scope.editDate = false; }
 
 		if(el=="d"){ $scope.editSubtitle = true; var thisid = "#displaySubtitle input"}

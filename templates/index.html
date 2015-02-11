@@ -152,7 +152,7 @@
             <input title="Month" maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[1]!='xx'" ng-model="$parent.dateInfo[0].dateArray[1]" ></input>
               <span class="addDimension" ng-click="addMonth('start')" ng-if="dateInfo[0].dateArray[1]=='xx'" ng-model="$parent.dateInfo[0].dateArray[1]" >month</span>
 
-            <input title="Year" maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[0]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]"></input>
+            <input id="startdateYear" title="Year" maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[0]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]"></input>
               <!--div class="addDimension" ng-if="dateInfo[0].dateArray[0]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]">+</div-->
           
           
