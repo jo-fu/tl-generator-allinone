@@ -7,6 +7,8 @@ var scaleFactor;
 var itemHeight = 20;
 var margin = { left: 75, right:25, top: 100, bottom:20 };
 
+var tlHeight = 300;
+
 var numberTimexes = 0;
 var timexes = [];
 var currId, currNr, currSent, myTl, dct;
@@ -410,23 +412,13 @@ function preprocessing(){
   if(!title) title = "No title"
 
   var dct = $('#inputOverlay input[name="date"]').val();
-  if(!dct){
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
+  if(!dct){ today = getToday(); dct = today; }
 
-    if(dd<10) { dd='0'+dd }
-    if(mm<10) { mm='0'+mm }
-
-    today = yyyy+'-'+mm+'-'+dd;
-    dct = today;
-  }
 
   var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
   //console.log(content.length)
   if(content.length==0){
-    content = cleanUpInput("<i>You have to enter some text, otherwise we can't find any temporal expressions.</i>")
+    content = cleanUpInput("You have to enter some text, otherwise we can't find any temporal expressions.")
   }
   var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
     "\n<TITLE>"+title+"</TITLE>"+
@@ -436,3 +428,16 @@ function preprocessing(){
 
     return jsonout
   }
+
+function getToday(){
+  var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) { dd='0'+dd }
+    if(mm<10) { mm='0'+mm }
+
+    today = yyyy+'-'+mm+'-'+dd;
+    return today;
+}

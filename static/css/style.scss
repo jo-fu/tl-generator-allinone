@@ -24,9 +24,14 @@ $doc11: rgb(177,89,40);
 $highlightColor:rgb(255, 97, 56);
 $highlightColorHalf:rgba(255, 97, 56, 0.4);
 
+@mixin calc($property, $expression) { 
+  #{$property}: -webkit-calc(#{$expression}); 
+  #{$property}: -moz-calc(#{$expression}); 
+  #{$property}: calc(#{$expression}); 
+} 
 
-html{
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef;
+html, body{
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef; height:100%;
 }
 // Basic Layout
 #leftBox{ position:absolute; height:100%; width:$leftBoxSize; background-color:#fff; top:0; left:0; }
@@ -96,7 +101,7 @@ html{
 // Top Box for Tools
 #topBox{
   
-
+  #tlc{ position:absolute; left:10px; top:0px; font-size:20px; font-weight:lighter; color:#999; margin:10px; }
   //#addDoc{ background-image:url(../img/addDoc.png); }
   #selectBox{ position:absolute; top:40px; left:11px; z-index:1; }
 
@@ -225,7 +230,11 @@ html{
 
 #inputOverlay{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.9); z-index:11; padding:20px;
   #closeInput{ position:absolute; top:0px; right:0; height:50px; width:50px; background-image:url(../img/closeInput.png); background-repeat:no-repeat; background-position:center; cursor:pointer;}
-  #inputContainer{ width:360px; margin: 0 auto; }
+  #inputContainer{ width:100%; margin: 0 auto; height:100%;
+    #insertText{ background-color:#efefef; padding:20px; margin:0 0 30px 0; @include calc(height, "100% - 170px");}
+    #insertFile{ background-color:#efefef; text-align:center; padding:10px; margin:30px 0 0 0; height:80px; }
+    textarea{ width:100%; min-height:100px; @include calc(height , "100% - 190px"); }
+  }
   h1{ font-size:20px; margin:0 0 15px 0; }
   .optional{ color:#666; font-style:italic; font-size:0.8em; }
   .loading{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.7); z-index:12;

@@ -37,7 +37,7 @@
         itemHeight = 20;
 
     function timeline (gParent) {
-      var g = gParent.append("g");
+      var g = gParent.append("g").attr("class","allthedates");
       var gParentSize = gParent[0][0].getBoundingClientRect();
 
       var gParentItem = d3.select(gParent[0][0]);
@@ -116,7 +116,9 @@
         .call(xAxis);
 
       // draw the chart
-      g.each(function(d, i) {
+      g
+      .append("g")
+      .each(function(d, i) {
         d.forEach( function(datum, index){
           var datum = datum
           var typ = datum.typ;
@@ -128,7 +130,7 @@
           var duration = datum.typ=="duration";
           var docNr = datum.docNr;
 
-          g.selectAll("svg").data(data).enter().append("path")
+          g.selectAll("svg").select("g.allthedates").data(data).enter().append("path")
               // Path
               .attr("d", function(){
                 // line

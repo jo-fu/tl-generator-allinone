@@ -262,24 +262,26 @@
     <div id="inputContainer">
       
 
-      <div style="background-color:#efefef; padding:20px; margin:0 0 30px 0;">
+      <div id="insertText">
         <h1>Insert your text here</h1>
-        <label for="title"><b>Title</b></label><br>
-        <input type="text" size="60" name="title" placeholder="Document Title"> <br>
-
-        <label class="optional" for="date">Date</label>
-        <input type="date" size="50" name="date"> <br><br>
+        <label for="title"><b>Title</b></label>
+        <input type="text" style="width:255px;" name="title" placeholder="Document Title"> <br><br>
 
         <label for="content"><b>Content</b></label><br>
-        <textarea name="content" id="content" rows="10" cols="43" placeholder="Drop the content here."></textarea><br>
+        <textarea name="content" id="content" placeholder="Drop the content here."></textarea><br>
+
+        <label class="optional" for="date">Which date does "today" refer to in the document (optional):</label>
+        <input type="date" value="{{ today }}" size="50" name="date">
 
         <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
-        <br>
-        <div class="btn" ng-click="getTimexes()" style="margin: 0 auto;">Go!</div>
+        
+        <p style="text-align:right; margin:0;">
+          <span class="btn" ng-click="getTimexes()" style="padding: 5px 10px;">Go!</span>
+        </p>
       </div>
 
-      <div style="background-color:#efefef; text-align:center; padding:10px; margin:30px 0 0 0;">
-      <p>Or choose from an example file</p>
+      <div id="insertFile">
+      <p>Or choose from an example file 
         <select
           ng-model="selectedFile"
           ng-change="addDocument(selectedFile)"
@@ -287,6 +289,7 @@
           <option> </option>
           <!--option  ng-repeat="file in tempFiles" ng-click="addDocument(file)" value="{{file}}" ng>{{file}}</option-->
         </select>
+      </p>
       </div>
 
 

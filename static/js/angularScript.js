@@ -3,6 +3,7 @@ var app = angular.module('tlApp', []);
 app
 .controller('MainCtrl', function($scope, $http, $sce, CreateArray, CreateTimeline, DateHandling, DateExporting) {
 	
+	$scope.today = getToday()
 	$scope.docNr = -1;
 	//$scope.tempFiles = ["england","usa","canada","denmark"]
 	$scope.tempFiles = ["iceland", "journalism", "nasa", "newspapers", "ubc"]
@@ -10,9 +11,11 @@ app
 	//$scope.fileNames[$scope.docNr] = "today"
 	$scope.myfile;
 	$scope.files = [];
+	$scope.dcts = [];
 	$scope.timexes = [];
 	$scope.currIndex = 0;
 	$scope.tlWidth = $("#rightBox").width() - 50;
+	$scope.tlHeight = 300;
 	$scope.severalSelected = false;
 	$scope.editDate = false;
 	$scope.singleSents = []
@@ -69,7 +72,7 @@ app
       $scope.highlightSent = function(d,docNr){ CreateTimeline.highlightSent(d,docNr) }
       $scope.scrollToSent = function(id,sent,docNr,v){ CreateTimeline.scrollToSent(id,sent,docNr,v) }
 
-      $scope.updateD3Tl = function(tx,m,fct,nr){ CreateTimeline.updateD3Tl(tx,m,fct,nr); }
+      $scope.updateD3Tl = function(tx,dcts,m,fct,nr){ CreateTimeline.updateD3Tl(tx,dcts,m,fct,nr); }
 
 	$scope.checkThisDate = function(){
 		
@@ -83,7 +86,7 @@ app
 			var dateVals = dateConversion(updatedDate)
 			$scope.timexes[currIndex].times[0].starting_time = dateVals.startVal;
 			$scope.timexes[currIndex].times[0].ending_time = dateVals.endVal;
-			$scope.updateD3Tl($scope.timexes, "move")
+			$scope.updateD3Tl($scope.timexes, $scope.dcts, "move")
 		}
 	}
 
@@ -199,7 +202,7 @@ app
 	$scope.switchView = function(v){ DateHandling.switchView(v) }
 	$scope.hideDoc = function(v){
 		$scope.timexes = DateHandling.hideDoc(v,$scope.timexes);
-		$scope.updateD3Tl($scope.timexes,"delete")
+		$scope.updateD3Tl($scope.timexes,$scope.dcts, "delete")
 	}
 
 	$scope.addDocument = function(val,source){
@@ -211,6 +214,7 @@ app
         		$scope.myfile = data;
 			$scope.files.push(data);
 			dct = getDCT(data);
+			$scope.dcts.push(dct);
 			
 			var docTitle = data.match(/<TITLE>([^<]*)<\/TITLE>/)[1]
 			docTitle = cleanSubtitle(docTitle)
@@ -233,7 +237,7 @@ app
 
 			$scope.timexes = CreateArray.makeArray($scope.timexes,data,nrIds,nrSents)
 			$scope.singleSents[$scope.docNr] = CreateArray.recreateText(data, $sce, nrSents,nrIds);
-			$scope.updateD3Tl($scope.timexes,"newDoc",$scope.clickingCircle)
+			$scope.updateD3Tl($scope.timexes,$scope.dcts,"newDoc",$scope.clickingCircle,"xx")
 
 			// Adjust DOM
 			$("#button_"+docNr).css("background-color", "rgb("+colorDate[docNr]+")")
@@ -311,7 +315,7 @@ app
 
 	$(window).bind( "resize" , function() {
 		if(this.id) clearTimeout(this.id);
-		this.id = setTimeout($scope.updateD3Tl($scope.timexes, "resize"), 500);
+		this.id = setTimeout($scope.updateD3Tl($scope.timexes, $scope.dcts, "resize"), 500);
 	});
 
 
@@ -363,20 +367,18 @@ this.buildTl = function($scope){
 	      		event.preventDefault();
 	      		$scope.deleteDate("one");
 	      		// Editor doesn't hide event when deleted over key
-	      		console.log($scope.dateSelected)
+	      		// ??
 	      	}
 	  	}
 	});
 
   	var chart = d3.timeline();
   	chart
-	// !!! ticks have to be adjusted to input data
 	.itemHeight(circleSize)
 	.margin({ left: margin.left, right:margin.right, top: margin.top, bottom:margin.bottom })
 	.tickFormat({
-		//format: d3.time.format("%Y"),
-		tickTime: d3.time.years,  // !!!
-		tickInterval: 5,          // !!!
+		tickTime: d3.time.years,
+		tickInterval: 5,
 		tickSize: 10
 	})
 	//.mouseover(function(i){ })
@@ -388,24 +390,28 @@ this.buildTl = function($scope){
 		.html("") // to remove Waiting Gif
 		.append("svg")
 		.attr("width", $scope.tlWidth)
-		.attr("height", 300)
-		.datum($scope.timexes)
-		.call(chart)
+		.attr("height", $scope.tlHeight)
+		
 		//.call(brush);
+	
+	// Add group for reference lines
+	myTl.append("g").attr("class", "ref")
 
+	myTl.datum($scope.timexes)
+		.call(chart)
 
 	$scope.scaleFactor = scaleFactor;
 	if($scope.timexes.length!=0){
 		$scope.dateInfo = [{
-		typ : $scope.timexes[$scope.currIndex].typ,
-		val : $scope.timexes[$scope.currIndex].val,
-		title : checkIfDate($scope.timexes[$scope.currIndex].val),
-		titleDur : $scope.timexes[$scope.currIndex].title,
-		subtitle : $scope.timexes[$scope.currIndex].sub,
-		sent : $scope.timexes[$scope.currIndex].sent,
-		dateArray : [],
-		currSent : -1,
-		currId : 0
+			typ : $scope.timexes[$scope.currIndex].typ,
+			val : $scope.timexes[$scope.currIndex].val,
+			title : checkIfDate($scope.timexes[$scope.currIndex].val),
+			titleDur : $scope.timexes[$scope.currIndex].title,
+			subtitle : $scope.timexes[$scope.currIndex].sub,
+			sent : $scope.timexes[$scope.currIndex].sent,
+			dateArray : [],
+			currSent : -1,
+			currId : 0
 		}]
 	}
 		
@@ -501,46 +507,11 @@ this.scrollToSent = function(thisid,sent,thisDocNr,view){
     	$(thisDiv).animate({ scrollTop: topPos }, 300);
   }
 
-this.updateD3Tl = function(tx, action, clickFct, nr){
+this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	// Check for duplicates, but don't reorder, because that would mess up D3 elements
 	var d = checkDuplicatesWithoutOrdering(tx);
 
-	if(action == "loadData"){ d3.select("svg").select("g").selectAll(".timelineItem").remove() }
 
-	if(action=="add" || action == "merge" || action=="newDoc" || action=="loadData"){
-		if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
-		else{ var newpath = "M 0, 0 m -30, 0 a 30,30 0 1,0 60,0 a 30,30 0 1,0 -60,0" }
-
-		var timexElements = d3.select("svg").select("g").selectAll(".timelineItem").data(d).enter();
-		timexElements
-		//d3.select("svg").select("g").selectAll("circle").data(d).enter()
-		.append('path')
-		.attr("d", newpath )
-		.attr("class" , function(d){
-
-			if(action=="newDoc" || action=="loadData"){
-				var classes = " timelineItem_sent_"+d.sentNr }
-			else{ var classes = ""}
-
-			if(d.typ=="duration"){ return "timelineItem duration" + classes }
-			else{ return "timelineItem date"+classes }
-		})
-		.attr("id", function(d){ return "timelineItem_"+ d.id })
-		.attr("fill" , function(d){ return getColor(d) })
-		.attr("stroke" , function(d){
-			if(d.typ=="duration"){ return getColor(d) }
-			else{  return "#fff" }
-		})
-		.attr("stroke-width" , function(d){
-			if(d.typ=="duration"){ return 4 }
-			else{  return 2 }
-		})
-		.on("click", function (d) { clickFct(d) })
-		//.append('title')
-    		//.text("xxx")
-		
-	}
-	
 	// RESCALING AXIS
 	var minTime = 1451606400000;
 	var maxTime = -90000000000000; // Because 0 = 1970
@@ -599,8 +570,81 @@ this.updateD3Tl = function(tx, action, clickFct, nr){
       //console.log("Beg: "+beginning+", End: "+ending)
 
       scaleFactor = (1/(ending - beginning)) * (width - margin.left - margin.right)
-  	//d.forEach( function(datum, index){
+
+	
+
+
+
+	if(action == "loadData"){ d3.select("svg").select("g").selectAll(".timelineItem").remove() }
+
+	if(action=="add" || action == "merge" || action=="newDoc" || action=="loadData"){
+		if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
+		else{ var newpath = "M 0, 0 m -30, 0 a 30,30 0 1,0 60,0 a 30,30 0 1,0 -60,0" }
+
+		var timexElements = d3.select("svg").select("g.allthedates").selectAll(".timelineItem").data(d).enter();
+		timexElements
+		//d3.select("svg").select("g").selectAll("circle").data(d).enter()
+		.append('path')
+		.attr("d", newpath )
+		.attr("class" , function(d){
+
+			if(action=="newDoc" || action=="loadData"){
+				var classes = " timelineItem_sent_"+d.sentNr }
+			else{ var classes = ""}
+
+			if(d.typ=="duration"){ return "timelineItem duration" + classes }
+			else{ return "timelineItem date"+classes }
+		})
+		.attr("id", function(d){ return "timelineItem_"+ d.id })
+		.attr("fill" , function(d){ return getColor(d) })
+		.attr("stroke" , function(d){
+			if(d.typ=="duration"){ return getColor(d) }
+			else{  return "#fff" }
+		})
+		.attr("stroke-width" , function(d){
+			if(d.typ=="duration"){ return 4 }
+			else{  return 2 }
+		})
+		.on("click", function (d) { clickFct(d) })
+		//.append('title')
+    		//.text("xxx")
+
+
+	}
+	
+	
+	// Add Reference Lines
+	if(action=="newDoc"){
+		var reflines = d3.select("svg").select("g.ref").selectAll("line").data(dcts).enter();
+		reflines.append("svg:line")
+		.attr("x1", function(t){
+			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
+			return margin.left + (dctstamp - beginning) * scaleFactor;
+			})
+		.attr("y1", 0)
+		.attr("x2", function(t){
+			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
+			return margin.left + (dctstamp - beginning) * scaleFactor;
+			})
+		.attr("y2", tlHeight)
+		.style("stroke", "#FF0000")
+		.style("stroke-dasharray", "3,5")
+	}
+
+
+	// Update all paths
 	var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition();
+	
+	// Update all refs
+	var refs = d3.select("svg").select("g.ref").selectAll("line").data(dcts).transition()
+		.attr("x1", function(t){
+			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
+			return margin.left + (dctstamp - beginning) * scaleFactor;
+			})
+		.attr("x2", function(t){
+			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
+			return margin.left + (dctstamp - beginning) * scaleFactor;
+			});
 
 	paths.attr("d", function(d){
 		// line
@@ -991,7 +1035,7 @@ app.service('DateHandling', function(){
 			})	
 		}
 		$(".timex, .listEl").removeClass("highlighted");
-		$scope.updateD3Tl($scope.timexes, "delete");
+		$scope.updateD3Tl($scope.timexes, $scope.dcts, "delete");
 		$scope.severalSelected = false;
 
 		return $scope.timexes;
@@ -1003,7 +1047,7 @@ app.service('DateHandling', function(){
 		$scope.dateSelected = true;
 		var thisIndex = $scope.currIndex;
 		$scope.timexes[thisIndex].visible = true;
-		$scope.updateD3Tl($scope.timexes, "recover");
+		$scope.updateD3Tl($scope.timexes, $scope.dcts, "recover");
 		return $scope.timexes;
 	}
 
@@ -1015,7 +1059,6 @@ app.service('DateHandling', function(){
 		if(aT){
 			aT = aT.split("_")[1]
 			if(aT!="list"){ currDoc = aT }
-			console.log(currDoc)
 		}
 		
 
@@ -1030,7 +1073,7 @@ app.service('DateHandling', function(){
 		$scope.currIndex = number;
 		
 		d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec",false)
-		$scope.updateD3Tl($scope.timexes, "add", $scope.clickingCircle);
+		$scope.updateD3Tl($scope.timexes, $scope.dcts, "add", $scope.clickingCircle);
 		$scope.dateInfo = [];
 		$scope.dateInfo.push({ currId : number });
 		$scope.dateInfo[0] = $scope.showDateInfo($scope.timexes[number]);
@@ -1087,7 +1130,7 @@ app.service('DateHandling', function(){
 		$scope.dateInfo = [];
 		$scope.currIndex = newId;
 		
-		$scope.updateD3Tl($scope.timexes, "merge", $scope.clickingCircle, newId);
+		$scope.updateD3Tl($scope.timexes, $scope.dcts, "merge", $scope.clickingCircle, newId);
 		$scope.dateSelected = true;
 
 		$scope.makeSelection(newSentNr,$scope.timexes[newId],"fromMerging")
@@ -1127,7 +1170,7 @@ app.service('DateHandling', function(){
 		$scope.timexes[thisIndex].times[0].starting_time = newDate.startVal;
 		$scope.timexes[thisIndex].times[0].ending_time = newDate.endVal;
 
-		$scope.updateD3Tl($scope.timexes,"unitChange")
+		$scope.updateD3Tl($scope.timexes,$scope.dcts, "unitChange")
 
 		return $scope;
 	}
@@ -1291,7 +1334,7 @@ app.service('DateExporting', function(){
 				}
 			})
 			
-			$scope.updateD3Tl($scope.timexes,"loadData",$scope.clickingCircle)
+			$scope.updateD3Tl($scope.timexes,$scope.dcts, "loadData",$scope.clickingCircle)
 			$scope.docNr = $scope.fileNames.length - 1
 			docNr = $scope.fileNames.length - 1
 			
