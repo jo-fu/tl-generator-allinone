@@ -114,9 +114,9 @@ function checkDateLength(d){
   var l = d.length;
   var date;
   // TODO Include Modality here
-  if(l==12){ date = new Date(d.substr(0,4) , d.substr(4,2) , d.substr(6,2) , d.substr(8,2) , d.substr(10,2)).getTime(); }
-  else if(l==8){ date = new Date(d.substr(0,4) , d.substr(4,2) , d.substr(6,2)).getTime(); }
-  else if(l==6){ date = new Date(d.substr(0,4) , d.substr(4,2)).getTime() }
+  if(l==12){ date = new Date(d.substr(0,4) , d.substr(4,2)-1 , d.substr(6,2) , d.substr(8,2) , d.substr(10,2)).getTime(); }
+  else if(l==8){ date = new Date(d.substr(0,4) , d.substr(4,2)-1 , d.substr(6,2)).getTime(); }
+  else if(l==6){ date = new Date(d.substr(0,4) , d.substr(4,2)-1).getTime() }
   else if(l==4){ date = new Date(d).getTime() }
   
   //return [date,modality]
@@ -142,6 +142,7 @@ function dateConversion(d,mod){
   else{
     var typ = "duration"
     // Duration with XXXX TO XXXX
+    // TODO: what about XXXX,XX TO XXXX,XX,XX etc
     if(d.indexOf("TO")>0){
       var startDate = d.substr(0,4)
       var start = new Date(startDate).getTime()
@@ -377,9 +378,9 @@ function cleanSubtitle(val){
 
 function cleanUpInput(input){
   cleanedUp = input
-              .replace(/–|—/g, "-")
-              .replace(/’|'/g, "_APOSTROPHE_")
-              .replace(/"|“|”/g, "_QUOTE_")
+              .replace(/[–—–]/g, "-")
+              .replace(/[’']/g, "_APOSTROPHE_")
+              .replace(/["“]|”/g, "_QUOTE_")
               .replace(/ü/g, "&uuml;").replace(/Ü/g, "&Uuml;")
               .replace(/ä/g, "&auml;").replace(/Ä/g, "&Auml;")
               .replace(/ö/g, "&ouml;").replace(/Ö/g, "&Ouml;")
@@ -401,7 +402,7 @@ function cleanUpInput(input){
               .replace(/>/g,"&gt;")
               .replace(/&/g, "_AND_") // to also replace the HTML special chars
               // All the rest is replaced with ?
-              .replace(/[^\x00-\x7F]/g, "...");
+              .replace(/[^\x00-\x7F]/g, "...")
   return cleanedUp;
 }
 
@@ -418,7 +419,7 @@ function preprocessing(){
   var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
   //console.log(content.length)
   if(content.length==0){
-    content = cleanUpInput("You have to enter some text, otherwise we can't find any temporal expressions.")
+    content = "You have to enter some text, otherwise we can't find any temporal expressions."
   }
   var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
     "\n<TITLE>"+title+"</TITLE>"+

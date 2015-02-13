@@ -1,7 +1,8 @@
 html, body {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   background-color: #efefef;
-  height: 100%; }
+  height: 100%;
+  margin: 0; }
 
 #leftBox {
   position: absolute;
@@ -358,6 +359,11 @@ html, body {
   left: 10px;
   font-size: 10px; }
 
+.refline {
+  shape-rendering: crispEdges;
+  stroke: #ccc;
+  stroke-width: 1px; }
+
 .timelineItem {
   -moz-transition: all 300ms ease-in;
   -webkit-transition: all 300ms ease-in;
@@ -467,21 +473,21 @@ html, body {
       background-color: #efefef;
       padding: 20px;
       margin: 0 0 30px 0;
-      height: -webkit-calc(100% - 170px);
-      height: -moz-calc(100% - 170px);
-      height: calc(100% - 170px); }
+      height: -webkit-calc(100% - 140px);
+      height: -moz-calc(100% - 140px);
+      height: calc(100% - 140px); }
     #inputOverlay #inputContainer #insertFile {
       background-color: #efefef;
       text-align: center;
-      padding: 10px;
-      margin: 30px 0 0 0;
-      height: 80px; }
+      height: 55px;
+      padding: 5px; }
     #inputOverlay #inputContainer textarea {
       width: 100%;
       min-height: 100px;
       height: -webkit-calc(100% - 190px);
       height: -moz-calc(100% - 190px);
-      height: calc(100% - 190px); }
+      height: calc(100% - 190px);
+      resize: none; }
   #inputOverlay h1 {
     font-size: 20px;
     margin: 0 0 15px 0; }

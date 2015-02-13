@@ -42,6 +42,7 @@ app
 		    url: "/dothenlp",
 		    contentType: 'application/json;charset=UTF-8',
 		    success: function(data){
+		    	console.log(data)
 		        $(".loading").fadeOut(300)
 		        closeInput()
 			  $scope.addDocument(data.result,"fromInput")
@@ -627,7 +628,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			return margin.left + (dctstamp - beginning) * scaleFactor;
 			})
 		.attr("y2", tlHeight)
-		.style("stroke", "#FF0000")
+		.attr("class", "refline")
 		.style("stroke-dasharray", "3,5")
 	}
 
@@ -712,6 +713,7 @@ app.service('CreateArray', function(SplitSents){
 	            	// Get: ID, Timex, Surrounding Sentence, Value, Mod, Count (=1)
 	            	var x = nTimexes[n]
 	            	var thistempex = x.split(/\<TIMEX2.*?\>/)[1].replace("&#039;","'");
+
 	            	// Check if VAL
 	            	if(x.indexOf("VAL") >= 0){ var thisVal = x.match(/VAL=\"([^<]*)\"/)[1] }
 	            	else{ var thisVal = x.split(">")[1]; }

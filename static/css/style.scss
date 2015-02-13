@@ -31,7 +31,7 @@ $highlightColorHalf:rgba(255, 97, 56, 0.4);
 } 
 
 html, body{
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef; height:100%;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef; height:100%; margin:0;
 }
 // Basic Layout
 #leftBox{ position:absolute; height:100%; width:$leftBoxSize; background-color:#fff; top:0; left:0; }
@@ -168,7 +168,7 @@ html, body{
   #recoverElement{ position:absolute; text-align:left; bottom:10px; left:10px; font-size:10px; }
 }
 
-
+.refline{ shape-rendering: crispEdges; stroke: #ccc; stroke-width:1px; }
 .timelineItem{
     -moz-transition: all 300ms ease-in;
     -webkit-transition: all 300ms ease-in;
@@ -231,9 +231,9 @@ html, body{
 #inputOverlay{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.9); z-index:11; padding:20px;
   #closeInput{ position:absolute; top:0px; right:0; height:50px; width:50px; background-image:url(../img/closeInput.png); background-repeat:no-repeat; background-position:center; cursor:pointer;}
   #inputContainer{ width:100%; margin: 0 auto; height:100%;
-    #insertText{ background-color:#efefef; padding:20px; margin:0 0 30px 0; @include calc(height, "100% - 170px");}
-    #insertFile{ background-color:#efefef; text-align:center; padding:10px; margin:30px 0 0 0; height:80px; }
-    textarea{ width:100%; min-height:100px; @include calc(height , "100% - 190px"); }
+    #insertText{ background-color:#efefef; padding:20px; margin:0 0 30px 0; @include calc(height, "100% - 140px");}
+    #insertFile{ background-color:#efefef; text-align:center; height:55px; padding:5px; }
+    textarea{ width:100%; min-height:100px; @include calc(height , "100% - 190px"); resize: none; }
   }
   h1{ font-size:20px; margin:0 0 15px 0; }
   .optional{ color:#666; font-style:italic; font-size:0.8em; }

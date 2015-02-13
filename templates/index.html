@@ -28,7 +28,7 @@
     <!-- Switch between Views -->
     <!--div id="view_switch"><button>Switch View.</button></div-->
     <div id="docSwitcher">
-      <div ng-repeat="file in fileNames" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{$index}}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[$index] }} )">
+      <div ng-repeat="file in fileNames track by $index" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{$index}}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[$index] }} )">
         {{ file }}
         <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
       </div>

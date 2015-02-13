@@ -177,7 +177,7 @@ Match: (<($ORDINAL_NUMS|$ORDINAL_WORDS)-quarter~.+>|<($ORDINAL_NUMS|$ORDINAL_WOR
 # 28
 
 Type: date
-Match: (<current~.+>|<once~.+>|<medieval~.+>|(<the~.+>)?<future~.+>)
+Match: (<medieval~.+>|(<the~.+>)?<future~.+>)
 
 ---
 # 29
@@ -343,11 +343,11 @@ Type: time
 Guard: \b(ago|hence|from)\b
 Match: (((<.+~CD>(<and~.+>)?)<.+~CD>|(<a~.+><few~.+>|<several~.+>|<some~.+>)))+<minutes?~.+>(<ago~.+>|<hence~.+>|<from~.+><now~.+>)
 
----
+#---
 # 54
 
-Type: date
-Match: <now~.+>
+#Type: date
+#Match: <now~.+>
 
 ---
 # 55
