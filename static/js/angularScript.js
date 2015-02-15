@@ -14,8 +14,8 @@ app
 	$scope.dcts = [];
 	$scope.timexes = [];
 	$scope.currIndex = 0;
-	$scope.tlWidth = $("#rightBox").width() - 50;
-	$scope.tlHeight = 300;
+	$scope.tlWidth = "100%";
+	$scope.tlHeight = $("#topBox").height();
 	$scope.severalSelected = false;
 	$scope.editDate = false;
 	$scope.singleSents = []
@@ -71,7 +71,7 @@ app
 
       //$scope.highlightCircle = function(arr,origin){ return CreateTimeline.highlightCircle(arr,origin) }
       $scope.highlightSent = function(d,docNr){ CreateTimeline.highlightSent(d,docNr) }
-      $scope.scrollToSent = function(id,sent,docNr,v){ CreateTimeline.scrollToSent(id,sent,docNr,v) }
+      $scope.scrollToSent = function(id,sent,docNr){ CreateTimeline.scrollToSent(id,sent,docNr) }
 
       $scope.updateD3Tl = function(tx,dcts,m,fct,nr){ CreateTimeline.updateD3Tl(tx,dcts,m,fct,nr); }
 
@@ -245,8 +245,8 @@ app
 			
 			
 			setTimeout( function(){
-				var pT = $("#docSwitcher").height() + 10
-				$("#leftBox .sidebar").css("padding-top", pT )
+				var pT = $("#docSwitcher").height()
+				$("#centerBox #docText").css("padding-top", pT )
 			} , 500 )
 
 			if(source=="fromInput"){ $scope.$apply($scope) }
@@ -279,32 +279,32 @@ app
 	$scope.arrowKey = function(dir,btn){
 		if($scope.dateSelected){
 			
-			var listLength = $('#listData li').length
+			var listLength = $('#listData tr').length
 			var currListEl = parseInt($("#listEl_" + $scope.currIndex).index()) + 1
-			var newEl = $("#listData li:nth-child("+ (parseInt(currListEl)+1) +")").attr("id")
+			var newEl = $("#listData tr:nth-child("+ (parseInt(currListEl)+1) +")").attr("id")
 
 
 			if(dir=="next"){
 				if(currListEl==listLength){ var newIndex = 1 }
 				else{ var newIndex = parseInt(currListEl)+1 }
-				var newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				var newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
 				
 				// If not visible go one further
 				while (!$scope.timexes[newListEl].visible) {
 					if(newIndex==listLength){ newIndex = 1 }
 					else{ newIndex++ }
-					newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+					newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
 				}
 			}
 			else if(dir=="prev"){
 				if(currListEl==1){ var newIndex = listLength }
 				else{ var newIndex = parseInt(currListEl)-1 }
-				var newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				var newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
 				// If not visible go one further
 				while (!$scope.timexes[newListEl].visible) {
 					if(newIndex==1){ newIndex = listLength }
 					else{ newIndex-- }
-					newListEl = $("#listData li:nth-child("+ newIndex +")").attr("id").split("_")[1]
+					newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
 				}
 			}
 			if(btn){ var origin = "arrowBtn"}
@@ -319,12 +319,12 @@ app
 		this.id = setTimeout($scope.updateD3Tl($scope.timexes, $scope.dcts, "resize"), 500);
 	});
 
-
-	window.setInterval(function(){
+	// AUTOSAVE DEACTIVATED
+	/*window.setInterval(function(){
   		// TODO: Only autosave when there were changes??
   		// Or when window is in focus
   		$scope.saveState($scope, "autosave")
-	}, 60000);
+	}, 60000);*/
 })
 
 // DIRECTIVES
@@ -376,7 +376,7 @@ this.buildTl = function($scope){
   	var chart = d3.timeline();
   	chart
 	.itemHeight(circleSize)
-	.margin({ left: margin.left, right:margin.right, top: margin.top, bottom:margin.bottom })
+	.margin({ left: margin.left, right:margin.right, top: $("#topBox").height()-70, bottom:margin.bottom })
 	.tickFormat({
 		tickTime: d3.time.years,
 		tickInterval: 5,
@@ -398,8 +398,7 @@ this.buildTl = function($scope){
 	// Add group for reference lines
 	myTl.append("g").attr("class", "ref")
 
-	myTl.datum($scope.timexes)
-		.call(chart)
+	myTl.datum($scope.timexes).call(chart)
 
 	$scope.scaleFactor = scaleFactor;
 	if($scope.timexes.length!=0){
@@ -501,11 +500,18 @@ this.highlightSent = function(arr,docNr){
   }
 
 this.scrollToSent = function(thisid,sent,thisDocNr,view){
-  	if(view=="text"){ var thisDiv = "#txtData_"+thisDocNr; var thisEl = "#timeSent_"+sent }
-    	else{ var thisDiv = "#listData"; var thisEl = "#listEl_"+thisid }
-    	var h = $(thisDiv).height() / 2;
-    	var topPos = $(thisDiv).scrollTop() + parseInt($(thisEl).offset().top) - h; 
-    	$(thisDiv).animate({ scrollTop: topPos }, 300);
+	
+	// List View
+  	var thisListEl = "#listEl_"+thisid
+    	var topListPos = $("#leftBox").scrollTop() + $(thisListEl).position().top
+    		- $("#leftBox").height()/2 + $(thisListEl).height()/2;
+    	$("#leftBox").animate({ scrollTop: topListPos }, 300);
+
+	// Text View
+  	var thisTextEl = "#timeSent_"+sent
+    	var topTextPos = $("#centerBox").scrollTop() + $(thisTextEl).position().top
+    		- $("#centerBox").height()/2 + $(thisTextEl).height()/2;
+    	$("#centerBox").animate({ scrollTop: topTextPos }, 300);
   }
 
 this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
@@ -537,30 +543,12 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		ending = 1451606400000
 	}
 	
-	var width = $("#rightBox").width() - 50;
+	var width = $("#topBox").width() - 50;
 	
 	var xScale = d3.time.scale()
 			.domain([beginning, ending])
 			.range([margin.left, width - margin.right]);	
 	
-
-	// ZOOMIN IN & SCROLLING ?????
-	/*if (zoomfactor != 1) {
-		console.log(zoomfactor)
-        var move = function() {
-          var x = Math.min(0, Math.max(width - width*zoomfactor, d3.event.translate[0]));
-          zoom.translate([x, 0]);
-          d3.select("#timeline")
-          .attr("transform", "translate(" + x + ",0)")
-          scroll(x*scaleFactor, xScale);
-        };
-
-        var zoom = d3.behavior.zoom().x(xScale).on("zoom", move);
-
-        d3.select("#timeline")
-          .attr("class", "scrollable")
-          .call(zoom);
-      }*/
       var xAxis = d3.svg.axis().scale(xScale).ticks(15).tickSize(15)
 	d3.select("svg").selectAll("g.axis").call(xAxis);
 
@@ -571,10 +559,6 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
       //console.log("Beg: "+beginning+", End: "+ending)
 
       scaleFactor = (1/(ending - beginning)) * (width - margin.left - margin.right)
-
-	
-
-
 
 	if(action == "loadData"){ d3.select("svg").select("g").selectAll(".timelineItem").remove() }
 
@@ -603,7 +587,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			else{  return "#fff" }
 		})
 		.attr("stroke-width" , function(d){
-			if(d.typ=="duration"){ return 4 }
+			if(d.typ=="duration"){ return 0 }
 			else{  return 2 }
 		})
 		.on("click", function (d) { clickFct(d) })
@@ -627,7 +611,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
 			return margin.left + (dctstamp - beginning) * scaleFactor;
 			})
-		.attr("y2", tlHeight)
+		.attr("y2", $("#topBox").height())
 		.attr("class", "refline")
 		.style("stroke-dasharray", "3,5")
 	}
@@ -655,7 +639,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		})
 		.attr("stroke-width" , function(d){
 			if(d.visible){
-				if(d.typ=="duration"){ return 4 }
+				if(d.typ=="duration"){ return 0 }
 				else{  return 2 }
 			}
 			else{ return 0 }
@@ -663,7 +647,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		
 
 	/* In case there will be any difference between move and delete */
-	if(action=="resize"){ d3.select("#timeline").select("svg").attr("width", $("#rightBox").width() - 50) }
+	if(action=="resize"){ d3.select("#timeline").select("svg").attr("width", $("#topBox").width() - 50) }
 
 	else if(action=="move" || action == "unitChange"){
 		paths
@@ -672,7 +656,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			else{  return "#fff" }
 		})
 		.attr("stroke-width" , function(d){
-			if(d.typ=="duration"){ return 4 }
+			if(d.typ=="duration"){ return 0 }
 			else{  return 2 }
 		})
 	}
@@ -992,7 +976,7 @@ app.service('DateHandling', function(){
       			var view = "text"
       		}
       		$scope.highlightSent($scope.dateInfo,thisDocNr);
-      		$scope.scrollToSent(thisId,sentNr,thisDocNr,view)	
+      		$scope.scrollToSent(thisId,sentNr,thisDocNr)	
       	}
       	// if manually added Date
       	else{ if(!shifted) $(".timex").removeClass("highlighted"); }
@@ -1066,7 +1050,7 @@ app.service('DateHandling', function(){
 
 		var newDate = {
 			id : number , timex : "manually added" , docNr : currDoc,
-			sent : "manually added" , sub : "Optional Title", sentNr : -1 , typ : "date", 
+			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "date", 
 			val : "XXXX" , title : "0000", mod : "" , count : 1 ,
 			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 			times : [{ starting_time : "XXXX" , ending_time : "XXXX"}], visible : true
@@ -1179,12 +1163,10 @@ app.service('DateHandling', function(){
 
 	this.switchView = function(v){
 
-	$(".docView").removeClass("activetab")
+	$(".txtData").removeClass("activetab")
 	$(".docBtn").removeClass("activeBtn")
 	$("#button_"+v).addClass("activeBtn")
-
-	if(v=="list"){ $("#listData").addClass("activetab");  }
-	else{ $("#txtData_"+v).addClass("activetab") }
+	$("#txtData_"+v).addClass("activetab")
 
 	}
 

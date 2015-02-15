@@ -7,8 +7,6 @@ var scaleFactor;
 var itemHeight = 20;
 var margin = { left: 75, right:25, top: 100, bottom:20 };
 
-var tlHeight = 300;
-
 var numberTimexes = 0;
 var timexes = [];
 var currId, currNr, currSent, myTl, dct;
@@ -200,7 +198,7 @@ function dateConversion(d,mod){
 
 function prettifyDate(d){
   var l = d.length;
-  MM = ["January", "February","March","April","May","June","July","August","September","October","November", "December"];
+  MM = ["Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov", "Dec"];
   var prettyD;
 
   if(l==12){ prettyD = d.substr(6,2) + " " + MM[parseInt(d.substr(4,2))-1] + " " + d.substr(0,4) + ", "+d.substr(8,2)+":"+d.substr(10,2); }
@@ -247,38 +245,48 @@ function getXPos(d,beg,scale) {
 
 function getYPos(d) {
     var isDate = !isNaN(d.times[0].starting_time);
-    var pos = margin.top + itemHeight + 4;
+    var pos = $("#topBox").height() - 50 - itemHeight;
     var hasCount = (d.count != 1);
     if(isDate){
       if(hasCount){
         if(d.count<6){ return pos - ((d.count-1)*itemHeight+2) }
-        else{ return pos - 5*itemHeight+2 }
+        else{ return pos }
       }
       else{ return pos }  
     }
-    else{ return 270 }
+    else{ return 100 }
 }
 
 function getLinePath(datum,beginning,scaleFactor){
 
-  var cxStart = parseInt(getXPos(datum,beginning,scaleFactor));
-  var cxEnd = margin.left + (datum.times[0].ending_time - beginning) * scaleFactor;
+  var cxStart = parseInt(getXPos(datum,beginning,scaleFactor))+10;
+  var cxEnd = margin.left + (datum.times[0].ending_time - beginning) * scaleFactor-10;
   
-  var length = cxEnd - cxStart
-  if(length<5){ length = 5 }
+
+  //var length = cxEnd - cxStart
+  //if(length<5){ length = 5 }
   
-  var yPos = 155 + datum.count*5
+  var yPos = parseInt($("#topBox").height() - 50 - datum.count*5)
+  var yBottom = yPos - 10
+  var yTop = yPos + 10
+  
+  var xStart = cxStart-10
+  var xEnd = cxEnd+10
+  var lineTop = yPos-1
+  var lineBottom = yPos +1
+
   //console.log(datum.count)
-  var path = "M "+ cxStart +" "+yPos+" l "+ length +" 0"
-  //console.log("End: "+datum.times[0].ending_time+", Start: "+cxStart+", Path: "+path)
+  //var path = "M "+ cxStart +" "+yPos+" l "+ length +" 0"
+  var path =  "M" + xStart + " " + yTop + " L" + xStart + " " + yBottom + " L" + cxStart + " " + lineBottom +
+              // Line + Back Triangle
+              " L" + cxEnd + " " + lineBottom + " L" + xEnd + " " + yBottom + " L" + xEnd + " " + yTop + " L" + cxEnd + " " + lineTop +
+              // Line closing path
+              " L" + cxStart + " " + lineTop +" Z"
+
   return path
 }
 
-/*function getIndex(timexes,el){
-  var thisObj = $.grep(timexes, function(tx){ return tx.id == el.currId; })[0]
-  var thisIndex = timexes.indexOf(thisObj)
-  return thisIndex;
-}*/
+
 
 function getColor(d){
   var isDate = !isNaN(d.times[0].starting_time);

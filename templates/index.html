@@ -21,27 +21,59 @@
 
 <body ng-controller="MainCtrl">
   {% raw %}
-  
-<!-- leftBox: Text and List Viewer -->
+
+  <!-- topBox: Timeline JS -->
+  <div id="topBox">
+    
+    <div id="timeline">
+        <p style="text-align:center;"><i>Please select a document or add dates manually.</i></p>
+        
+    </div>
+    <!-- Add date + Arrow buttons -->  
+    <h1 id="tlc" ng-if="!severalSelected">TimeLineCurator</h1>
+    <div id="prevDate" class="ctlBtns" title="Go to the previous date" ng-click="arrowKey('prev','btn')"></div>
+    <div id="nextDate" class="ctlBtns" title="Go to the next date" ng-click="arrowKey('next','btn')"></div>
+    <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
+
+  </div>
+
+ 
+ <!-- bottomBox: ListView / TextView / ControlPanel -->
+  <div id="bottomBox">
+ 
+
+<!-- leftBox: ListView -->
 <div id="leftBox">
 
-    <!-- Switch between Views -->
-    <!--div id="view_switch"><button>Switch View.</button></div-->
+<!-- List Viewer -->
+      <div id="listData">
+        <table>
+          <tr ng-repeat="tx in timexes | orderBy: 'val'" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
+            <td class="docColor_{{ tx.docNr }}">&#8226;</td>
+            <td><b>{{ tx.title }}</b></td>
+            <td><small>{{ tx.sub }}</small></td>
+          </tr>
+        </table>
+      </div>
+
+</div>
+
+
+<!-- centerBox: TextView -->
+<div id="centerBox">
+
     <div id="docSwitcher">
       <div ng-repeat="file in fileNames track by $index" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{$index}}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[$index] }} )">
         {{ file }}
         <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
       </div>
-      <div id="button_list" class="docBtn" ng-click="switchView( 'list' )" style="background-color:#efefef;">List View</div>
+      <div id="addDoc" class="ctlBtns" title="Add a new document" onclick="openInput()"></div>
 
-    <div id="addDoc" class="ctlBtns" title="Add a new document" onclick="openInput()"></div>
-
-    
-
+      <!--div id="button_list" class="docBtn" ng-click="switchView( 'list' )" style="background-color:#efefef;">List View</div-->
     </div>
-    <!-- Text Viewer -->
-    <div id="txtViewer">
-      <div id="txtData_{{$index}}" ng-repeat="doc in singleSents" class="sidebar docView txtData" ng-class="{ activetab: $index == docNr}">
+
+    <div id="docText">
+      <div id="txtData_{{$index}}" ng-repeat="doc in singleSents" class="txtData" ng-class="{ activetab: $index == docNr}">
         
         <span ng-repeat="sent in doc">
           <!-- For sentences WITH Timexes -->
@@ -51,36 +83,21 @@
 
         </span>
       </div>
-
-
-      <!-- List Viewer -->
-      <div class="sidebar docView" id="listData">
-        <ul>
-        <li ng-repeat="tx in timexes | orderBy: 'val'" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}">
-          <span style="color:#ccc;" ng-if="!tx.visible"><b>{{ tx.title }}</b> <small>({{tx.timex}})</small></span>
-          <span ng-if="tx.visible"><b>{{ tx.title }}</b> <small>({{tx.timex}})</small><br>
-            <span class="subtitle">Title: <b>{{tx.sub}}</b></span></span>
-        </li>
-        </ul>
-      </div>
     </div>
 </div>
 
+<!-- rightBox: RightView -->
 <div id="rightBox">
-  <!-- topBox: Timeline JS -->
-  <div id="topBox">
 
-<!-- Upper left Toolbox -->
+  <!-- Editor -->
+  
 
-    <h1 id="tlc" ng-if="!severalSelected">TimeLineCurator</h1>
 
-    <div id="mergeDates" class="ctlBtns" ng-if="severalSelected" title="Merge these dates" ng-click="mergeDates()"></div>
-
-    <div id="deleteAll" class="ctlBtns" ng-if="severalSelected" title="Delete these dates" ng-click="deleteDate('all')"></div>
-
-<!-- Upper right Toolbox -->
-    <!-- Load previous saved state -->
+  <!-- ToolBox -->
+  <div id="toolBox">
     <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="uploadData=!uploadData"></div>
+
+    <!-- Import Data-->
     <ul ng-if="uploadData" id="loadDataOptions">
       <li ng-class="{ notSelectable: !prevData}" ng-click="loadData('localStorage')">Load previous state</li>
       <li onclick="triggerUpload()">Load from file</li>
@@ -96,106 +113,99 @@
     <a href="tljs" target="_blank">
       <div id="exportJson" class="ctlBtns" title="Export this dates to Timeline JS" ng-click="exportAsJson()"></div>
     </a>
+
+    <div class="tool ctlBtns" title="Delete this date" ng-click="deleteDate('one')" id="tool_delete"></div>
+
+    <div id="mergeDates" class="ctlBtns" ng-if="severalSelected" title="Merge these dates" ng-click="mergeDates()"></div>
+
+    <div id="deleteAll" class="ctlBtns" ng-if="severalSelected" title="Delete these dates" ng-click="deleteDate('all')"></div>
+
   </div>
-  
-  <!-- bottomBox: Editor -->
-  <div id="bottomBox">
-    
-    <div id="timeline">
-        <p style="text-align:center;"><i>Please select a document or add dates manually.</i></p>
-        <!-- Absolute  positioned Add Date Button -->  
-    </div>
-    <div id="prevDate" class="ctlBtns" title="Go to the previous date" ng-click="arrowKey('prev','btn')"></div>
-    <div id="nextDate" class="ctlBtns" title="Go to the next date" ng-click="arrowKey('next','btn')"></div>
 
-    <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
+  <!-- ToolBox END -->
 
-      <!-- General Timeline information -->
-      <div class="display" ng-show="!dateSelected">
+  <!-- General Timeline information -->
+  <div class="display" ng-show="!dateSelected">
 
-        <!-- Editable TL Title -->
-        <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
-          <input ng-switch-when="true" size="30" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
-          <div ng-switch-default ng-click="enableEdit('d')"><h2>{{ tlDescr[0] }}</h2></div>
-        </ng-switch>
-    
+    <!-- Editable TL Title -->
+    <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
+      <input ng-switch-when="true" size="30" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
+      <div ng-switch-default ng-click="enableEdit('d')"><h2>{{ tlDescr[0] }}</h2></div>
+    </ng-switch>
 
-        <!-- Editable Content -->
-        <ng-switch on="editContent" id="displayContent">
-          <!-- Edit Mode -->
-          <textarea rows="4" cols="36" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
-          <!-- Preview Mode -->
-          <div ng-switch-default ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
-        </ng-switch>
+    <!-- Editable Content -->
+    <ng-switch on="editContent" id="displayContent">
+      <!-- Edit Mode -->
+      <textarea rows="4" cols="36" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
+      <!-- Preview Mode -->
+      <div ng-switch-default ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
+    </ng-switch>
 
-      </div>
+  </div>
       
 
 
-
-      <!-- Single dates information -->
-      <div class="display" ng-show="dateSelected && timexes[currIndex].visible">
+    <!-- Single dates information -->
+    <div class="display" ng-show="dateSelected && timexes[currIndex].visible">
+      
+     <div style="margin-bottom:25px;">
+      <!-- Editable Date -->
+      <ng-switch on="editDate" id="displayDate" class="editorfield">
+        <span class="label">Date:</span>
+      <!-- EDIT MODE -->
+        <div ng-switch-when="true" id="dateEditMode">
         
-       <div style="margin-bottom:25px;">
-        <!-- Editable Date -->
-        <ng-switch on="editDate" id="displayDate" class="editorfield">
-          
-        <!-- EDIT MODE -->
-          <div ng-switch-when="true" id="dateEditMode">
-          
-            <input title="time of day" maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[3]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[3]" ></input>
-              <span class="addDimension" ng-click="addTime('start')" ng-if="dateInfo[0].dateArray[3]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[3]" >time</span>
+          <input title="time of day" maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[3]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[3]" ></input>
+            <span class="addDimension" ng-click="addTime('start')" ng-if="dateInfo[0].dateArray[3]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[3]" >time</span>
 
-            <input title="day in month" maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[2]!='xx'" ng-model="$parent.dateInfo[0].dateArray[2]" ></input>
-              <span class="addDimension" ng-click="addDay('start')" ng-if="dateInfo[0].dateArray[2]=='xx'" ng-model="$parent.dateInfo[0].dateArray[2]" >day</span>
+          <input title="day in month" maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[2]!='xx'" ng-model="$parent.dateInfo[0].dateArray[2]" ></input>
+            <span class="addDimension" ng-click="addDay('start')" ng-if="dateInfo[0].dateArray[2]=='xx'" ng-model="$parent.dateInfo[0].dateArray[2]" >day</span>
 
-            <input title="Month" maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[1]!='xx'" ng-model="$parent.dateInfo[0].dateArray[1]" ></input>
-              <span class="addDimension" ng-click="addMonth('start')" ng-if="dateInfo[0].dateArray[1]=='xx'" ng-model="$parent.dateInfo[0].dateArray[1]" >month</span>
+          <input title="Month" maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[1]!='xx'" ng-model="$parent.dateInfo[0].dateArray[1]" ></input>
+            <span class="addDimension" ng-click="addMonth('start')" ng-if="dateInfo[0].dateArray[1]=='xx'" ng-model="$parent.dateInfo[0].dateArray[1]" >month</span>
 
-            <input id="startdateYear" title="Year" maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[0]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]"></input>
-              <!--div class="addDimension" ng-if="dateInfo[0].dateArray[0]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]">+</div-->
-          
-          
-          <!-- IF DURATION -->
-          <span ng-if="dateInfo[0].typ=='duration'">
-            <span> - </span>
-            <input maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[7]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[7]" ></input>
-              <span class="addDimension" ng-click="addTime('end')" ng-if="dateInfo[0].dateArray[7]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[7]" >time</span>
+          <input id="startdateYear" title="Year" maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[0]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]"></input>
+            <!--div class="addDimension" ng-if="dateInfo[0].dateArray[0]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[0]">+</div-->
+        
+        
+        <!-- IF DURATION -->
+        <span ng-if="dateInfo[0].typ=='duration'">
+          <span> - </span>
+          <input maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[7]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[7]" ></input>
+            <span class="addDimension" ng-click="addTime('end')" ng-if="dateInfo[0].dateArray[7]=='xxxx'" ng-model="$parent.dateInfo[0].dateArray[7]" >time</span>
 
-            <input maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[6]!='xx'" ng-model="$parent.dateInfo[0].dateArray[6]" ></input>
-              <span class="addDimension" ng-click="addDay('end')" ng-if="dateInfo[0].dateArray[6]=='xx'" ng-model="$parent.dateInfo[0].dateArray[6]" >day</span>
+          <input maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[6]!='xx'" ng-model="$parent.dateInfo[0].dateArray[6]" ></input>
+            <span class="addDimension" ng-click="addDay('end')" ng-if="dateInfo[0].dateArray[6]=='xx'" ng-model="$parent.dateInfo[0].dateArray[6]" >day</span>
 
-            <input maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[5]!='xx'" ng-model="$parent.dateInfo[0].dateArray[5]" ></input>
-              <span class="addDimension" ng-click="addMonth('end')" ng-if="dateInfo[0].dateArray[5]=='xx'" ng-model="$parent.dateInfo[0].dateArray[5]" >month</span>
+          <input maxlength="2" onkeypress='return validate(event)' size="2" ng-if="dateInfo[0].dateArray[5]!='xx'" ng-model="$parent.dateInfo[0].dateArray[5]" ></input>
+            <span class="addDimension" ng-click="addMonth('end')" ng-if="dateInfo[0].dateArray[5]=='xx'" ng-model="$parent.dateInfo[0].dateArray[5]" >month</span>
 
-            <input maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[4]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[4]"></input>
-          </span>
+          <input maxlength="4" onkeypress='return validate(event)' size="4" ng-if="dateInfo[0].dateArray[4]!='xxxx'" ng-model="$parent.dateInfo[0].dateArray[4]"></input>
+        </span>
 
-          <!-- Date Editing Control Panel -->
+        <!-- Date Editing Control Panel -->
 
-            <span class="ctlBtns" title="Apply changes" id="check" ng-click="checkThisDate()"></span>
+          <span title="Add a second date to create a time span" ng-if="dateInfo[0].typ=='date'||dateInfo[0].typ=='neither'" class="changeUnit ctlBtns" ng-click="changeUnit('toDur')"></span>
+          <span title="Make it an event instead of a time span" ng-if="dateInfo[0].typ=='duration'" class="changeUnit ctlBtns durtodate" ng-click="changeUnit('toDate')"></span>
 
-            <span title="Add a second date to create a time span" ng-if="dateInfo[0].typ=='date'||dateInfo[0].typ=='neither'" class="changeUnit ctlBtns" ng-click="changeUnit('toDur')"></span>
-            <span title="Make it an event instead of a time span" ng-if="dateInfo[0].typ=='duration'" class="changeUnit ctlBtns durtodate" ng-click="changeUnit('toDate')"></span>
+          <span class="ctlBtns" title="Apply changes" id="check" ng-click="checkThisDate()"></span>
 
-          <!--/div-->
+        <!--/div-->
 
-          </div>
-          <!-- END EDIT MODE -->
-
-          <div ng-switch-default ng-click="enableEdit('t')">
-            <span class="label">Date:</span>
-            <span class="datetitle ctl">{{ dateInfo[0].title }}<span>
-          </div>
-        </ng-switch>
-      </div>
+        </div>
+        <!-- END EDIT MODE -->
+        <div ng-switch-default ng-click="enableEdit('t')">
+          <span class="datetitle ctl">{{ dateInfo[0].title }}<span>
+        </div>
+      </ng-switch>
+    </div>
 
       <div style="margin-bottom:25px;">
         <!-- Editable Subtitle -->
         <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
+          <span class="label">Title:<br></span>
           <input ng-switch-when="true" ng-model="$parent.dateInfo[0].subtitle" onkeypress='validate(event,this)' unfocus="disableEdit('d')"></input>
           <div ng-switch-default ng-click="enableEdit('d')">
-            <span class="label">Title:</span>
             <span class='subtitle ctl'>{{ dateInfo[0].subtitle }}</span>
           </div>
         </ng-switch>
@@ -209,7 +219,6 @@
 
           <textarea rows="15" cols="44" ng-switch-when="true" ng-model="$parent.dateInfo[0].sent" unfocus="disableEdit('c')"></textarea>
           <!-- Preview Mode -->
-          
           <div class="content ctl" ng-switch-default ng-click="enableEdit('c')">
             <p ng-bind-html="highlightTimex(dateInfo[0].sent, dateInfo[0].timex)"></p>
           </div>
@@ -222,7 +231,7 @@
         </div>
         <!-- Media -->
         <!-- Source -->
-        <div ng-if="addMedia">
+        <div id="addMediaBox" ng-if="addMedia">
             <ng-switch on="editMediaSource" id="mediaSource" class="editorfield">
               <input ng-switch-when="true" ng-model="$parent.dateInfo[0].medium['source']" onkeypress='validate(event,this)' unfocus="disableEdit('ms')"></input>
               <div class="media" ng-switch-default ng-click="enableEdit('ms')"><p>{{ dateInfo[0].medium["source"] }}</p></div>
@@ -241,18 +250,13 @@
             </ng-switch>
         </div>
 
-        <div id="tools">
-          <!--div class="tool" id="tool_edit">Edit</div>
-          <div class="tool" id="tool_move">Move</div-->
-          <div class="tool ctlBtns" title="Delete this date" ng-click="deleteDate('one')" id="tool_delete"></div>
-        </div>
 
       </div>
       <div id="recoverElement" ng-show="!timexes[currIndex].visible && dateInfo.length!=0">
           <i>You deleted this element</i><br>
           <div ng-click="recoverDate()" style="cursor:pointer; color:#ff6138;"><b>No!</b> Bring it back please!</div>
       </div>
-
+  </div>
   </div>
 
 </div>

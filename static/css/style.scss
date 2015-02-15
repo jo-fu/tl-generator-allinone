@@ -14,12 +14,7 @@ $doc2: rgb(251,154,153);
 $doc3: rgb(253,191,111);
 $doc4: rgb(202,178,214);
 $doc5: rgb(255,255,153);
-$doc6: rgb(31,120,180);
-$doc7: rgb(51,160,44);
-$doc8: rgb(227,26,28);
-$doc9: rgb(255,127,0);
-$doc10: rgb(106,61,154);
-$doc11: rgb(177,89,40);
+
 
 $highlightColor:rgb(255, 97, 56);
 $highlightColorHalf:rgba(255, 97, 56, 0.4);
@@ -34,18 +29,80 @@ html, body{
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef; height:100%; margin:0;
 }
 // Basic Layout
-#leftBox{ position:absolute; height:100%; width:$leftBoxSize; background-color:#fff; top:0; left:0; }
-#rightBox{ position:absolute; height:100%; width:100%-$leftBoxSize; top:0; left:$leftBoxSize;
-  #topBox{ position:relative; height: 50px; width: 100%; background-color:#efefef; }
-  #bottomBox{ position:absolute; top: 50px; bottom: 0px; width: 100%; background-color:#efefef; }
+#topBox{ position:relative; height: 50%; width: 100%; background-color:#efefef; }
+
+#bottomBox{ position:relative; height: 50%; width: 100%; background-color:#f9f9f9; border-top: 1px solid #999; box-sizing: border-box;
+
+  #leftBox{ height:100%; width:30%; float:left; overflow-y: auto; border-right: 1px solid #999; box-sizing: border-box; }
+  #centerBox{ height:100%; width:30%; float:left; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #999; box-sizing: border-box; }
+  #rightBox{ height:100%; width: 40%; float:left; position:relative; }
+  
   }
 
-.ctl{ margin:10px; padding:5px 10px; background-color:#fff; cursor:pointer; box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow;}
-.ctlBtns{ width:$btnsSize; height:$btnsSize; margin:9px 2px 10px 10px; border:1px solid #efefef; background-repeat:no-repeat;
-    float: left; background-color:#fff; background-position:center; cursor:pointer;
+#topBox{
+  #tlc{ position:absolute; left:10px; top:0px; font-size:20px; font-weight:lighter; color:#999; margin:10px; }
+}
+
+#leftBox{
+  table{ padding:15px; width:100%; border-collapse:collapse; font-size:0.9em; }
+  tr{ border-bottom: 1px solid #ccc !important; }
+  tr:hover{ background-color:#efefef; }
+  td{ padding: 0 5px; }
+  td:nth-child(3){ line-height:1em; }
+  .deleted{ text-decoration:line-through; background-color:#ccc; font-size:0.7em; }
+}
+// Center Box
+#centerBox{
+   #docSwitcher{ z-index:10; height:auto; min-height:40px; position:absolute; max-width:29%;
+    .docBtn{ padding: 5px 15px 3px 8px; margin: 0 5px 7px 0; float:left; cursor:pointer; position:relative;
+      -moz-box-shadow:$shadow; -webkit-box-shadow:$shadow; box-shadow:$shadow; font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
+    #addDoc{ float:left; }
+    .inactive{ font-size: 5px; background-color: #999 !important; color:#fff !important }
+    .inactive .hideDoc{ background-image: url("../img/reload.png") !important; }
+    .docBtn:active, .activeBtn{ margin:2px 3px 5px 2px; -moz-box-shadow:$noshadow; -webkit-box-shadow:$noshadow; box-shadow:$noshadow; }
+    .hideDoc{ width:10px; height:10px; position:absolute; top:3px; right:2px; background-image:url("../img/delete.png"); background-size:100%;}
+  }
+  #docText{ padding:15px;
+    
+    .txtData{ display:none;
+      .tx{ color: $highlightColor; font-weight: bold; }
+    }
+    .activetab{ display:block; }
+  }
+}
+
+#rightBox{ 
+  #toolBox{ position:absolute; right:0; top:0; height:100%; width: ($btnsSize+10px);
+    #loadData{ background-image:url(../img/loadData.png); }
+    #loadDataOptions{ position:absolute; top:40px; z-index:1; right:82px; }
+    #saveState{ background-image:url(../img/saveState.png); }
+    #exportJson{ background-image:url(../img/exportJson.png); }
+    #tool_delete{ background-image:url(../img/delete.png); }
+    #mergeDates{ background-image:url(../img/merge.png); }
+    #deleteAll{ background-image:url(../img/deleteAll.png); }
+  }
+  .display{
+    @include calc(width, "100% - 60px"); padding:15px;
+    .media p{ font-size:0.8em; }
+    #addMedia{ width: 80px; height: $btnsSize + 10;  margin: 20px 0 0 0px; 
+      #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; color: #333; 
+      box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; float:left; }
+      #addMediaBtn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow; }
+      #mediaIndicator{ width:$btnsSize; height:$btnsSize; background-image:url(../img/hasMedia.png); margin-top:-24px; margin-left:100px; }
+      .hasMedia{ background-position: right; }
+    }
+    #addMediaBox{ padding:1px 10px; background-color:#efefef; }
+  }
+}
+
+// BUTTON STYLE
+.ctl{ padding:5px 10px; background-color:#fff; cursor:pointer; box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow;}
+.ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 2px; border:1px solid #efefef; background-repeat:no-repeat;
+    background-color:#fff; background-position:center; cursor:pointer;
     box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; }
 .ctlBtns:active,  .ctl:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow;
-    margin: 12px 0px 8px 12px; }
+    margin: 2px 0px 0px 2px; }
+
 #addDoc, #addDate{ background-image:url(../img/add.png); margin:5px; }
 #addDate{ position:absolute; top:250px; left:10px;}
 #prevDate, #nextDate{ position:absolute; top:105px; background-image:url(../img/arrows.png) }
@@ -55,118 +112,61 @@ html, body{
 
 
 // Left Box (Text or List display)
-#leftBox{
+
   #view_switch{ width:100%; height:20px; position:absolute; z-index:10; text-align:center; }
-  #docSwitcher{ position:absolute; top:-2px; left:0px; z-index:10; height:auto; min-height:40px;
-    .docBtn{ padding: 5px 15px 3px 8px; margin: 0 5px 7px 0; float:left; cursor:pointer; position:relative;
-      -moz-box-shadow:$shadow; -webkit-box-shadow:$shadow; box-shadow:$shadow; font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
-    .inactive{ font-size: 5px; background-color: #999 !important; color:#fff !important }
-    .inactive .hideDoc{ background-image: url("../img/reload.png") !important; }
-    .docBtn:active, .activeBtn{ margin:2px 3px 5px 2px; -moz-box-shadow:$noshadow; -webkit-box-shadow:$noshadow; box-shadow:$noshadow; }
-    .hideDoc{ width:10px; height:10px; position:absolute; top:3px; right:2px; background-image:url("../img/delete.png"); background-size:100%;}
-    /*.docBtn_0{ background-color: $doc0; }
-    .docBtn_1{ background-color: $doc1; }
-    .docBtn_2{ background-color: $doc2; }*/
-  }
-  .sidebar{ overflow-y:auto; position:absolute; background-color: #fff; height:100%; width:100%; padding:50px 20px 20px; border-right:1px solid #333; box-sizing: border-box; }
-  .activetab{ z-index: 1; }
+ 
+  .listview{ overflow-y:auto; position:absolute; background-color: #fff; height:100%; width:100%; padding:50px 20px 20px; border-right:1px solid #333; box-sizing: border-box; }
+  
+
 
   .highlighted{ background-color:rgba(255,255,157,0.5); }
   .timex{ cursor:pointer; }
-  .txtData{  
-    .tx{ color: $highlightColor; font-weight: bold; }
-    
-    }
+  
   #listData{
     .listEl{ cursor:pointer; }
-    .listEl .subtitle{ display:none; font-size:0.8em; padding-bottom:10px; color:#666; }
-    .listEl:hover .subtitle, .highlighted .subtitle{ display:block; }
-    ul > .doc_0 { color: $doc0; }
-    ul > .doc_1 { color: $doc1; }
-    ul > .doc_2 { color: $doc2; }
-    ul > .doc_3 { color: $doc3; }
-    ul > .doc_4 { color: $doc4; }
-    ul > .doc_5 { color: $doc5; }
-    ul > .doc_6 { color: $doc6; }
-    ul > .doc_7 { color: $doc7; }
-    ul > .doc_8 { color: $doc8; }
-    ul > .doc_9 { color: $doc9; }
-    ul > .doc_10 { color: $doc10; }
-    ul > .doc_11 { color: $doc11; }
+    .docColor_0 { color: $doc0; }
+    .docColor_1 { color: $doc1; }
+    .docColor_2 { color: $doc2; }
+    .docColor_3 { color: $doc3; }
+    .docColor_4 { color: $doc4; }
+    .docColor_5 { color: $doc5; }
     ul > li > span { color: #000; }
   }
 
-}
 
-// Top Box for Tools
-#topBox{
+
   
-  #tlc{ position:absolute; left:10px; top:0px; font-size:20px; font-weight:lighter; color:#999; margin:10px; }
   //#addDoc{ background-image:url(../img/addDoc.png); }
   #selectBox{ position:absolute; top:40px; left:11px; z-index:1; }
 
   
   //#addDate{ background-image:url(../img/add.png); }
-  #mergeDates{ background-image:url(../img/merge.png); }
-  #deleteAll{ background-image:url(../img/deleteAll.png); }
-
-  #loadData{ position:absolute; right:80px; background-image:url(../img/loadData.png); }
-  #loadDataOptions{ position:absolute; top:40px; z-index:1; right:82px; }
-
-  #saveState{ position:absolute; right:45px; background-image:url(../img/saveState.png); }
-  #exportJson{ position:absolute; right:10px; background-image:url(../img/exportJson.png); }
-
+ 
   ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   li{ background-color: #fff; margin: 2px 0; padding:2px 10px; -webkit-box-shadow:$shadow; -moz-box-shadow:$shadow; box-shadow:$shadow}
   li:hover{ background-color:#efefef }
   li:active{ -webkit-box-shadow:$noshadow; -moz-box-shadow:$noshadow; box-shadow:$noshadow; margin: 4px 0 0 2px; }
-}
-
-#bottomBox{
-  
-  .display{
-    width:400px; text-align: center; font-size: 0.5; height: auto; left: 50%; margin-left: -200px; margin-top:20px; position:relative;
-    #name{ font-size: 1; font-weight: bold; }
-    #sentence{ font-style: italic; margin-bottom: 10px; color:#666;}
-    #tools{  margin-left: auto; margin-right: auto; width:40px;
-      .tool{ width:30px; height: 30px; margin: 5px; float:left; cursor:pointer; background-repeat:no-repeat; }
-      #tool_edit{}
-      #tool_move{}
-      #tool_delete{ background-image:url(../img/delete.png); }
-    }
-  }
-
-  #selectedItemInfobox{
-    position:absolute; bottom: 0px; width:100%; height:15px; line-height:15px;
-    font-size:9px; background-color:#efefef; text-align:center; }
 
 
   h1, .datetitle{ font-size: 18px; }
-  h2, .subtitle{ font-size: 15px; color:#333; }
-  .subtitle{ }
+  h2{ font-size: 15px; color:#333; }
+
   .hltx{ color: $highlightColor; font-weight:bold; }
   p, .content{ font-size: 12px; font-weight:normal; }
   .label{ font-size:0.8em; color:#999; font-weight:bold; }
-  input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; text-align:center; }
-  .media p{ font-size:0.8em; }
-  #addMedia{ width: 80px; height: $btnsSize + 10;  margin: 15px auto; 
-      #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; color: #333; 
-    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; float:left; }
-      #addMediaBtn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow; }
-      #mediaIndicator{ width:$btnsSize; height:$btnsSize; background-image:url(../img/hasMedia.png); margin-top:-24px; margin-left:100px; }
-      .hasMedia{ background-position: right; }
-    }
+  input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
+
   .addDimension{ padding: 7px 0 0; cursor:pointer; color:#999; background-position: center top; vertical-align:bottom;
     background-image:url(../img/editAdd.png); background-repeat:no-repeat; font-size:8px; }
   #displayDate input{ font-size: 18px; }
   
-  .changeUnit{ background-image:url(../img/dateToDur.png); margin-top:5px; float:right }
-  .durtodate{ background-image:url(../img/durToDate.png); margin-top:5px; float:right }
-  #check{ background-image:url(../img/check.png); margin-top:5px; float:right }
+  .changeUnit{ background-image:url(../img/dateToDur.png); margin:2px 5px; padding:1px 13px; }
+  .durtodate{ background-image:url(../img/durToDate.png); margin:2px 5px; padding:1px 13px; }
+  #check{ background-image:url(../img/check.png); margin:2px 5px; padding:1px 13px; }
   #dateEditMode{ }
   #displaySubtitle input{ font-size: 14px; }
   #recoverElement{ position:absolute; text-align:left; bottom:10px; left:10px; font-size:10px; }
-}
+
 
 .refline{ shape-rendering: crispEdges; stroke: #ccc; stroke-width:1px; }
 .timelineItem{
@@ -176,8 +176,8 @@ html, body{
     transition: all 300ms ease-in;
     cursor: pointer;
     }
-.selected{ stroke: $highlightColor; stroke-width: 3px; }
-.selectedSec{ stroke: $highlightColorHalf; stroke-width: 3px;  }
+.selected{ fill: $highlightColor; }
+.selectedSec{ fill: $highlightColorHalf;  }
 
 .datelabel{ display: none; text-align: center; }
 .visible{ display: block; }
@@ -199,7 +199,7 @@ html, body{
   font-family: sans-serif;
   font-size: 10px;
 }
-#timeline{ height: 300px; background-color:#fff; 
+#timeline{ background-color:#fff; 
   .timeline-label { font-family: sans-serif; font-size: 32px; }
   .extent{ fill: none; stroke: #999; stroke-width: 1px; stroke-dasharray: 5 }
 }

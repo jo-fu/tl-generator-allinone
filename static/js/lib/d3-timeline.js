@@ -47,7 +47,7 @@
         minTime = 946684800000,
         maxTime = 1420070400000;
 
-      width = $("#rightBox").width() - 50
+      width = $("#topBox").width() - 50
 
 
       // check how many stacks we're gonna need
@@ -91,24 +91,6 @@
         //.tickFormat(tickFormat.format)
         .ticks(15)
         .tickSize(15);
-
-
-      // BRUSHING
-      //Create a linear scale generator for the x of our brush.
-      brushX = d3.scale.linear()
-        .range([0, width])
-        .domain([margin.left,margin.right]);
-
-      //Create a linear scale generator for the y of our brush.
-      brushY = d3.scale.linear()
-        .range([0, 300])
-        .domain([margin.top,margin.bottom]);
-
-      brush = d3.svg.brush().x(brushX).y(brushY)
-      .on("brushstart", function () { console.log("start"); d3.select(".extent").classed("nodisplay",false);})
-      .on('brush', function () { })
-      .on('brushend', function (brush) { console.log(brush); d3.select(".extent").classed("nodisplay",true); })
-
 
       g.append("g")
         .attr("class", "axis")
