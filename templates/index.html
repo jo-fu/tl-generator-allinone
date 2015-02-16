@@ -49,7 +49,7 @@
       <div id="listData">
         <table>
           <tr ng-repeat="tx in timexes | orderBy: 'val'" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
-            <td class="docColor_{{ tx.docNr }}">&#8226;</td>
+            <td><span class="bgColor_{{ tx.docNr }} symbol_{{ tx.typ }}"></span></td>
             <td><b>{{ tx.title }}</b></td>
             <td><small>{{ tx.sub }}</small></td>
           </tr>

@@ -8,6 +8,7 @@ $btnsSize:25px;
 $shadow:2px 2px 0px #666;
 $noshadow:0px 0px 0px #666;
 
+$doc-1: rgb(111,111,111);
 $doc0: rgb(166,206,227);
 $doc1: rgb(178,223,138);
 $doc2: rgb(251,154,153);
@@ -44,12 +45,29 @@ html, body{
 }
 
 #leftBox{
-  table{ padding:15px; width:100%; border-collapse:collapse; font-size:0.9em; }
-  tr{ border-bottom: 1px solid #ccc !important; }
-  tr:hover{ background-color:#efefef; }
-  td{ padding: 0 5px; }
-  td:nth-child(3){ line-height:1em; }
-  .deleted{ text-decoration:line-through; background-color:#ccc; font-size:0.7em; }
+  table{ padding:15px; width:100%; border-collapse:collapse; font-size:0.9em; 
+    tr{ border-bottom: 1px solid #ccc !important; }
+    tr:hover{ color:darken( $highlightColor, 35% ); }
+    .highlighted:hover{ color:#fff; }
+    td{ padding: 2px 5px; position:relative; }
+    td:nth-child(1){ width:32px; }
+    td:nth-child(3){ line-height:1em; }
+    .deleted{ text-decoration:line-through; background-color:#ccc; font-size:0.7em; }
+    .listEl{
+      .bgColor_-1 { background-color: $doc-1; border-color:transparent transparent transparent $doc-1 }
+      .bgColor_0 { background-color: $doc0; border-color:transparent transparent transparent $doc0 }
+      .bgColor_1 { background-color: $doc1; border-color:transparent transparent transparent $doc1 }
+      .bgColor_2 { background-color: $doc2; border-color:transparent transparent transparent $doc2 }
+      .bgColor_3 { background-color: $doc3; border-color:transparent transparent transparent $doc3 }
+      .bgColor_4 { background-color: $doc4; border-color:transparent transparent transparent $doc4 }
+      .bgColor_5 { background-color: $doc5; border-color:transparent transparent transparent $doc5 }
+      .symbol_date{ width:12px; height:12px; border-radius:6px; margin:-6px 5px; position:absolute; }
+      .symbol_duration{ background-color:transparent; width:0; height:0; border-width:8px 12px; border-style:solid; margin:-6px 5px; position:absolute; }
+      .symbol_neither{ width:10px; height:10px; margin:-6px 5px; position:absolute; }
+    }
+    
+
+  }
 }
 // Center Box
 #centerBox{
@@ -119,11 +137,12 @@ html, body{
   
 
 
-  .highlighted{ background-color:rgba(255,255,157,0.5); }
+  .highlighted{ background-color:#333; color:#fff; }
   .timex{ cursor:pointer; }
   
   #listData{
     .listEl{ cursor:pointer; }
+    .docColor_-1 { color: $doc-1; }
     .docColor_0 { color: $doc0; }
     .docColor_1 { color: $doc1; }
     .docColor_2 { color: $doc2; }
@@ -151,7 +170,7 @@ html, body{
   h1, .datetitle{ font-size: 18px; }
   h2{ font-size: 15px; color:#333; }
 
-  .hltx{ color: $highlightColor; font-weight:bold; }
+  .hltx{ color: #fff; background-color:#333; font-weight:bold; }
   p, .content{ font-size: 12px; font-weight:normal; }
   .label{ font-size:0.8em; color:#999; font-weight:bold; }
   input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }

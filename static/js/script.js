@@ -53,11 +53,45 @@ function orderArray(t){
   return sortedT;
 }
 
+function orderArrayByIndex(t){
+
+  var sortedByIndex = t.sort(function(a, b){
+    var keyA = a.id,
+        keyB = b.id;
+    // Compare the 2 dates
+    if(keyA < keyB) return -1;
+    if(keyA > keyB) return 1;
+    return 0;
+  });
+  return sortedByIndex;
+}
+
 function checkIfDate(val){
     var isDate = !isNaN(val) || val == "XXXX"
     if(isDate){ var thisTitle = prettifyDate(val) }
     else{ var thisTitle = prettifyDate(val.split(" - ")[0])+" - "+prettifyDate(val.split(" - ")[1]) ; }
     return thisTitle;
+}
+
+function checkyIndizes(d,scaleFactor){
+  
+  var orderedD = orderArray(d)
+  var prevX = -1;
+  var newyIndex = 1;
+
+  orderedD.forEach(function(tx){
+    var isDate = !isNaN(tx.times[0].starting_time);
+    if(isDate){
+      var newX = tx.times[0].starting_time * scaleFactor;
+      if(newX != prevX && newX < prevX + itemHeight){ newyIndex++; tx.yIndex = newyIndex; }
+      else{ newyIndex = 1 }
+      prevX = newX
+    } 
+  })
+
+  var newArray = orderArrayByIndex(orderedD)
+  return newArray
+
 }
 
 function checkDuplicates(t){
@@ -79,32 +113,17 @@ function checkDuplicates(t){
 }
 
 function checkDuplicatesWithoutOrdering(t){
-//console.log(t)
-  var valArray = [];
+//called 2times - why?
 
   for(var i = 0; i < t.length; i++){
     var startCount = 1;
-    valArray[i] = { val : t[i].val, visible : t[i].visible, indexNr : i , count : startCount }; // i because we need to keep track of its original position
-    
+    t[i].count = startCount; 
   }
 
-  var orderedArray = orderArray(valArray);
+  var orderedArray = orderArray(t);
   var duplicateArray = checkDuplicates(orderedArray);
-
-  var countDurations = 1;
-
-  for(var i = 0; i < t.length; i++){
-    var thisIndex = duplicateArray[i].indexNr;
-    if(t[thisIndex].typ=="duration"&&t[thisIndex].visible){
-      t[thisIndex].count = countDurations;
-      countDurations++
-    }
-    else{
-      var count = duplicateArray[i].count;
-      t[thisIndex].count = count;
-      }
-
-  }
+  var t = orderArrayByIndex(duplicateArray)
+  
   return t;
 }
 
@@ -236,55 +255,64 @@ function getCirclePath(datum,beginning,scaleFactor){
   return path
 }
 
+function getLinePath(datum,beginning,scaleFactor){
+
+  var cxStart = parseInt(getXPos(datum,beginning,scaleFactor))+2;
+  var cxEnd = margin.left + (datum.times[0].ending_time - beginning) * scaleFactor-2;
+  var yPos = parseInt(getYPos(datum))
+  var yBottom = yPos - 10
+  var yTop = yPos + 10
+  var lineTop = yPos-1
+  var lineBottom = yPos +1
+  
+  if(datum.visible){
+    var xStart = cxStart-10
+    var xEnd = cxEnd+10
+
+    var path =  "M" + xStart + " " + yTop + " L" + xStart + " " + yBottom + " L" + cxStart + " " + lineBottom +
+                // Line + Back Triangle
+                " L" + cxEnd + " " + lineBottom + " L" + xEnd + " " + yBottom + " L" + xEnd + " " + yTop + " L" + cxEnd + " " + lineTop +
+                // Line closing path
+                " L" + cxStart + " " + lineTop +" Z"
+  }
+  else{
+    var c = cxStart + ((cxEnd-cxStart)/2)
+    // invisible SVG path, deleting animation towards center of span 
+    var path = "M"+c+" "+yTop+" L"+c+" "+yBottom+" L"+c+" "+lineBottom +
+               " L"+c+" "+lineBottom+" L"+c+" "+yBottom+" L"+c+" "+yTop+" L"+c+" "+lineTop+
+               " L"+c+" "+lineTop+" Z"
+   }
+  
+  return path
+}
+
 function getXPos(d,beg,scale) {
   var isDate = !isNaN(d.times[0].starting_time);
   if(isDate) var newXPos = margin.left + (d.times[0].starting_time - beg) * scale;
-  else{ var newXPos = margin.left + (d.count-1) * (itemHeight+10) } 
+  else{ var newXPos = margin.left + (d.count*5) } 
   return newXPos;
   }
 
 function getYPos(d) {
     var isDate = !isNaN(d.times[0].starting_time);
-    var pos = $("#topBox").height() - 50 - itemHeight;
+    var pos = $("#topBox").height() - 45;
     var hasCount = (d.count != 1);
+    var hasyIndex = (d.yIndex != 1);
+    
     if(isDate){
       if(hasCount){
-        if(d.count<6){ return pos - ((d.count-1)*itemHeight+2) }
+        if(d.count<6){ return pos - ((d.count-1)*(itemHeight-5)) }
         else{ return pos }
+      }
+      else if(hasyIndex){
+        //console.log("y Index!" + d.yIndex + ", ID: "+d.id)
+        return pos - ((d.yIndex-1)*itemHeight+1) - (d.count-1)*itemHeight-2
       }
       else{ return pos }  
     }
     else{ return 100 }
 }
 
-function getLinePath(datum,beginning,scaleFactor){
-
-  var cxStart = parseInt(getXPos(datum,beginning,scaleFactor))+10;
-  var cxEnd = margin.left + (datum.times[0].ending_time - beginning) * scaleFactor-10;
-  
-
-  //var length = cxEnd - cxStart
-  //if(length<5){ length = 5 }
-  
-  var yPos = parseInt($("#topBox").height() - 50 - datum.count*5)
-  var yBottom = yPos - 10
-  var yTop = yPos + 10
-  
-  var xStart = cxStart-10
-  var xEnd = cxEnd+10
-  var lineTop = yPos-1
-  var lineBottom = yPos +1
-
-  //console.log(datum.count)
-  //var path = "M "+ cxStart +" "+yPos+" l "+ length +" 0"
-  var path =  "M" + xStart + " " + yTop + " L" + xStart + " " + yBottom + " L" + cxStart + " " + lineBottom +
-              // Line + Back Triangle
-              " L" + cxEnd + " " + lineBottom + " L" + xEnd + " " + yBottom + " L" + xEnd + " " + yTop + " L" + cxEnd + " " + lineTop +
-              // Line closing path
-              " L" + cxStart + " " + lineTop +" Z"
-
-  return path
-}
 
 
 

@@ -52,18 +52,63 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9em; }
-#leftBox tr {
-  border-bottom: 1px solid #ccc !important; }
-#leftBox tr:hover {
-  background-color: #efefef; }
-#leftBox td {
-  padding: 0 5px; }
-#leftBox td:nth-child(3) {
-  line-height: 1em; }
-#leftBox .deleted {
-  text-decoration: line-through;
-  background-color: #ccc;
-  font-size: 0.7em; }
+  #leftBox table tr {
+    border-bottom: 1px solid #ccc !important; }
+  #leftBox table tr:hover {
+    color: #851b00; }
+  #leftBox table .highlighted:hover {
+    color: #fff; }
+  #leftBox table td {
+    padding: 2px 5px;
+    position: relative; }
+  #leftBox table td:nth-child(1) {
+    width: 32px; }
+  #leftBox table td:nth-child(3) {
+    line-height: 1em; }
+  #leftBox table .deleted {
+    text-decoration: line-through;
+    background-color: #ccc;
+    font-size: 0.7em; }
+  #leftBox table .listEl .bgColor_-1 {
+    background-color: #6f6f6f;
+    border-color: transparent transparent transparent #6f6f6f; }
+  #leftBox table .listEl .bgColor_0 {
+    background-color: #a6cee3;
+    border-color: transparent transparent transparent #a6cee3; }
+  #leftBox table .listEl .bgColor_1 {
+    background-color: #b2df8a;
+    border-color: transparent transparent transparent #b2df8a; }
+  #leftBox table .listEl .bgColor_2 {
+    background-color: #fb9a99;
+    border-color: transparent transparent transparent #fb9a99; }
+  #leftBox table .listEl .bgColor_3 {
+    background-color: #fdbf6f;
+    border-color: transparent transparent transparent #fdbf6f; }
+  #leftBox table .listEl .bgColor_4 {
+    background-color: #cab2d6;
+    border-color: transparent transparent transparent #cab2d6; }
+  #leftBox table .listEl .bgColor_5 {
+    background-color: #ffff99;
+    border-color: transparent transparent transparent #ffff99; }
+  #leftBox table .listEl .symbol_date {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    margin: -6px 5px;
+    position: absolute; }
+  #leftBox table .listEl .symbol_duration {
+    background-color: transparent;
+    width: 0;
+    height: 0;
+    border-width: 8px 12px;
+    border-style: solid;
+    margin: -6px 5px;
+    position: absolute; }
+  #leftBox table .listEl .symbol_neither {
+    width: 10px;
+    height: 10px;
+    margin: -6px 5px;
+    position: absolute; }
 
 #centerBox #docSwitcher {
   z-index: 10;
@@ -248,13 +293,16 @@ html, body {
   box-sizing: border-box; }
 
 .highlighted {
-  background-color: rgba(255, 255, 157, 0.5); }
+  background-color: #333;
+  color: #fff; }
 
 .timex {
   cursor: pointer; }
 
 #listData .listEl {
   cursor: pointer; }
+#listData .docColor_-1 {
+  color: #6f6f6f; }
 #listData .docColor_0 {
   color: #a6cee3; }
 #listData .docColor_1 {
@@ -307,7 +355,8 @@ h2 {
   color: #333; }
 
 .hltx {
-  color: #ff6138;
+  color: #fff;
+  background-color: #333;
   font-weight: bold; }
 
 p, .content {

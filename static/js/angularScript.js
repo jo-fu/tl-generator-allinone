@@ -79,8 +79,10 @@ app
 		
 		var updatedDate = DateHandling.checkThisDate($scope.dateInfo[0].dateArray);
 		if(updatedDate){
+
 			$scope.editDate = false;
 			var currIndex = $scope.currIndex;
+			//if(updatedDate!="XXXX"){ $scope.timexes[currIndex].typ = "date"; }
 			$scope.timexes[currIndex].val = updatedDate;
 			$scope.timexes[currIndex].title = updatedDate;
 			$scope.dateInfo[0].title = checkIfDate(updatedDate);
@@ -544,6 +546,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	}
 	
 	var width = $("#topBox").width() - 50;
+	var height = $("#topBox").height();
 	
 	var xScale = d3.time.scale()
 			.domain([beginning, ending])
@@ -560,11 +563,13 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
       scaleFactor = (1/(ending - beginning)) * (width - margin.left - margin.right)
 
+      d = checkyIndizes(d,scaleFactor);
+
 	if(action == "loadData"){ d3.select("svg").select("g").selectAll(".timelineItem").remove() }
 
 	if(action=="add" || action == "merge" || action=="newDoc" || action=="loadData"){
 		if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
-		else{ var newpath = "M 0, 0 m -30, 0 a 30,30 0 1,0 60,0 a 30,30 0 1,0 -60,0" }
+		else{ var newpath = "M 500, " + height + " m -0, 0 a 0,0 0 1,0 0,0 a 0,0 0 1,0 -0,0" }
 
 		var timexElements = d3.select("svg").select("g.allthedates").selectAll(".timelineItem").data(d).enter();
 		timexElements
@@ -582,21 +587,20 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		})
 		.attr("id", function(d){ return "timelineItem_"+ d.id })
 		.attr("fill" , function(d){ return getColor(d) })
-		.attr("stroke" , function(d){
+		/*.attr("stroke" , function(d){
 			if(d.typ=="duration"){ return getColor(d) }
 			else{  return "#fff" }
 		})
 		.attr("stroke-width" , function(d){
 			if(d.typ=="duration"){ return 0 }
 			else{  return 2 }
-		})
+		})*/
 		.on("click", function (d) { clickFct(d) })
 		//.append('title')
     		//.text("xxx")
 
 
 	}
-	
 	
 	// Add Reference Lines
 	if(action=="newDoc"){
@@ -637,28 +641,28 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		//circle
 		else{ return getCirclePath(d,beginning,scaleFactor) }
 		})
-		.attr("stroke-width" , function(d){
+		/*.attr("stroke-width" , function(d){
 			if(d.visible){
 				if(d.typ=="duration"){ return 0 }
 				else{  return 2 }
 			}
 			else{ return 0 }
-		})
+		})*/
 		
 
 	/* In case there will be any difference between move and delete */
 	if(action=="resize"){ d3.select("#timeline").select("svg").attr("width", $("#topBox").width() - 50) }
 
-	else if(action=="move" || action == "unitChange"){
-		paths
-		.attr("stroke" , function(d){
+	else if(action == "unitChange"){
+		paths.attr("d", newpath )
+		/*.attr("stroke" , function(d){
 			if(d.typ=="duration"){ return getColor(d) }
 			else{  return "#fff" }
 		})
 		.attr("stroke-width" , function(d){
 			if(d.typ=="duration"){ return 0 }
 			else{  return 2 }
-		})
+		})*/
 	}
 	else if(action=="recover"){ }
 
@@ -723,7 +727,7 @@ app.service('CreateArray', function(SplitSents){
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "date",
 					sent : thisS , sub : sub, sentNr : sentNr , val : thisVal ,
-					title : prettifyDate(thisVal), mod : thisMod , count : 1 ,
+					title : prettifyDate(thisVal), mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true
@@ -736,7 +740,7 @@ app.service('CreateArray', function(SplitSents){
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "duration",
 					sent : thisS , sub : sub , sentNr : sentNr , val : durTitle ,
-					title : durTitle , mod : thisMod , count : 1 ,
+					title : durTitle , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true
@@ -749,7 +753,7 @@ app.service('CreateArray', function(SplitSents){
 					timexes[number] = {
 					id : number , docNr : docNr , timex : thistempex , typ : "neither",
 					sent : thisS , sub : sub, sentNr : sentNr , val : temporarySolution ,
-					title : "XXXX" , mod : thisMod , count : 1 ,
+					title : "XXXX" , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 					visible : true
@@ -1050,8 +1054,8 @@ app.service('DateHandling', function(){
 
 		var newDate = {
 			id : number , timex : "manually added" , docNr : currDoc,
-			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "date", 
-			val : "XXXX" , title : "0000", mod : "" , count : 1 ,
+			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "neither", 
+			val : "XXXX" , title : "0000", mod : "" , count : 1 , yIndex : 1 ,
 			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 			times : [{ starting_time : "XXXX" , ending_time : "XXXX"}], visible : true
 			}
@@ -1107,7 +1111,7 @@ app.service('DateHandling', function(){
 		var newDate = {
 			id : newId , docNr : newDocNr , timex : "merged Date" ,
 			sent : newSent , sub : newSubtitle, sentNr : newSentNr , typ : newTyp, 
-			val : newTitle , title : newTitle, mod : "" , count : 1 ,
+			val : newTitle , title : newTitle, mod : "" , count : 1 , yIndex : 1 ,
 			times : [{ starting_time : d.startVal , ending_time : d.endVal}], visible : true
 			}
 			
@@ -1147,9 +1151,13 @@ app.service('DateHandling', function(){
 		var thisIndex = $scope.currIndex
 		
 		var updatedDate = this.checkThisDate($scope.dateInfo[0].dateArray)
+		
+		if(updatedDate=="XXXX") $scope.timexes[thisIndex].typ = "neither"
+		else if(updatedDate.indexOf(" - ") > 0) $scope.timexes[thisIndex].typ = "duration"
+		else $scope.timexes[thisIndex].typ = "date"
+
 		$scope.timexes[thisIndex].typ = newTyp
 		$scope.timexes[thisIndex].val = updatedDate;
-		$scope.timexes[thisIndex].title = updatedDate;
 		$scope.timexes[thisIndex].title = updatedDate;
 		
 		var newDate = dateConversion(updatedDate)
@@ -1158,6 +1166,8 @@ app.service('DateHandling', function(){
 
 		$scope.updateD3Tl($scope.timexes,$scope.dcts, "unitChange")
 
+		// TODO: Find other solution!!
+		setTimeout( function(){ $("#check").trigger('click') },200)
 		return $scope;
 	}
 
