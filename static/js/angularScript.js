@@ -5,6 +5,8 @@ app
 	
 	$scope.today = getToday()
 	$scope.docNr = -1;
+	$scope.orderByVal = "val"
+	$scope.orderReverse = false
 	//$scope.tempFiles = ["england","usa","canada","denmark"]
 	$scope.tempFiles = ["iceland", "journalism", "nasa", "newspapers", "ubc"]
 	$scope.fileNames = []
@@ -74,7 +76,7 @@ app
       $scope.scrollToSent = function(id,sent,docNr){ CreateTimeline.scrollToSent(id,sent,docNr) }
 
       $scope.updateD3Tl = function(tx,dcts,m,fct,nr){ CreateTimeline.updateD3Tl(tx,dcts,m,fct,nr); }
-
+      $scope.markAsTouched = function(d,i){ CreateTimeline.markAsTouched(d,i) }
 	$scope.checkThisDate = function(){
 		
 		var updatedDate = DateHandling.checkThisDate($scope.dateInfo[0].dateArray);
@@ -82,7 +84,12 @@ app
 
 			$scope.editDate = false;
 			var currIndex = $scope.currIndex;
-			//if(updatedDate!="XXXX"){ $scope.timexes[currIndex].typ = "date"; }
+
+			if(updatedDate=="XXXX"){ $scope.timexes[currIndex].typ = "neither"; }
+			else if(updatedDate.indexOf(" - ")>0){ $scope.timexes[currIndex].typ = "duration"; }
+			else{ $scope.timexes[currIndex].typ = "date"; }
+
+			if($scope.timexes[currIndex].val!=updatedDate) $scope.markAsTouched($scope.timexes,$scope.currIndex)
 			$scope.timexes[currIndex].val = updatedDate;
 			$scope.timexes[currIndex].title = updatedDate;
 			$scope.dateInfo[0].title = checkIfDate(updatedDate);
@@ -150,10 +157,15 @@ app
 		if(thisid) setTimeout( function(){ $(thisid).select() } , 50 )
 	}
 	$scope.disableEdit = function(el) {
+
 		if(el=="d"){
 			$scope.editSubtitle = false;
 			if($scope.dateInfo[0].subtitle.length>0){
-				$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
+				if($scope.timexes[$scope.currIndex].sub!=$scope.dateInfo[0].subtitle){
+					$scope.markAsTouched($scope.timexes,$scope.currIndex);
+					$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
+				}
+				
 			}
 			else{
 				$scope.dateInfo[0].subtitle = " "
@@ -161,7 +173,12 @@ app
 		}
 		else if(el=="c"){
 			$scope.editContent = false;
-			if($scope.dateInfo.length>0){ $scope.timexes[$scope.currIndex].sent = $scope.dateInfo[0].sent; }
+			if($scope.timexes[$scope.currIndex].sent!=$scope.dateInfo[0].sent){
+				$scope.markAsTouched($scope.timexes,$scope.currIndex);
+				if($scope.dateInfo.length>0){
+					$scope.timexes[$scope.currIndex].sent = $scope.dateInfo[0].sent;
+				}
+			}
 		}
 		else if(el=="ms"){
 			$scope.editMediaSource = false;
@@ -170,7 +187,7 @@ app
 				var newSource = $scope.dateInfo[0].medium["source"];
 				if(newSource == ""){ newSource = "Enter URL"; $scope.dateInfo[0].medium["source"] = newSource }
 				if (newSource != "Enter URL" && newSource != "x"){
-					
+					$scope.markAsTouched($scope.timexes,$scope.currIndex);
 					$scope.timexes[$scope.currIndex].hasMedia = true;
 					$('#mediaIndicator').addClass("hasMedia")
 				}
@@ -454,41 +471,11 @@ this.showDateInfo = function(datum){
   	return dateInfo
   }
 
-/*this.highlightCircle = function(arr,origin){
-  	if(arr.length==0){
-  		d3.selectAll(".timelineItem").classed("selected",false);
-  		var dateSelected = false;
-  	}
-  	else{
-	  	if(origin=="fromSent"){
-	  		d3.selectAll(".timelineItem").classed("selected",false);
-	  		arr.forEach(function(datum,i){
-	  			console.log(i)
-	  			var thisSent = datum.currSent;
-	  			d3.selectAll(".timelineItem_sent_"+thisSent).classed("selected",true);
-	  			})
-	  		var dateSelected = true;
-	  	}
-	  	else{
-
-		  	if(arr.length==1 && d3.select("#timelineItem_"+arr[0].currId).classed("selected")){
-		  		d3.select("#timelineItem_"+arr[0].currId).classed("selected",false)
-		  		var dateSelected = false;
-		  	}
-			else{
-		  		d3.selectAll(".timelineItem").classed("selected",false);
-		  		arr.forEach(function(datum,i){
-		  			console.log("From where: "+i)
-		  			var thisId = datum.currId;
-		  			d3.select("#timelineItem_"+thisId).classed("selected",true);
-		  			})
-		  		
-		  		var dateSelected = true;
-		  	}
-		}
-	}
-	return dateSelected
-  }*/
+this.markAsTouched = function(d,i){
+	d[i].touched = true
+	var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition();
+	paths.attr("fill" , function(d){ return getColor(d) })
+}
 
 this.highlightSent = function(arr,docNr){
   	$(".timex").removeClass("highlighted");
@@ -569,11 +556,10 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 	if(action=="add" || action == "merge" || action=="newDoc" || action=="loadData"){
 		if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
-		else{ var newpath = "M 500, " + height + " m -0, 0 a 0,0 0 1,0 0,0 a 0,0 0 1,0 -0,0" }
+		else{ var newpath = "M 500, " + height + " M -0, 0 a 0,0 0 1,0 0,0 a 0,0 0 1,0 -0,0" }
 
 		var timexElements = d3.select("svg").select("g.allthedates").selectAll(".timelineItem").data(d).enter();
 		timexElements
-		//d3.select("svg").select("g").selectAll("circle").data(d).enter()
 		.append('path')
 		.attr("d", newpath )
 		.attr("class" , function(d){
@@ -587,21 +573,13 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		})
 		.attr("id", function(d){ return "timelineItem_"+ d.id })
 		.attr("fill" , function(d){ return getColor(d) })
-		/*.attr("stroke" , function(d){
-			if(d.typ=="duration"){ return getColor(d) }
-			else{  return "#fff" }
-		})
-		.attr("stroke-width" , function(d){
-			if(d.typ=="duration"){ return 0 }
-			else{  return 2 }
-		})*/
 		.on("click", function (d) { clickFct(d) })
 		//.append('title')
     		//.text("xxx")
 
-
 	}
 	
+		
 	// Add Reference Lines
 	if(action=="newDoc"){
 		var reflines = d3.select("svg").select("g.ref").selectAll("line").data(dcts).enter();
@@ -621,8 +599,9 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	}
 
 
-	// Update all paths
-	var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition();
+	// Update all paths - without transition, if shape changes from circle to span-shape
+	if(action == "unitChange"){ var paths = d3.select("svg").selectAll(".timelineItem").data(d); }
+	else{ var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition(); }
 	
 	// Update all refs
 	var refs = d3.select("svg").select("g.ref").selectAll("line").data(dcts).transition()
@@ -635,12 +614,14 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			return margin.left + (dctstamp - beginning) * scaleFactor;
 			});
 
-	paths.attr("d", function(d){
+	paths
+	.attr("d", function(d){
 		// line
 		if(d.typ=="duration"){ return getLinePath(d,beginning,scaleFactor) }
 		//circle
 		else{ return getCirclePath(d,beginning,scaleFactor) }
 		})
+	.attr("fill" , function(d){ return getColor(d) })
 		/*.attr("stroke-width" , function(d){
 			if(d.visible){
 				if(d.typ=="duration"){ return 0 }
@@ -653,17 +634,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	/* In case there will be any difference between move and delete */
 	if(action=="resize"){ d3.select("#timeline").select("svg").attr("width", $("#topBox").width() - 50) }
 
-	else if(action == "unitChange"){
-		paths.attr("d", newpath )
-		/*.attr("stroke" , function(d){
-			if(d.typ=="duration"){ return getColor(d) }
-			else{  return "#fff" }
-		})
-		.attr("stroke-width" , function(d){
-			if(d.typ=="duration"){ return 0 }
-			else{  return 2 }
-		})*/
-	}
+	
 	else if(action=="recover"){ }
 
 	return d;
@@ -725,7 +696,7 @@ app.service('CreateArray', function(SplitSents){
 					if(thisVal=="PRESENT_REF"){ thisVal = dct.substr(0,4)+dct.substr(5,2)+dct.substr(8,2) }
 
 					timexes[number] = {
-					id : number , docNr : docNr , timex : thistempex , typ : "date",
+					id : number , docNr : docNr , timex : thistempex , typ : "date", touched : false ,
 					sent : thisS , sub : sub, sentNr : sentNr , val : thisVal ,
 					title : prettifyDate(thisVal), mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
@@ -738,7 +709,7 @@ app.service('CreateArray', function(SplitSents){
 				else if(d.typ=="duration"){
 					var durTitle = d.startDate +" - "+d.endDate;
 					timexes[number] = {
-					id : number , docNr : docNr , timex : thistempex , typ : "duration",
+					id : number , docNr : docNr , timex : thistempex , typ : "duration", touched : false ,
 					sent : thisS , sub : sub , sentNr : sentNr , val : durTitle ,
 					title : durTitle , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
@@ -751,7 +722,7 @@ app.service('CreateArray', function(SplitSents){
 					var temporarySolution = "XXXX"
 					//var subt = "I am not properly defined yet"
 					timexes[number] = {
-					id : number , docNr : docNr , timex : thistempex , typ : "neither",
+					id : number , docNr : docNr , timex : thistempex , typ : "neither", touched : false ,
 					sent : thisS , sub : sub, sentNr : sentNr , val : temporarySolution ,
 					title : "XXXX" , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
@@ -1054,7 +1025,7 @@ app.service('DateHandling', function(){
 
 		var newDate = {
 			id : number , timex : "manually added" , docNr : currDoc,
-			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "neither", 
+			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "neither",  touched : false ,
 			val : "XXXX" , title : "0000", mod : "" , count : 1 , yIndex : 1 ,
 			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 			times : [{ starting_time : "XXXX" , ending_time : "XXXX"}], visible : true
@@ -1167,7 +1138,7 @@ app.service('DateHandling', function(){
 		$scope.updateD3Tl($scope.timexes,$scope.dcts, "unitChange")
 
 		// TODO: Find other solution!!
-		setTimeout( function(){ $("#check").trigger('click') },200)
+		//setTimeout( function(){ $("#check").trigger('click') },200)
 		return $scope;
 	}
 

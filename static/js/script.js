@@ -319,15 +319,16 @@ function getYPos(d) {
 function getColor(d){
   var isDate = !isNaN(d.times[0].starting_time);
   var dN = d.docNr
+  var touched = d.touched;
+  if(touched) var o = "1"
+  else var o = "0.5"
   if(dN!=-1){
-    if(isDate){ return "rgb("+colorDate[dN]+")"; }
-    else{ return "rgba("+colorDate[dN]+",0.8)"; }
+    
+    return "rgba("+colorDate[dN]+"," + o + ")";
   }
   // Vague or undefined dates
   else{
-    var currActiveBtn = $(".activeBtn").attr("id")
-    if(!currActiveBtn || currActiveBtn=="button_list"){ return "#999" }
-    if(currActiveBtn){ return "rgb("+colorDate[currActiveBtn.split("_")[1]]+")"}
+    return "rgba(111,111,111," + o + ")";
     }
 }
 

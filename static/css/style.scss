@@ -34,7 +34,7 @@ html, body{
 
 #bottomBox{ position:relative; height: 50%; width: 100%; background-color:#f9f9f9; border-top: 1px solid #999; box-sizing: border-box;
 
-  #leftBox{ height:100%; width:30%; float:left; overflow-y: auto; border-right: 1px solid #999; box-sizing: border-box; }
+  #leftBox{ height:100%; width:30%; float:left; overflow-y: auto; border-right: 1px solid #999; box-sizing: border-box; position:relative; }
   #centerBox{ height:100%; width:30%; float:left; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #999; box-sizing: border-box; }
   #rightBox{ height:100%; width: 40%; float:left; position:relative; }
   
@@ -45,28 +45,40 @@ html, body{
 }
 
 #leftBox{
-  table{ padding:15px; width:100%; border-collapse:collapse; font-size:0.9em; 
-    tr{ border-bottom: 1px solid #ccc !important; }
-    tr:hover{ color:darken( $highlightColor, 35% ); }
-    .highlighted:hover{ color:#fff; }
-    td{ padding: 2px 5px; position:relative; }
-    td:nth-child(1){ width:32px; }
-    td:nth-child(3){ line-height:1em; }
-    .deleted{ text-decoration:line-through; background-color:#ccc; font-size:0.7em; }
-    .listEl{
-      .bgColor_-1 { background-color: $doc-1; border-color:transparent transparent transparent $doc-1 }
-      .bgColor_0 { background-color: $doc0; border-color:transparent transparent transparent $doc0 }
-      .bgColor_1 { background-color: $doc1; border-color:transparent transparent transparent $doc1 }
-      .bgColor_2 { background-color: $doc2; border-color:transparent transparent transparent $doc2 }
-      .bgColor_3 { background-color: $doc3; border-color:transparent transparent transparent $doc3 }
-      .bgColor_4 { background-color: $doc4; border-color:transparent transparent transparent $doc4 }
-      .bgColor_5 { background-color: $doc5; border-color:transparent transparent transparent $doc5 }
-      .symbol_date{ width:12px; height:12px; border-radius:6px; margin:-6px 5px; position:absolute; }
-      .symbol_duration{ background-color:transparent; width:0; height:0; border-width:8px 12px; border-style:solid; margin:-6px 5px; position:absolute; }
-      .symbol_neither{ width:10px; height:10px; margin:-6px 5px; position:absolute; }
-    }
-    
 
+  #tablehead{ position:fixed; background-color:#fff; border-bottom:2px solid #333; width:30%; z-index:1; box-shadow:0px 1px 2px #999;
+    td:nth-child(1){ width:42px; }
+    td:nth-child(2){ min-width:100px; }
+    td{ text-align:left; padding:2px; font-size:0.7em;
+      .order{ padding:2px; cursor:pointer; }
+      .order:hover{ color:#666; }
+      }
+    }
+  
+  #listData{ position:relative; @include calc(height, "100% - 30px"); top:30px; overflow-y:auto;
+    table{ padding:15px; width:100%; border-collapse:collapse;
+      tr{ border-bottom: 1px solid #ccc !important; }
+      tr:hover{ color:darken( $highlightColor, 35% ); }
+      .highlighted:hover{ color:#fff; }
+      td{ padding: 2px 5px; position:relative; }
+      td:nth-child(1){ width:32px; }
+      td:nth-child(2){ min-width:100px; }
+      td:nth-child(3){ line-height:1em; }
+      .deleted{ text-decoration:line-through; background-color:#ccc; font-size:0.7em; }
+      .listEl{
+        .bgColor_-1 { background-color: $doc-1; border-color:transparent $doc-1 transparent $doc-1 }
+        .bgColor_0 { background-color: $doc0; border-color:transparent $doc0 transparent $doc0 }
+        .bgColor_1 { background-color: $doc1; border-color:transparent $doc1 transparent $doc1 }
+        .bgColor_2 { background-color: $doc2; border-color:transparent $doc2 transparent $doc2 }
+        .bgColor_3 { background-color: $doc3; border-color:transparent $doc3 transparent $doc3 }
+        .bgColor_4 { background-color: $doc4; border-color:transparent $doc4 transparent $doc4 }
+        .bgColor_5 { background-color: $doc5; border-color:transparent $doc5 transparent $doc5 }
+        .symbol_date{ width:12px; height:12px; border-radius:6px; margin:-6px 6px; position:absolute; }
+        .symbol_duration{ background-color:transparent; width:0; height:0; border-width:8px 7px; border-style:solid; margin:-6px 5px; position:absolute; }
+        .symbol_neither{ width:10px; height:10px; margin:-6px 5px; position:absolute; }
+        .untouched{ opacity: 0.5; stroke-color:#666; stroke-width:3px; }
+      }
+    }
   }
 }
 // Center Box

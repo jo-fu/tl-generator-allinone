@@ -46,15 +46,23 @@
 <div id="leftBox">
 
 <!-- List Viewer -->
+      <div id="tablehead">
+          <table><tr>
+            <td>Type <span class="order" ng-click="orderByVal='typ';orderReverse=!orderReverse">&#9660;</span></td>
+            <td>Date <span class="order" ng-click="orderByVal='val';orderReverse=!orderReverse">&#9660;</span></td>
+            <td>Title <span class="order" ng-click="orderByVal='sub';orderReverse=!orderReverse">&#9660;</span></td>
+          </tr></table>
+        </div>
+
       <div id="listData">
-        <table>
-          <tr ng-repeat="tx in timexes | orderBy: 'val'" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
-            <td><span class="bgColor_{{ tx.docNr }} symbol_{{ tx.typ }}"></span></td>
+          <table>
+          <tr ng-repeat="tx in timexes | orderBy: orderByVal : orderReverse" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
+            <td><span class="bgColor_{{ tx.docNr }} symbol_{{ tx.typ }}" ng-class="{ untouched: !tx.touched }"></span></td>
             <td><b>{{ tx.title }}</b></td>
             <td><small>{{ tx.sub }}</small></td>
           </tr>
         </table>
-      </div>
+    </div>
 
 </div>
 
