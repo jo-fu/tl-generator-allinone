@@ -14,7 +14,9 @@ var sidbarVisible = true;
 var currDatum = "";
 var star = "M 180.000 200.000 L 200.000 214.641 L 197.321 190.000 L 220.000 180.000 L 197.321 170.000 L 200.000 145.359 L 180.000 160.000 L 160.000 145.359 L 162.679 170.000 L 140.000 180.000 L 162.679 190.000 L 160.000 214.641 z"
 var shifted = false;
+var openedInput = false;
 var docNr = -1;
+var trackNr = 0;
 
 var colorDate = [
   "166,206,227",
@@ -38,6 +40,7 @@ $(document).on('keyup keydown', function(e){
   if(shifted){ $('#leftBox, #timeline').addClass("nouserselect") }
   else{ $('#leftBox, #timeline').removeClass("nouserselect") }
   });
+
 
 function getDCT(file){ return file.match(/<DATE_TIME>([^<]*)<\/DATE_TIME>/)[1] }
 
@@ -76,16 +79,15 @@ function checkIfDate(val){
 function checkyIndizes(d,scaleFactor){
   
   var orderedD = orderArray(d)
-  var prevX = -1;
-  var newyIndex = 1;
+  var prevX = orderedD[0].times[0].starting_time * scaleFactor-1;
+  var newyIndex = 0;
 
   orderedD.forEach(function(tx){
     var isDate = !isNaN(tx.times[0].starting_time);
     if(isDate){
       var newX = tx.times[0].starting_time * scaleFactor;
-      if(newX != prevX && newX < prevX + itemHeight){ newyIndex++; tx.yIndex = newyIndex; }
-      else{ newyIndex = 1 }
-      prevX = newX
+      if(prevX > newX - itemHeight){ newyIndex++; tx.yIndex = newyIndex; }
+      else{ newyIndex = 1; prevX = newX }
     } 
   })
 
@@ -318,10 +320,10 @@ function getYPos(d) {
 
 function getColor(d){
   var isDate = !isNaN(d.times[0].starting_time);
-  var dN = d.docNr
+  var dN = d.trackNr
   var touched = d.touched;
   if(touched) var o = "1"
-  else var o = "0.5"
+  else var o = "0.7"
   if(dN!=-1){
     
     return "rgba("+colorDate[dN]+"," + o + ")";
@@ -379,6 +381,17 @@ function triggerUpload(){ $('#uploadFile').click() }
 
 function openInput(){
     $("#inputOverlay").fadeIn(300);
+    $("#chooseDoc_"+(trackNr)).addClass("chosen")
+
+    if(!openedInput){
+      $(".chooseDoc").on( "click" , function(){
+        $(".chooseDoc").removeClass("chosen")
+        // CONTINUE HERE
+        trackNr = $(this).attr("id").split("_")[1]
+        $("#"+$(this).attr("id")).addClass("chosen")
+      })
+      openedInput = true;
+    }
     $(document).on("keydown" , exitOverlay )
 }
 

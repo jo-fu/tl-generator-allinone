@@ -25,12 +25,29 @@ $highlightColorHalf:rgba(255, 97, 56, 0.4);
   #{$property}: -moz-calc(#{$expression}); 
   #{$property}: calc(#{$expression}); 
 } 
+@mixin shadow() { 
+  -moz-box-shadow:$shadow;
+  -webkit-box-shadow:$shadow;
+  box-shadow:$shadow; 
+}
+@mixin noshadow() { 
+  -moz-box-shadow:$noshadow;
+  -webkit-box-shadow:$noshadow;
+  box-shadow:$noshadow; 
+} 
 
 html, body{
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef; height:100%; margin:0;
 }
 // Basic Layout
 #topBox{ position:relative; height: 50%; width: 100%; background-color:#efefef; }
+
+.bgColor_0 { background-color: $doc0; }
+.bgColor_1 { background-color: $doc1; }
+.bgColor_2 { background-color: $doc2; }
+.bgColor_3 { background-color: $doc3; }
+.bgColor_4 { background-color: $doc4; }
+.bgColor_5 { background-color: $doc5; }
 
 #bottomBox{ position:relative; height: 50%; width: 100%; background-color:#f9f9f9; border-top: 1px solid #999; box-sizing: border-box;
 
@@ -76,20 +93,21 @@ html, body{
         .symbol_date{ width:12px; height:12px; border-radius:6px; margin:-6px 6px; position:absolute; }
         .symbol_duration{ background-color:transparent; width:0; height:0; border-width:8px 7px; border-style:solid; margin:-6px 5px; position:absolute; }
         .symbol_neither{ width:10px; height:10px; margin:-6px 5px; position:absolute; }
-        .untouched{ opacity: 0.5; stroke-color:#666; stroke-width:3px; }
+        .untouched{ opacity: 0.7; stroke-color:#666; stroke-width:3px; }
       }
     }
   }
 }
 // Center Box
 #centerBox{
+  .statusBox{ font-size:0.7em; position:fixed; background-color:#fff; bottom:0px; width:30%; left:30%; padding:0 5px;  box-sizing: border-box; z-index:1; box-shadow:0px -1px 2px #999;}
    #docSwitcher{ z-index:10; height:auto; min-height:40px; position:absolute; max-width:29%;
     .docBtn{ padding: 5px 15px 3px 8px; margin: 0 5px 7px 0; float:left; cursor:pointer; position:relative;
-      -moz-box-shadow:$shadow; -webkit-box-shadow:$shadow; box-shadow:$shadow; font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
+      @include shadow(); font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
     #addDoc{ float:left; }
     .inactive{ font-size: 5px; background-color: #999 !important; color:#fff !important }
     .inactive .hideDoc{ background-image: url("../img/reload.png") !important; }
-    .docBtn:active, .activeBtn{ margin:2px 3px 5px 2px; -moz-box-shadow:$noshadow; -webkit-box-shadow:$noshadow; box-shadow:$noshadow; }
+    .docBtn:active, .activeBtn{ margin:2px 3px 5px 2px; @include noshadow(); }
     .hideDoc{ width:10px; height:10px; position:absolute; top:3px; right:2px; background-image:url("../img/delete.png"); background-size:100%;}
   }
   #docText{ padding:15px;
@@ -104,7 +122,7 @@ html, body{
 #rightBox{ 
   #toolBox{ position:absolute; right:0; top:0; height:100%; width: ($btnsSize+10px);
     #loadData{ background-image:url(../img/loadData.png); }
-    #loadDataOptions{ position:absolute; top:40px; z-index:1; right:82px; }
+    #loadDataOptions{ position:absolute; top:3px; z-index:1; right:37px; width:175px; }
     #saveState{ background-image:url(../img/saveState.png); }
     #exportJson{ background-image:url(../img/exportJson.png); }
     #tool_delete{ background-image:url(../img/delete.png); }
@@ -116,22 +134,25 @@ html, body{
     .media p{ font-size:0.8em; }
     #addMedia{ width: 80px; height: $btnsSize + 10;  margin: 20px 0 0 0px; 
       #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; color: #333; 
-      box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; float:left; }
-      #addMediaBtn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow; }
+      @include shadow(); float:left; }
+      #addMediaBtn:active{ @include noshadow(); }
       #mediaIndicator{ width:$btnsSize; height:$btnsSize; background-image:url(../img/hasMedia.png); margin-top:-24px; margin-left:100px; }
       .hasMedia{ background-position: right; }
     }
     #addMediaBox{ padding:1px 10px; background-color:#efefef; }
+    #changeTrackBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; margin-right:10px; color: #333; @include shadow(); float:left; }
+    #changeTrackBtn:active, .activeBtn{ @include noshadow(); margin: 2px 0 0 2px; }
+    #changeTrackBox{ padding: 4px; }
   }
+
 }
 
 // BUTTON STYLE
-.ctl{ padding:5px 10px; background-color:#fff; cursor:pointer; box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow;}
+.ctl{ padding:5px 10px; background-color:#fff; cursor:pointer; @include shadow();}
 .ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 2px; border:1px solid #efefef; background-repeat:no-repeat;
     background-color:#fff; background-position:center; cursor:pointer;
-    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; }
-.ctlBtns:active,  .ctl:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow;
-    margin: 2px 0px 0px 2px; }
+    @include shadow(); }
+.ctlBtns:active,  .ctl:active{ @include noshadow(); margin: 2px 0px 0px 2px; }
 
 #addDoc, #addDate{ background-image:url(../img/add.png); margin:5px; }
 #addDate{ position:absolute; top:250px; left:10px;}
@@ -174,9 +195,9 @@ html, body{
   //#addDate{ background-image:url(../img/add.png); }
  
   ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
-  li{ background-color: #fff; margin: 2px 0; padding:2px 10px; -webkit-box-shadow:$shadow; -moz-box-shadow:$shadow; box-shadow:$shadow}
+  li{ background-color: #fff; margin: 2px 0; padding:2px 10px; @include shadow(); }
   li:hover{ background-color:#efefef }
-  li:active{ -webkit-box-shadow:$noshadow; -moz-box-shadow:$noshadow; box-shadow:$noshadow; margin: 4px 0 0 2px; }
+  li:active{ @include noshadow(); margin: 4px 0 0 2px; }
 
 
   h1, .datetitle{ font-size: 18px; }
@@ -207,13 +228,20 @@ html, body{
     transition: all 300ms ease-in;
     cursor: pointer;
     }
-.selected{ fill: $highlightColor; }
+
+.selected{ stroke: $highlightColor; stroke-width:2px; }
 .selectedSec{ fill: $highlightColorHalf;  }
 
 .datelabel{ display: none; text-align: center; }
 .visible{ display: block; }
 
+.chooseDoc, .changeDoc{ float:left; margin:0 5px 2px 3px; padding: 0 8px; font-size: 0.8em; font-weight: bold; @include shadow(); }
+.chosen, .changeDoc:active, .chooseDoc:active{
+  margin:2px 3px 0 5px; outline:2px solid #efefef; @include noshadow();
+}
 
+
+   
 
 #fileinfo{ position:absolute; right:10px; top:10px; }
 
@@ -272,9 +300,8 @@ html, body{
     img{ width:80px; height:85px; position:absolute; top:50%; margin-top:-42px; left:50%; margin-left:-40px; }
   }
   .btn{ margin:0 auto; border:1px solid #efefef; background-color:#fff; cursor:pointer; width: 50px; text-align: center; height: 30px; line-height:30px;
-    box-shadow: $shadow; -moz-box-shadow: $shadow; -webkit-box-shadow: $shadow; }
-  .btn:active{ box-shadow: $noshadow; -moz-box-shadow: $noshadow; -webkit-box-shadow: $noshadow;
-    margin: 2px 0px 0px 2px; }
+    @include shadow(); }
+  .btn:active{ @include noshadow(); margin: 2px 0px 0px 2px; }
 }
 
 #saved{ display:none; position:fixed; bottom:25px; right:0; color:#999; font-size:10px; padding:3px 5px 3px 25px; font-style:italic; background-image:url(../img/check.png); background-repeat:no-repeat; background-position:left;}

@@ -10,6 +10,24 @@ html, body {
   width: 100%;
   background-color: #efefef; }
 
+.bgColor_0 {
+  background-color: #a6cee3; }
+
+.bgColor_1 {
+  background-color: #b2df8a; }
+
+.bgColor_2 {
+  background-color: #fb9a99; }
+
+.bgColor_3 {
+  background-color: #fdbf6f; }
+
+.bgColor_4 {
+  background-color: #cab2d6; }
+
+.bgColor_5 {
+  background-color: #ffff99; }
+
 #bottomBox {
   position: relative;
   height: 50%;
@@ -139,10 +157,21 @@ html, body {
       margin: -6px 5px;
       position: absolute; }
     #leftBox #listData table .listEl .untouched {
-      opacity: 0.5;
+      opacity: 0.7;
       stroke-color: #666;
       stroke-width: 3px; }
 
+#centerBox .statusBox {
+  font-size: 0.7em;
+  position: fixed;
+  background-color: #fff;
+  bottom: 0px;
+  width: 30%;
+  left: 30%;
+  padding: 0 5px;
+  box-sizing: border-box;
+  z-index: 1;
+  box-shadow: 0px -1px 2px #999; }
 #centerBox #docSwitcher {
   z-index: 10;
   height: auto;
@@ -204,9 +233,10 @@ html, body {
     background-image: url(../img/loadData.png); }
   #rightBox #toolBox #loadDataOptions {
     position: absolute;
-    top: 40px;
+    top: 3px;
     z-index: 1;
-    right: 82px; }
+    right: 37px;
+    width: 175px; }
   #rightBox #toolBox #saveState {
     background-image: url(../img/saveState.png); }
   #rightBox #toolBox #exportJson {
@@ -236,14 +266,14 @@ html, body {
       font-size: 0.7em;
       padding: 3px 8px;
       color: #333;
-      box-shadow: 2px 2px 0px #666666;
       -moz-box-shadow: 2px 2px 0px #666666;
       -webkit-box-shadow: 2px 2px 0px #666666;
+      box-shadow: 2px 2px 0px #666666;
       float: left; }
     #rightBox .display #addMedia #addMediaBtn:active {
-      box-shadow: 0px 0px 0px #666666;
       -moz-box-shadow: 0px 0px 0px #666666;
-      -webkit-box-shadow: 0px 0px 0px #666666; }
+      -webkit-box-shadow: 0px 0px 0px #666666;
+      box-shadow: 0px 0px 0px #666666; }
     #rightBox .display #addMedia #mediaIndicator {
       width: 25px;
       height: 25px;
@@ -255,14 +285,34 @@ html, body {
   #rightBox .display #addMediaBox {
     padding: 1px 10px;
     background-color: #efefef; }
+  #rightBox .display #changeTrackBtn {
+    border: 1px solid #efefef;
+    background-color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.7em;
+    padding: 3px 8px;
+    margin-right: 10px;
+    color: #333;
+    -moz-box-shadow: 2px 2px 0px #666666;
+    -webkit-box-shadow: 2px 2px 0px #666666;
+    box-shadow: 2px 2px 0px #666666;
+    float: left; }
+  #rightBox .display #changeTrackBtn:active, #rightBox .display .activeBtn {
+    -moz-box-shadow: 0px 0px 0px #666666;
+    -webkit-box-shadow: 0px 0px 0px #666666;
+    box-shadow: 0px 0px 0px #666666;
+    margin: 2px 0 0 2px; }
+  #rightBox .display #changeTrackBox {
+    padding: 4px; }
 
 .ctl {
   padding: 5px 10px;
   background-color: #fff;
   cursor: pointer;
-  box-shadow: 2px 2px 0px #666666;
   -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666; }
+  -webkit-box-shadow: 2px 2px 0px #666666;
+  box-shadow: 2px 2px 0px #666666; }
 
 .ctlBtns {
   width: 25px;
@@ -273,14 +323,14 @@ html, body {
   background-color: #fff;
   background-position: center;
   cursor: pointer;
-  box-shadow: 2px 2px 0px #666666;
   -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666; }
+  -webkit-box-shadow: 2px 2px 0px #666666;
+  box-shadow: 2px 2px 0px #666666; }
 
 .ctlBtns:active, .ctl:active {
-  box-shadow: 0px 0px 0px #666666;
   -moz-box-shadow: 0px 0px 0px #666666;
   -webkit-box-shadow: 0px 0px 0px #666666;
+  box-shadow: 0px 0px 0px #666666;
   margin: 2px 0px 0px 2px; }
 
 #addDoc, #addDate {
@@ -367,16 +417,16 @@ li {
   background-color: #fff;
   margin: 2px 0;
   padding: 2px 10px;
-  -webkit-box-shadow: 2px 2px 0px #666666;
   -moz-box-shadow: 2px 2px 0px #666666;
+  -webkit-box-shadow: 2px 2px 0px #666666;
   box-shadow: 2px 2px 0px #666666; }
 
 li:hover {
   background-color: #efefef; }
 
 li:active {
-  -webkit-box-shadow: 0px 0px 0px #666666;
   -moz-box-shadow: 0px 0px 0px #666666;
+  -webkit-box-shadow: 0px 0px 0px #666666;
   box-shadow: 0px 0px 0px #666666;
   margin: 4px 0 0 2px; }
 
@@ -455,7 +505,8 @@ input {
   cursor: pointer; }
 
 .selected {
-  fill: #ff6138; }
+  stroke: #ff6138;
+  stroke-width: 2px; }
 
 .selectedSec {
   fill: rgba(255, 97, 56, 0.4); }
@@ -466,6 +517,23 @@ input {
 
 .visible {
   display: block; }
+
+.chooseDoc, .changeDoc {
+  float: left;
+  margin: 0 5px 2px 3px;
+  padding: 0 8px;
+  font-size: 0.8em;
+  font-weight: bold;
+  -moz-box-shadow: 2px 2px 0px #666666;
+  -webkit-box-shadow: 2px 2px 0px #666666;
+  box-shadow: 2px 2px 0px #666666; }
+
+.chosen, .changeDoc:active, .chooseDoc:active {
+  margin: 2px 3px 0 5px;
+  outline: 2px solid #efefef;
+  -moz-box-shadow: 0px 0px 0px #666666;
+  -webkit-box-shadow: 0px 0px 0px #666666;
+  box-shadow: 0px 0px 0px #666666; }
 
 #fileinfo {
   position: absolute;
@@ -601,13 +669,13 @@ input {
     text-align: center;
     height: 30px;
     line-height: 30px;
-    box-shadow: 2px 2px 0px #666666;
     -moz-box-shadow: 2px 2px 0px #666666;
-    -webkit-box-shadow: 2px 2px 0px #666666; }
+    -webkit-box-shadow: 2px 2px 0px #666666;
+    box-shadow: 2px 2px 0px #666666; }
   #inputOverlay .btn:active {
-    box-shadow: 0px 0px 0px #666666;
     -moz-box-shadow: 0px 0px 0px #666666;
     -webkit-box-shadow: 0px 0px 0px #666666;
+    box-shadow: 0px 0px 0px #666666;
     margin: 2px 0px 0px 2px; }
 
 #saved {

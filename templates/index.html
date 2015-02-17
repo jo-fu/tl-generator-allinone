@@ -57,7 +57,7 @@
       <div id="listData">
           <table>
           <tr ng-repeat="tx in timexes | orderBy: orderByVal : orderReverse" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
-            <td><span class="bgColor_{{ tx.docNr }} symbol_{{ tx.typ }}" ng-class="{ untouched: !tx.touched }"></span></td>
+            <td><span class="bgColor_{{ tx.trackNr }} symbol_{{ tx.typ }}" ng-class="{ untouched: !tx.touched }"></span></td>
             <td><b>{{ tx.title }}</b></td>
             <td><small>{{ tx.sub }}</small></td>
           </tr>
@@ -71,8 +71,8 @@
 <div id="centerBox">
 
     <div id="docSwitcher">
-      <div ng-repeat="file in fileNames track by $index" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{$index}}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[$index] }} )">
-        {{ file }}
+      <div ng-repeat="file in fileNames track by $index" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{ $index }}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[file.trackNr] }} )">
+        {{ file.title }}
         <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
       </div>
       <div id="addDoc" class="ctlBtns" title="Add a new document" onclick="openInput()"></div>
@@ -90,8 +90,10 @@
           <span ng-if="sent.tx=='NoTx'" ng-bind-html="sent.sent"></span>
 
         </span>
+      <div class="statusBox"><b>Number events: {{ countTxs(docNr,"event") }}</b>, Number vague expressions: {{ countTxs(docNr,"vague") }}</div>
       </div>
     </div>
+    
 </div>
 
 <!-- rightBox: RightView -->
@@ -234,7 +236,7 @@
         <br>
 
         <div id="addMedia">
-          <div id="addMediaBtn" ng-click="addMedia=true"> {{ dateInfo[0].medium['hasMedia'] | iif : "Has" : "Add" }} Media</div>
+          <div id="addMediaBtn" ng-click="addMedia=!addMedia"> {{ dateInfo[0].medium['hasMedia'] | iif : "Has" : "Add" }} Media</div>
           <div id="mediaIndicator" ng-class="{ hasMedia: dateInfo[0].medium['hasMedia'] } "></div>
         </div>
         <!-- Media -->
@@ -258,6 +260,18 @@
             </ng-switch>
         </div>
 
+        <div id="changeTrack">
+          <div id="changeTrackBtn" ng-click="changeTrackVis=!changeTrackVis"> Change Track</div>
+          <div id="changeTrackBox" ng-if="changeTrackVis">
+            <!-- Doc Choice -->
+            <div id="changeDoc_0" ng-click="changeTrack(0)" ng-class="{activeBtn: dateInfo[0].trackNr == 0}" class="changeDoc bgColor_0">1</div>
+            <div id="changeDoc_1" ng-click="changeTrack(1)" ng-class="{activeBtn: dateInfo[0].trackNr == 1}" class="changeDoc bgColor_1">2</div>
+            <div id="changeDoc_2" ng-click="changeTrack(2)" ng-class="{activeBtn: dateInfo[0].trackNr == 2}" class="changeDoc bgColor_2">3</div>
+            <div id="changeDoc_3" ng-click="changeTrack(3)" ng-class="{activeBtn: dateInfo[0].trackNr == 3}" class="changeDoc bgColor_3">4</div>
+            <div id="changeDoc_4" ng-click="changeTrack(4)" ng-class="{activeBtn: dateInfo[0].trackNr == 4}" class="changeDoc bgColor_4">5</div>
+            <div id="changeDoc_5" ng-click="changeTrack(5)" ng-class="{activeBtn: dateInfo[0].trackNr == 5}" class="changeDoc bgColor_5">6</div>
+          </div>
+        </div>
 
       </div>
       <div id="recoverElement" ng-show="!timexes[currIndex].visible && dateInfo.length!=0">
@@ -276,8 +290,17 @@
 
       <div id="insertText">
         <h1>Insert your text here</h1>
-        <label for="title"><b>Title</b></label>
-        <input type="text" style="width:255px;" name="title" placeholder="Document Title"> <br><br>
+        <label for="title" style="float:left;padding-right: 10px;"><b>Title</b> </label>
+        <input type="text" style="float:left; width:255px;" name="title" placeholder="Document Title"> 
+
+        <!-- Doc Choice -->
+        <div id="chooseDoc_0" class="chooseDoc bgColor_0">1</div>
+        <div id="chooseDoc_1" class="chooseDoc bgColor_1">2</div>
+        <div id="chooseDoc_2" class="chooseDoc bgColor_2">3</div>
+        <div id="chooseDoc_3" class="chooseDoc bgColor_3">4</div>
+        <div id="chooseDoc_4" class="chooseDoc bgColor_4">5</div>
+        <div id="chooseDoc_5" class="chooseDoc bgColor_5">6</div><br><br>
+
 
         <label for="content"><b>Content</b></label><br>
         <textarea name="content" id="content" placeholder="Drop the content here."></textarea><br>

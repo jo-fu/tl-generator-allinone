@@ -212,6 +212,19 @@ app
 		// It's called 3 times... WHY?
     		return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="hltx">$&</span>'));
 	};
+	$scope.countTxs = function(docNr,date){
+		var nr = 0;
+
+		$scope.timexes.forEach( function(d){
+			if(date == "event"){
+				if(d.docNr == docNr && d.typ=="date" || d.typ=="duration") nr++
+			}
+			else if(date == "vague"){
+				if(d.docNr == docNr && d.typ=="neither") nr++
+			}
+		});
+		return nr
+	}
 
 	// TOOLS
 	$scope.deleteDate = function(nr){ $scope.timexes = DateHandling.deleteDate($scope,nr) }
@@ -224,7 +237,13 @@ app
 		$scope.timexes = DateHandling.hideDoc(v,$scope.timexes);
 		$scope.updateD3Tl($scope.timexes,$scope.dcts, "delete")
 	}
-
+	$scope.changeTrack = function(nr){
+		$(".changeDoc").removeClass("activeBtn")
+		$("#changeDoc_"+nr).addClass("activeBtn")
+		$scope.timexes[$scope.currIndex].trackNr = nr;
+		var paths = d3.select("svg").selectAll(".timelineItem").data($scope.timexes);
+		paths.attr("fill" , function(d){ return getColor(d) })
+		}
 	$scope.addDocument = function(val,source){
 		$scope.docNr++
 		docNr++
@@ -242,14 +261,16 @@ app
 			if($scope.tlDescr[0] == "Timeline Generator" && docNr==0){
 				$scope.tlDescr[0] = docTitle
 			}
-			else if($scope.tlDescr[0] == $scope.fileNames[0] && docNr==1){
+			else if($scope.tlDescr[0] == $scope.fileNames[0].title && docNr==1){
 				$scope.tlDescr[0] = $scope.tlDescr[0] + " & " + docTitle
 			}
-			else if($scope.tlDescr[0] == $scope.fileNames[0] + " & " + $scope.fileNames[1] ){
+			else if($scope.tlDescr[0] == $scope.fileNames[0].title + " & " + $scope.fileNames[1].title ){
 				$scope.tlDescr[0] = "Comparing Several Documents"
 			}
+
+			$scope.fileNames[$scope.docNr] = { title : docTitle , trackNr : trackNr }
 			
-			$scope.fileNames[$scope.docNr] = docTitle;
+			console.log($scope.fileNames)
 
 			var nrIds = $scope.timexes.length
 			var nrSents = 0;
@@ -260,7 +281,7 @@ app
 			$scope.updateD3Tl($scope.timexes,$scope.dcts,"newDoc",$scope.clickingCircle,"xx")
 
 			// Adjust DOM
-			$("#button_"+docNr).css("background-color", "rgb("+colorDate[docNr]+")")
+			$("#button_"+docNr).css("background-color", "rgb("+colorDate[trackNr]+")")
 			
 			
 			setTimeout( function(){
@@ -423,6 +444,8 @@ this.buildTl = function($scope){
 	if($scope.timexes.length!=0){
 		$scope.dateInfo = [{
 			typ : $scope.timexes[$scope.currIndex].typ,
+			timex : $scope.timexes[$scope.currIndex].timex,
+			trackNr : $scope.timexes[$scope.currIndex].trackNr,
 			val : $scope.timexes[$scope.currIndex].val,
 			title : checkIfDate($scope.timexes[$scope.currIndex].val),
 			titleDur : $scope.timexes[$scope.currIndex].title,
@@ -457,6 +480,7 @@ this.showDateInfo = function(datum){
 	dateInfo.sent = datum.sent;
 	dateInfo.typ = datum.typ;
 	dateInfo.timex = datum.timex;	
+	dateInfo.trackNr = datum.trackNr;	
 
 	dateInfo.medium = []
 	dateInfo.medium["source"] = datum.mediaSource;
@@ -696,7 +720,7 @@ app.service('CreateArray', function(SplitSents){
 					if(thisVal=="PRESENT_REF"){ thisVal = dct.substr(0,4)+dct.substr(5,2)+dct.substr(8,2) }
 
 					timexes[number] = {
-					id : number , docNr : docNr , timex : thistempex , typ : "date", touched : false ,
+					id : number , docNr : docNr ,  trackNr : trackNr, timex : thistempex , typ : "date", touched : false ,
 					sent : thisS , sub : sub, sentNr : sentNr , val : thisVal ,
 					title : prettifyDate(thisVal), mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.startVal}],
@@ -709,7 +733,7 @@ app.service('CreateArray', function(SplitSents){
 				else if(d.typ=="duration"){
 					var durTitle = d.startDate +" - "+d.endDate;
 					timexes[number] = {
-					id : number , docNr : docNr , timex : thistempex , typ : "duration", touched : false ,
+					id : number , docNr : docNr , trackNr : trackNr, timex : thistempex , typ : "duration", touched : false ,
 					sent : thisS , sub : sub , sentNr : sentNr , val : durTitle ,
 					title : durTitle , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
@@ -722,7 +746,7 @@ app.service('CreateArray', function(SplitSents){
 					var temporarySolution = "XXXX"
 					//var subt = "I am not properly defined yet"
 					timexes[number] = {
-					id : number , docNr : docNr , timex : thistempex , typ : "neither", touched : false ,
+					id : number , docNr : docNr , trackNr : trackNr, timex : thistempex , typ : "neither", touched : false ,
 					sent : thisS , sub : sub, sentNr : sentNr , val : temporarySolution ,
 					title : "XXXX" , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : temporarySolution , ending_time : temporarySolution}],
@@ -889,6 +913,7 @@ app.service('DateHandling', function(){
 	this.makeSelection = function($scope, sentNr, d, origin){
 		$scope.editDate = false;
 		$scope.addMedia = false;
+		$scope.changeTrackVis = false;
 		
 		if(sentNr===false){ sentNr = -1 }
 
@@ -1024,7 +1049,7 @@ app.service('DateHandling', function(){
 		
 
 		var newDate = {
-			id : number , timex : "manually added" , docNr : currDoc,
+			id : number , timex : "manually added" , docNr : currDoc, trackNr : trackNr, 
 			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "neither",  touched : false ,
 			val : "XXXX" , title : "0000", mod : "" , count : 1 , yIndex : 1 ,
 			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
@@ -1048,11 +1073,6 @@ app.service('DateHandling', function(){
 		return $scope;
 	}
 
-	this.addFreeformText = function(){
-		// Open up Form
-
-	}
-
 	this.mergeDates = function($scope){
 		var number = $scope.timexes.length;
 		var dateInfo = $scope.dateInfo
@@ -1060,7 +1080,7 @@ app.service('DateHandling', function(){
 		// Make first element the new value
 		var newId = dateInfo[0].currId
 		var newSent = "";
-		var newSentNr, newDocNr;
+		var newSentNr, newDocNr, newTrackNr;
 		var newSubtitle = "";
 		var newTyp = dateInfo[0].typ;
 		if(newTyp=="neither"){ var newTitle = "XXXX"; }
@@ -1071,6 +1091,7 @@ app.service('DateHandling', function(){
 			if(index==0){
 				newSubtitle = el.subtitle;
 				newDocNr = $scope.timexes[thisId].docNr;
+				newTrackNr = $scope.timexes[thisId].trackNr;
 				newSentNr = $scope.timexes[thisId].sentNr;
 			}
 			newSent += el.sent + "\n\n";
@@ -1080,7 +1101,7 @@ app.service('DateHandling', function(){
 
 		var d = dateConversion(newTitle)
 		var newDate = {
-			id : newId , docNr : newDocNr , timex : "merged Date" ,
+			id : newId , docNr : newDocNr , trackNr : newTrackNr, timex : "merged Date" ,
 			sent : newSent , sub : newSubtitle, sentNr : newSentNr , typ : newTyp, 
 			val : newTitle , title : newTitle, mod : "" , count : 1 , yIndex : 1 ,
 			times : [{ starting_time : d.startVal , ending_time : d.endVal}], visible : true
@@ -1231,7 +1252,7 @@ app.service('DateExporting', function(){
 					"endDate" : endDate ,
 					"headline" : el.sub ,
 					"text" : el.sent,
-					"tag" : filenames[el.docNr],
+					"tag" : (el.trackNr + 1),
 					"asset" : thisMedia
 					})
 			}
