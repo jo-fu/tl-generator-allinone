@@ -608,7 +608,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
 			return puffer/2 + (dctstamp - beginning) * scaleFactor + 3;
 			})
-	      .attr("y",  $("#topBox").height()-3 )
+	      .attr("y",  $("#timeline svg").height()-3 )
 	      .style("text-anchor", "left")
 	      .attr("class","todaytag")
 	      .text("today");
@@ -640,8 +640,10 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	.attr("d", function(d){
 		// line
 		if(d.typ=="duration"){ return getLinePath(d,beginning,scaleFactor) }
+		// date
+		else if(d.typ=="date"){ return getCirclePath(d,beginning,scaleFactor) }
 		//circle
-		else{ return getCirclePath(d,beginning,scaleFactor) }
+		else{ return getSquarePath(d,beginning,scaleFactor) }
 		})
 	.attr("fill" , function(d){ return getColor(d) })
 		/*.attr("stroke-width" , function(d){

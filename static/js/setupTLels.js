@@ -44,10 +44,24 @@ function getLinePath(datum,beginning,scaleFactor){
   return path
 }
 
+function getSquarePath(datum,beginning,scaleFactor){
+  var xLeft = parseInt(getXPos(datum,beginning,scaleFactor)) - 6;
+  var xRight = xLeft + 12;
+  var yTop = parseInt(getYPos(datum)) - 6
+  var yBottom = yTop + 12;
+  var path = "M "+xLeft+" "+yTop+" L"+xRight+" "+yTop+" L"+xRight+" "+yBottom+" L"+xLeft+" "+yBottom+" L"+xLeft+" "+yTop+" Z";
+  return path
+}
+
 function getXPos(d,beg,scale) {
   var isDate = !isNaN(d.times[0].starting_time);
   if(isDate) var newXPos = puffer/2 + (d.times[0].starting_time - beg) * scale;
-  else{ var newXPos = $("#topBox").width() - 40 } 
+  else{
+     console.log(d.count);
+    if(d.count % 3 === 0){ var newXPos = $("#topBox").width() - 56 } 
+    else if(d.count % 3 == 1){ var newXPos = $("#topBox").width() - 42 } 
+    else{ var newXPos = $("#topBox").width() - 28 }
+    }
   return newXPos;
   }
 
@@ -61,7 +75,10 @@ function getYPos(d) {
       var newX = pos - (d.yIndex*itemHeight) + 8 // + ((d.count-1)*8)
       return newX
     }
-    else{ return pos - d.count*10 }
+    else{
+      var vagueY = $("#timeline svg").height() - $("#topBox").height() + 40 + d.count*5
+      console.log(vagueY)
+      return vagueY }
 }
 
 function getColor(d){
