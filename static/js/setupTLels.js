@@ -16,7 +16,7 @@ function getCirclePath(datum,beginning,scaleFactor){
 function getLinePath(datum,beginning,scaleFactor){
 
   var cxStart = parseInt(getXPos(datum,beginning,scaleFactor))+2;
-  var cxEnd = puffer + (datum.times[0].ending_time - beginning) * scaleFactor-2;
+  var cxEnd = puffer/2 + (datum.times[0].ending_time - beginning) * scaleFactor;
   var yPos = parseInt(getYPos(datum))
   var yBottom = yPos - 10
   var yTop = yPos + 10

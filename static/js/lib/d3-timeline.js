@@ -80,7 +80,7 @@
       // draw the axis
       var xScale = d3.time.scale()
         .domain([beginning, ending])
-        .range([margin.left, width - margin.right]);
+        .range([puffer/2, width - puffer*2]);
 
       var xAxis = d3.svg.axis()
         .scale(xScale)
