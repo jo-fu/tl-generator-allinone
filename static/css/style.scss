@@ -5,16 +5,17 @@ $colorDateSelected:#a3ffc0;
 $colorNoDate:#ccc;
 $btnsSize:25px;
 
-$shadow:2px 2px 0px #666;
-$noshadow:0px 0px 0px #666;
+$shadow:2px 2px 0px #ccc;
+$noshadow:0px 0px 0px #ccc;
+$activeBorder: 1px solid #000;
 
 $doc-1: rgb(111,111,111);
-$doc0: rgb(166,206,227);
-$doc1: rgb(178,223,138);
-$doc2: rgb(251,154,153);
-$doc3: rgb(253,191,111);
-$doc4: rgb(202,178,214);
-$doc5: rgb(255,255,153);
+$doc0: rgb(55,126,184);
+$doc1: rgb(77,175,74);
+$doc2: rgb(152,78,163);
+$doc3: rgb(255,127,0);
+$doc4: rgb(228,26,28);
+$doc5: rgb(166,86,40);
 
 
 $highlightColor:rgb(255, 97, 56);
@@ -37,10 +38,10 @@ $highlightColorHalf:rgba(255, 97, 56, 0.4);
 } 
 
 html, body{
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#efefef; height:100%; margin:0;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; background-color:#fff; height:100%; margin:0;
 }
 // Basic Layout
-#topBox{ position:relative; height: 50%; width: 100%; background-color:#efefef; }
+#topBox{ position:relative; @include calc(height, "50% - 20px"); width: 100%; }
 
 .bgColor_0 { background-color: $doc0; }
 .bgColor_1 { background-color: $doc1; }
@@ -48,6 +49,14 @@ html, body{
 .bgColor_3 { background-color: $doc3; }
 .bgColor_4 { background-color: $doc4; }
 .bgColor_5 { background-color: $doc5; }
+
+#descriptionBox{ height:19px; background-color:#eee; line-height:15px; border-top: 1px solid #999;
+  table{ width:100%;}
+  td{ text-align:center; font-size:12px; color:#666; }
+  td:nth-child(1){ width:30%}
+  td:nth-child(2){ width:30%}
+  td:nth-child(3){ width:40%}
+}
 
 #bottomBox{ position:relative; height: 50%; width: 100%; background-color:#f9f9f9; border-top: 1px solid #999; box-sizing: border-box;
 
@@ -59,15 +68,18 @@ html, body{
 
 #topBox{
   #tlc{ position:absolute; left:10px; top:0px; font-size:20px; font-weight:lighter; color:#999; margin:10px; }
+  #vagueDatesArea{ position:absolute; right:0px; top:0px; height:auto; width:90px; border:1px solid #333;
+    h1{ font-size:0.7em; margin: 10px; font-weight:normal; }
+   }
 }
 
 #leftBox{
 
   #tablehead{ position:fixed; background-color:#fff; border-bottom:2px solid #333; width:30%; z-index:1; box-shadow:0px 1px 2px #999;
-    td:nth-child(1){ width:42px; }
+    td:nth-child(1){ width:50px; }
     td:nth-child(2){ min-width:100px; }
     td{ text-align:left; padding:2px; font-size:0.7em;
-      .order{ padding:2px; cursor:pointer; }
+      .order{ cursor:pointer; }
       .order:hover{ color:#666; }
       }
     }
@@ -78,10 +90,11 @@ html, body{
       tr:hover{ color:darken( $highlightColor, 35% ); }
       .highlighted:hover{ color:#fff; }
       td{ padding: 2px 5px; position:relative; }
-      td:nth-child(1){ width:32px; }
-      td:nth-child(2){ min-width:100px; }
-      td:nth-child(3){ line-height:1em; }
+      td:nth-child(1){ width:50px;}
+      td:nth-child(2){ min-width:100px; font-weight:bold; font-size:14px; }
+      td:nth-child(3){ line-height:1em; font-size:12px; }
       .deleted{ text-decoration:line-through; background-color:#ccc; font-size:0.7em; }
+      .deleted td:nth-child(1){ opacity:0.2 }
       .listEl{
         .bgColor_-1 { background-color: $doc-1; border-color:transparent $doc-1 transparent $doc-1 }
         .bgColor_0 { background-color: $doc0; border-color:transparent $doc0 transparent $doc0 }
@@ -90,24 +103,30 @@ html, body{
         .bgColor_3 { background-color: $doc3; border-color:transparent $doc3 transparent $doc3 }
         .bgColor_4 { background-color: $doc4; border-color:transparent $doc4 transparent $doc4 }
         .bgColor_5 { background-color: $doc5; border-color:transparent $doc5 transparent $doc5 }
-        .symbol_date{ width:12px; height:12px; border-radius:6px; margin:-6px 6px; position:absolute; }
-        .symbol_duration{ background-color:transparent; width:0; height:0; border-width:8px 7px; border-style:solid; margin:-6px 5px; position:absolute; }
-        .symbol_neither{ width:10px; height:10px; margin:-6px 5px; position:absolute; }
-        .untouched{ opacity: 0.7; stroke-color:#666; stroke-width:3px; }
+        .symbol_date{ width:15px; height:15px; border-radius:10px; margin:-7px 14px; position:absolute;
+          p{ text-align:center; color: #fff; font-size:12px; margin:0; padding:0; }
+          }
+        .symbol_duration{ background-color:transparent; width:0; height:0; border-width:10px 9px; border-style:solid; margin:-10px 13px; position:absolute;
+          p{ margin:-9px 1px; color:#fff; font-size:12px; }
+          }
+        .symbol_neither{ width:12px; height:12px; margin:-6px 16px; position:absolute;
+          p{ text-align:center; color: #fff; font-size:12px; margin:-2px; padding:0; }
+        }
+        .untouched{ opacity: 0.6; stroke-color:#666; stroke-width:3px; }
       }
     }
   }
 }
 // Center Box
 #centerBox{
-  .statusBox{ font-size:0.7em; position:fixed; background-color:#fff; bottom:0px; width:30%; left:30%; padding:0 5px;  box-sizing: border-box; z-index:1; box-shadow:0px -1px 2px #999;}
+  .statusBox{ font-size:0.7em; position:fixed; background-color:#fff; bottom:0px; width:30%; left:30%; padding:0 5px;  box-sizing: border-box; box-shadow:0px -1px 2px #999;}
    #docSwitcher{ z-index:10; height:auto; min-height:40px; position:absolute; max-width:29%;
-    .docBtn{ padding: 5px 15px 3px 8px; margin: 0 5px 7px 0; float:left; cursor:pointer; position:relative;
+    .docBtn{ padding: 0px 15px 0px 6px; margin: 0 5px 7px 5px; float:left; cursor:pointer; position:relative; color:#fff; font-weight:bold;
       @include shadow(); font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
-    #addDoc{ float:left; }
+    #addDoc{ float:left; margin: 0 0 0 5px; }
     .inactive{ font-size: 5px; background-color: #999 !important; color:#fff !important }
     .inactive .hideDoc{ background-image: url("../img/reload.png") !important; }
-    .docBtn:active, .activeBtn{ margin:2px 3px 5px 2px; @include noshadow(); }
+    .docBtn:active, .activeBtn{ margin:0px 3px 5px 0px; border:$activeBorder; @include noshadow(); }
     .hideDoc{ width:10px; height:10px; position:absolute; top:3px; right:2px; background-image:url("../img/delete.png"); background-size:100%;}
   }
   #docText{ padding:15px;
@@ -125,7 +144,8 @@ html, body{
     #loadDataOptions{ position:absolute; top:3px; z-index:1; right:37px; width:175px; }
     #saveState{ background-image:url(../img/saveState.png); }
     #exportJson{ background-image:url(../img/exportJson.png); }
-    #tool_delete{ background-image:url(../img/delete.png); }
+    #gohome{ background-image:url(../img/home.png); }
+    
     #mergeDates{ background-image:url(../img/merge.png); }
     #deleteAll{ background-image:url(../img/deleteAll.png); }
   }
@@ -140,26 +160,25 @@ html, body{
       .hasMedia{ background-position: right; }
     }
     #addMediaBox{ padding:1px 10px; background-color:#efefef; }
-    #changeTrackBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; margin-right:10px; color: #333; @include shadow(); float:left; }
-    #changeTrackBtn:active, .activeBtn{ @include noshadow(); margin: 2px 0 0 2px; }
-    #changeTrackBox{ padding: 4px; }
+    #changeTrack{ height:35px; width: auto; }
+    #changeTrackBtn{ font-weight: bold; font-size: 0.7em; padding: 4px 8px; margin-right:10px; float:left; }
+    .activeBtn{ @include noshadow(); margin: 0 5px 2px 3px; border: $activeBorder; }
+    #tool_delete{ float:left; background-image:url(../img/delete.png); }
+    #prevDate, #nextDate{ float:left; background-image:url(../img/arrows.png) }
+    #prevDate{ background-position:left; }
+    #nextDate{ background-position:right; }
   }
 
 }
 
 // BUTTON STYLE
 .ctl{ padding:5px 10px; background-color:#fff; cursor:pointer; @include shadow();}
-.ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 2px; border:1px solid #efefef; background-repeat:no-repeat;
+.ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 8px 0 0; border:1px solid #efefef; background-repeat:no-repeat;
     background-color:#fff; background-position:center; cursor:pointer;
     @include shadow(); }
 .ctlBtns:active,  .ctl:active{ @include noshadow(); margin: 2px 0px 0px 2px; }
 
-#addDoc, #addDate{ background-image:url(../img/add.png); margin:5px; }
-#addDate{ position:absolute; top:250px; left:10px;}
-#prevDate, #nextDate{ position:absolute; top:105px; background-image:url(../img/arrows.png) }
-#prevDate{ left:10px; background-position:left; }
-#nextDate{ right:10px; background-position:right; }
-#addDoc:active, #addDate:active{ margin:8px 2px 2px 8px; }
+#addDoc, #addDate{ background-image:url(../img/add.png); }
 
 
 // Left Box (Text or List display)
@@ -216,10 +235,14 @@ html, body{
   .durtodate{ background-image:url(../img/durToDate.png); margin:2px 5px; padding:1px 13px; }
   #check{ background-image:url(../img/check.png); margin:2px 5px; padding:1px 13px; }
   #dateEditMode{ }
-  #displaySubtitle input{ font-size: 14px; }
+  #displaySubtitle{
+    input{ font-size: 14px; margin: 15px 0; }
+    div, textarea{ font-size:18px; margin: 15px 0; @include calc(width, "100% - 100px"); }
+  }
+
   #recoverElement{ position:absolute; text-align:left; bottom:10px; left:10px; font-size:10px; }
 
-
+.todaytag{ font-size:10px; fill:#aaa; font-style:italic; }
 .refline{ shape-rendering: crispEdges; stroke: #ccc; stroke-width:1px; }
 .timelineItem{
     -moz-transition: all 300ms ease-in;
@@ -229,13 +252,13 @@ html, body{
     cursor: pointer;
     }
 
-.selected{ stroke: $highlightColor; stroke-width:2px; }
-.selectedSec{ fill: $highlightColorHalf;  }
+.selected{ stroke: #333; stroke-width:3px; }
+.selectedSec{ stroke: #666; stroke-width:2px;  }
 
 .datelabel{ display: none; text-align: center; }
 .visible{ display: block; }
 
-.chooseDoc, .changeDoc{ float:left; margin:0 5px 2px 3px; padding: 0 8px; font-size: 0.8em; font-weight: bold; @include shadow(); }
+.chooseDoc, .changeDoc{ float:left; margin:0 5px 2px 3px; padding: 0 8px; font-size: 0.8em; font-weight:bold; color:#fff; @include shadow(); }
 .chosen, .changeDoc:active, .chooseDoc:active{
   margin:2px 3px 0 5px; outline:2px solid #efefef; @include noshadow();
 }
@@ -257,8 +280,9 @@ html, body{
 .axis text {
   font-family: sans-serif;
   font-size: 10px;
+  fill:#000;
 }
-#timeline{ background-color:#fff; 
+#timeline{ 
   .timeline-label { font-family: sans-serif; font-size: 32px; }
   .extent{ fill: none; stroke: #999; stroke-width: 1px; stroke-dasharray: 5 }
 }

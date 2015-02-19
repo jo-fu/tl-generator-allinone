@@ -1,32 +1,51 @@
 html, body {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  background-color: #efefef;
+  background-color: #fff;
   height: 100%;
   margin: 0; }
 
 #topBox {
   position: relative;
-  height: 50%;
-  width: 100%;
-  background-color: #efefef; }
+  height: -webkit-calc(50% - 20px);
+  height: -moz-calc(50% - 20px);
+  height: calc(50% - 20px);
+  width: 100%; }
 
 .bgColor_0 {
-  background-color: #a6cee3; }
+  background-color: #377eb8; }
 
 .bgColor_1 {
-  background-color: #b2df8a; }
+  background-color: #4daf4a; }
 
 .bgColor_2 {
-  background-color: #fb9a99; }
+  background-color: #984ea3; }
 
 .bgColor_3 {
-  background-color: #fdbf6f; }
+  background-color: #ff7f00; }
 
 .bgColor_4 {
-  background-color: #cab2d6; }
+  background-color: #e41a1c; }
 
 .bgColor_5 {
-  background-color: #ffff99; }
+  background-color: #a65628; }
+
+#descriptionBox {
+  height: 19px;
+  background-color: #eee;
+  line-height: 15px;
+  border-top: 1px solid #999; }
+  #descriptionBox table {
+    width: 100%; }
+  #descriptionBox td {
+    text-align: center;
+    font-size: 12px;
+    color: #666; }
+  #descriptionBox td:nth-child(1) {
+    width: 30%; }
+  #descriptionBox td:nth-child(2) {
+    width: 30%; }
+  #descriptionBox td:nth-child(3) {
+    width: 40%; }
 
 #bottomBox {
   position: relative;
@@ -65,6 +84,17 @@ html, body {
   font-weight: lighter;
   color: #999;
   margin: 10px; }
+#topBox #vagueDatesArea {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: auto;
+  width: 90px;
+  border: 1px solid #333; }
+  #topBox #vagueDatesArea h1 {
+    font-size: 0.7em;
+    margin: 10px;
+    font-weight: normal; }
 
 #leftBox #tablehead {
   position: fixed;
@@ -74,7 +104,7 @@ html, body {
   z-index: 1;
   box-shadow: 0px 1px 2px #999; }
   #leftBox #tablehead td:nth-child(1) {
-    width: 42px; }
+    width: 50px; }
   #leftBox #tablehead td:nth-child(2) {
     min-width: 100px; }
   #leftBox #tablehead td {
@@ -82,7 +112,6 @@ html, body {
     padding: 2px;
     font-size: 0.7em; }
     #leftBox #tablehead td .order {
-      padding: 2px;
       cursor: pointer; }
     #leftBox #tablehead td .order:hover {
       color: #666; }
@@ -107,57 +136,78 @@ html, body {
       padding: 2px 5px;
       position: relative; }
     #leftBox #listData table td:nth-child(1) {
-      width: 32px; }
+      width: 50px; }
     #leftBox #listData table td:nth-child(2) {
-      min-width: 100px; }
+      min-width: 100px;
+      font-weight: bold;
+      font-size: 14px; }
     #leftBox #listData table td:nth-child(3) {
-      line-height: 1em; }
+      line-height: 1em;
+      font-size: 12px; }
     #leftBox #listData table .deleted {
       text-decoration: line-through;
       background-color: #ccc;
       font-size: 0.7em; }
+    #leftBox #listData table .deleted td:nth-child(1) {
+      opacity: 0.2; }
     #leftBox #listData table .listEl .bgColor_-1 {
       background-color: #6f6f6f;
       border-color: transparent #6f6f6f transparent #6f6f6f; }
     #leftBox #listData table .listEl .bgColor_0 {
-      background-color: #a6cee3;
-      border-color: transparent #a6cee3 transparent #a6cee3; }
+      background-color: #377eb8;
+      border-color: transparent #377eb8 transparent #377eb8; }
     #leftBox #listData table .listEl .bgColor_1 {
-      background-color: #b2df8a;
-      border-color: transparent #b2df8a transparent #b2df8a; }
+      background-color: #4daf4a;
+      border-color: transparent #4daf4a transparent #4daf4a; }
     #leftBox #listData table .listEl .bgColor_2 {
-      background-color: #fb9a99;
-      border-color: transparent #fb9a99 transparent #fb9a99; }
+      background-color: #984ea3;
+      border-color: transparent #984ea3 transparent #984ea3; }
     #leftBox #listData table .listEl .bgColor_3 {
-      background-color: #fdbf6f;
-      border-color: transparent #fdbf6f transparent #fdbf6f; }
+      background-color: #ff7f00;
+      border-color: transparent #ff7f00 transparent #ff7f00; }
     #leftBox #listData table .listEl .bgColor_4 {
-      background-color: #cab2d6;
-      border-color: transparent #cab2d6 transparent #cab2d6; }
+      background-color: #e41a1c;
+      border-color: transparent #e41a1c transparent #e41a1c; }
     #leftBox #listData table .listEl .bgColor_5 {
-      background-color: #ffff99;
-      border-color: transparent #ffff99 transparent #ffff99; }
+      background-color: #a65628;
+      border-color: transparent #a65628 transparent #a65628; }
     #leftBox #listData table .listEl .symbol_date {
-      width: 12px;
-      height: 12px;
-      border-radius: 6px;
-      margin: -6px 6px;
+      width: 15px;
+      height: 15px;
+      border-radius: 10px;
+      margin: -7px 14px;
       position: absolute; }
+      #leftBox #listData table .listEl .symbol_date p {
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        margin: 0;
+        padding: 0; }
     #leftBox #listData table .listEl .symbol_duration {
       background-color: transparent;
       width: 0;
       height: 0;
-      border-width: 8px 7px;
+      border-width: 10px 9px;
       border-style: solid;
-      margin: -6px 5px;
+      margin: -10px 13px;
       position: absolute; }
+      #leftBox #listData table .listEl .symbol_duration p {
+        margin: -9px 1px;
+        color: #fff;
+        font-size: 12px; }
     #leftBox #listData table .listEl .symbol_neither {
-      width: 10px;
-      height: 10px;
-      margin: -6px 5px;
+      width: 12px;
+      height: 12px;
+      margin: -6px 16px;
       position: absolute; }
+      #leftBox #listData table .listEl .symbol_neither p {
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        margin: -2px;
+        padding: 0; }
     #leftBox #listData table .listEl .untouched {
-      opacity: 0.7;
+      opacity: 0.6;
       stroke-color: #666;
       stroke-width: 3px; }
 
@@ -170,7 +220,6 @@ html, body {
   left: 30%;
   padding: 0 5px;
   box-sizing: border-box;
-  z-index: 1;
   box-shadow: 0px -1px 2px #999; }
 #centerBox #docSwitcher {
   z-index: 10;
@@ -179,21 +228,24 @@ html, body {
   position: absolute;
   max-width: 29%; }
   #centerBox #docSwitcher .docBtn {
-    padding: 5px 15px 3px 8px;
-    margin: 0 5px 7px 0;
+    padding: 0px 15px 0px 6px;
+    margin: 0 5px 7px 5px;
     float: left;
     cursor: pointer;
     position: relative;
-    -moz-box-shadow: 2px 2px 0px #666666;
-    -webkit-box-shadow: 2px 2px 0px #666666;
-    box-shadow: 2px 2px 0px #666666;
+    color: #fff;
+    font-weight: bold;
+    -moz-box-shadow: 2px 2px 0px #cccccc;
+    -webkit-box-shadow: 2px 2px 0px #cccccc;
+    box-shadow: 2px 2px 0px #cccccc;
     font-size: 12px;
     max-width: 170px;
     height: 25px;
     overflow: hidden;
     line-height: 25px; }
   #centerBox #docSwitcher #addDoc {
-    float: left; }
+    float: left;
+    margin: 0 0 0 5px; }
   #centerBox #docSwitcher .inactive {
     font-size: 5px;
     background-color: #999 !important;
@@ -201,10 +253,11 @@ html, body {
   #centerBox #docSwitcher .inactive .hideDoc {
     background-image: url("../img/reload.png") !important; }
   #centerBox #docSwitcher .docBtn:active, #centerBox #docSwitcher .activeBtn {
-    margin: 2px 3px 5px 2px;
-    -moz-box-shadow: 0px 0px 0px #666666;
-    -webkit-box-shadow: 0px 0px 0px #666666;
-    box-shadow: 0px 0px 0px #666666; }
+    margin: 0px 3px 5px 0px;
+    border: 1px solid black;
+    -moz-box-shadow: 0px 0px 0px #cccccc;
+    -webkit-box-shadow: 0px 0px 0px #cccccc;
+    box-shadow: 0px 0px 0px #cccccc; }
   #centerBox #docSwitcher .hideDoc {
     width: 10px;
     height: 10px;
@@ -241,8 +294,8 @@ html, body {
     background-image: url(../img/saveState.png); }
   #rightBox #toolBox #exportJson {
     background-image: url(../img/exportJson.png); }
-  #rightBox #toolBox #tool_delete {
-    background-image: url(../img/delete.png); }
+  #rightBox #toolBox #gohome {
+    background-image: url(../img/home.png); }
   #rightBox #toolBox #mergeDates {
     background-image: url(../img/merge.png); }
   #rightBox #toolBox #deleteAll {
@@ -266,14 +319,14 @@ html, body {
       font-size: 0.7em;
       padding: 3px 8px;
       color: #333;
-      -moz-box-shadow: 2px 2px 0px #666666;
-      -webkit-box-shadow: 2px 2px 0px #666666;
-      box-shadow: 2px 2px 0px #666666;
+      -moz-box-shadow: 2px 2px 0px #cccccc;
+      -webkit-box-shadow: 2px 2px 0px #cccccc;
+      box-shadow: 2px 2px 0px #cccccc;
       float: left; }
     #rightBox .display #addMedia #addMediaBtn:active {
-      -moz-box-shadow: 0px 0px 0px #666666;
-      -webkit-box-shadow: 0px 0px 0px #666666;
-      box-shadow: 0px 0px 0px #666666; }
+      -moz-box-shadow: 0px 0px 0px #cccccc;
+      -webkit-box-shadow: 0px 0px 0px #cccccc;
+      box-shadow: 0px 0px 0px #cccccc; }
     #rightBox .display #addMedia #mediaIndicator {
       width: 25px;
       height: 25px;
@@ -285,78 +338,61 @@ html, body {
   #rightBox .display #addMediaBox {
     padding: 1px 10px;
     background-color: #efefef; }
+  #rightBox .display #changeTrack {
+    height: 35px;
+    width: auto; }
   #rightBox .display #changeTrackBtn {
-    border: 1px solid #efefef;
-    background-color: #fff;
-    cursor: pointer;
     font-weight: bold;
     font-size: 0.7em;
-    padding: 3px 8px;
+    padding: 4px 8px;
     margin-right: 10px;
-    color: #333;
-    -moz-box-shadow: 2px 2px 0px #666666;
-    -webkit-box-shadow: 2px 2px 0px #666666;
-    box-shadow: 2px 2px 0px #666666;
     float: left; }
-  #rightBox .display #changeTrackBtn:active, #rightBox .display .activeBtn {
-    -moz-box-shadow: 0px 0px 0px #666666;
-    -webkit-box-shadow: 0px 0px 0px #666666;
-    box-shadow: 0px 0px 0px #666666;
-    margin: 2px 0 0 2px; }
-  #rightBox .display #changeTrackBox {
-    padding: 4px; }
+  #rightBox .display .activeBtn {
+    -moz-box-shadow: 0px 0px 0px #cccccc;
+    -webkit-box-shadow: 0px 0px 0px #cccccc;
+    box-shadow: 0px 0px 0px #cccccc;
+    margin: 0 5px 2px 3px;
+    border: 1px solid black; }
+  #rightBox .display #tool_delete {
+    float: left;
+    background-image: url(../img/delete.png); }
+  #rightBox .display #prevDate, #rightBox .display #nextDate {
+    float: left;
+    background-image: url(../img/arrows.png); }
+  #rightBox .display #prevDate {
+    background-position: left; }
+  #rightBox .display #nextDate {
+    background-position: right; }
 
 .ctl {
   padding: 5px 10px;
   background-color: #fff;
   cursor: pointer;
-  -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666;
-  box-shadow: 2px 2px 0px #666666; }
+  -moz-box-shadow: 2px 2px 0px #cccccc;
+  -webkit-box-shadow: 2px 2px 0px #cccccc;
+  box-shadow: 2px 2px 0px #cccccc; }
 
 .ctlBtns {
   width: 25px;
   height: 25px;
-  margin: 4px 2px;
+  margin: 4px 8px 0 0;
   border: 1px solid #efefef;
   background-repeat: no-repeat;
   background-color: #fff;
   background-position: center;
   cursor: pointer;
-  -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666;
-  box-shadow: 2px 2px 0px #666666; }
+  -moz-box-shadow: 2px 2px 0px #cccccc;
+  -webkit-box-shadow: 2px 2px 0px #cccccc;
+  box-shadow: 2px 2px 0px #cccccc; }
 
 .ctlBtns:active, .ctl:active {
-  -moz-box-shadow: 0px 0px 0px #666666;
-  -webkit-box-shadow: 0px 0px 0px #666666;
-  box-shadow: 0px 0px 0px #666666;
+  -moz-box-shadow: 0px 0px 0px #cccccc;
+  -webkit-box-shadow: 0px 0px 0px #cccccc;
+  box-shadow: 0px 0px 0px #cccccc;
   margin: 2px 0px 0px 2px; }
 
 #addDoc, #addDate {
-  background-image: url(../img/add.png);
-  margin: 5px; }
-
-#addDate {
-  position: absolute;
-  top: 250px;
-  left: 10px; }
-
-#prevDate, #nextDate {
-  position: absolute;
-  top: 105px;
-  background-image: url(../img/arrows.png); }
-
-#prevDate {
-  left: 10px;
-  background-position: left; }
-
-#nextDate {
-  right: 10px;
-  background-position: right; }
-
-#addDoc:active, #addDate:active {
-  margin: 8px 2px 2px 8px; }
+  background-image: url(../img/add.png); }
 
 #view_switch {
   width: 100%;
@@ -387,17 +423,17 @@ html, body {
 #listData .docColor_-1 {
   color: #6f6f6f; }
 #listData .docColor_0 {
-  color: #a6cee3; }
+  color: #377eb8; }
 #listData .docColor_1 {
-  color: #b2df8a; }
+  color: #4daf4a; }
 #listData .docColor_2 {
-  color: #fb9a99; }
+  color: #984ea3; }
 #listData .docColor_3 {
-  color: #fdbf6f; }
+  color: #ff7f00; }
 #listData .docColor_4 {
-  color: #cab2d6; }
+  color: #e41a1c; }
 #listData .docColor_5 {
-  color: #ffff99; }
+  color: #a65628; }
 #listData ul > li > span {
   color: #000; }
 
@@ -417,17 +453,17 @@ li {
   background-color: #fff;
   margin: 2px 0;
   padding: 2px 10px;
-  -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666;
-  box-shadow: 2px 2px 0px #666666; }
+  -moz-box-shadow: 2px 2px 0px #cccccc;
+  -webkit-box-shadow: 2px 2px 0px #cccccc;
+  box-shadow: 2px 2px 0px #cccccc; }
 
 li:hover {
   background-color: #efefef; }
 
 li:active {
-  -moz-box-shadow: 0px 0px 0px #666666;
-  -webkit-box-shadow: 0px 0px 0px #666666;
-  box-shadow: 0px 0px 0px #666666;
+  -moz-box-shadow: 0px 0px 0px #cccccc;
+  -webkit-box-shadow: 0px 0px 0px #cccccc;
+  box-shadow: 0px 0px 0px #cccccc;
   margin: 4px 0 0 2px; }
 
 h1, .datetitle {
@@ -483,7 +519,14 @@ input {
   padding: 1px 13px; }
 
 #displaySubtitle input {
-  font-size: 14px; }
+  font-size: 14px;
+  margin: 15px 0; }
+#displaySubtitle div, #displaySubtitle textarea {
+  font-size: 18px;
+  margin: 15px 0;
+  width: -webkit-calc(100% - 100px);
+  width: -moz-calc(100% - 100px);
+  width: calc(100% - 100px); }
 
 #recoverElement {
   position: absolute;
@@ -491,6 +534,11 @@ input {
   bottom: 10px;
   left: 10px;
   font-size: 10px; }
+
+.todaytag {
+  font-size: 10px;
+  fill: #aaa;
+  font-style: italic; }
 
 .refline {
   shape-rendering: crispEdges;
@@ -505,11 +553,12 @@ input {
   cursor: pointer; }
 
 .selected {
-  stroke: #ff6138;
-  stroke-width: 2px; }
+  stroke: #333;
+  stroke-width: 3px; }
 
 .selectedSec {
-  fill: rgba(255, 97, 56, 0.4); }
+  stroke: #666;
+  stroke-width: 2px; }
 
 .datelabel {
   display: none;
@@ -524,16 +573,17 @@ input {
   padding: 0 8px;
   font-size: 0.8em;
   font-weight: bold;
-  -moz-box-shadow: 2px 2px 0px #666666;
-  -webkit-box-shadow: 2px 2px 0px #666666;
-  box-shadow: 2px 2px 0px #666666; }
+  color: #fff;
+  -moz-box-shadow: 2px 2px 0px #cccccc;
+  -webkit-box-shadow: 2px 2px 0px #cccccc;
+  box-shadow: 2px 2px 0px #cccccc; }
 
 .chosen, .changeDoc:active, .chooseDoc:active {
   margin: 2px 3px 0 5px;
   outline: 2px solid #efefef;
-  -moz-box-shadow: 0px 0px 0px #666666;
-  -webkit-box-shadow: 0px 0px 0px #666666;
-  box-shadow: 0px 0px 0px #666666; }
+  -moz-box-shadow: 0px 0px 0px #cccccc;
+  -webkit-box-shadow: 0px 0px 0px #cccccc;
+  box-shadow: 0px 0px 0px #cccccc; }
 
 #fileinfo {
   position: absolute;
@@ -548,18 +598,17 @@ input {
 
 .axis text {
   font-family: sans-serif;
-  font-size: 10px; }
+  font-size: 10px;
+  fill: #000; }
 
-#timeline {
-  background-color: #fff; }
-  #timeline .timeline-label {
-    font-family: sans-serif;
-    font-size: 32px; }
-  #timeline .extent {
-    fill: none;
-    stroke: #999;
-    stroke-width: 1px;
-    stroke-dasharray: 5; }
+#timeline .timeline-label {
+  font-family: sans-serif;
+  font-size: 32px; }
+#timeline .extent {
+  fill: none;
+  stroke: #999;
+  stroke-width: 1px;
+  stroke-dasharray: 5; }
 
 #timeline2 .axis {
   transform: translate(0px, 30px);
@@ -669,13 +718,13 @@ input {
     text-align: center;
     height: 30px;
     line-height: 30px;
-    -moz-box-shadow: 2px 2px 0px #666666;
-    -webkit-box-shadow: 2px 2px 0px #666666;
-    box-shadow: 2px 2px 0px #666666; }
+    -moz-box-shadow: 2px 2px 0px #cccccc;
+    -webkit-box-shadow: 2px 2px 0px #cccccc;
+    box-shadow: 2px 2px 0px #cccccc; }
   #inputOverlay .btn:active {
-    -moz-box-shadow: 0px 0px 0px #666666;
-    -webkit-box-shadow: 0px 0px 0px #666666;
-    box-shadow: 0px 0px 0px #666666;
+    -moz-box-shadow: 0px 0px 0px #cccccc;
+    -webkit-box-shadow: 0px 0px 0px #cccccc;
+    box-shadow: 0px 0px 0px #cccccc;
     margin: 2px 0px 0px 2px; }
 
 #saved {

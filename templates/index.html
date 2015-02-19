@@ -9,11 +9,12 @@
   <script src="{{ url_for('static', filename='js/lib/d3-timeline.js')}}" charset="utf-8"></script>
 
   <script src="{{ url_for('static', filename='js/lib/angular.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/angularScript.js')}}"></script>
-
+  <script src="{{ url_for('static', filename='js/dataWrangling.js')}}"></script>
   <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/setupTLels.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/angularScript.js')}}"></script>
   
-  <title>Timeline Generator</title>
+  <title>TimeLineCurator v0.2</title>
 
 </head>
 
@@ -24,18 +25,25 @@
 
   <!-- topBox: Timeline JS -->
   <div id="topBox">
-    
+    <div id="vagueDatesArea"><h1>Vague dates</h1></div>
     <div id="timeline">
         <p style="text-align:center;"><i>Please select a document or add dates manually.</i></p>
         
     </div>
     <!-- Add date + Arrow buttons -->  
-    <h1 id="tlc" ng-if="!severalSelected">TimeLineCurator</h1>
-    <div id="prevDate" class="ctlBtns" title="Go to the previous date" ng-click="arrowKey('prev','btn')"></div>
-    <div id="nextDate" class="ctlBtns" title="Go to the next date" ng-click="arrowKey('next','btn')"></div>
-    <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
+    <h1 id="tlc"><b>TimeLineCurator</b> v0.2</h1>
+    
 
   </div>
+
+
+<div id="descriptionBox">
+  <table><tr>
+  <td>List View</td>
+  <td>Document View</td>
+  <td>Control Panel</td>
+  </tr></table>
+</div>
 
  
  <!-- bottomBox: ListView / TextView / ControlPanel -->
@@ -48,18 +56,26 @@
 <!-- List Viewer -->
       <div id="tablehead">
           <table><tr>
-            <td>Type <span class="order" ng-click="orderByVal='typ';orderReverse=!orderReverse">&#9660;</span></td>
-            <td>Date <span class="order" ng-click="orderByVal='val';orderReverse=!orderReverse">&#9660;</span></td>
-            <td>Title <span class="order" ng-click="orderByVal='sub';orderReverse=!orderReverse">&#9660;</span></td>
+            <td>
+              <span class="order" title="Order by type" ng-click="orderByVal='typ';orderReverse=!orderReverse">&#9679;</span>
+              <span class="order" title="Order by status" ng-click="orderByVal='touched';orderReverse=!orderReverse">&#9680;</span>
+              <span class="order" title="Order by document" ng-click="orderByVal='docNr';orderReverse=!orderReverse">&#9726;</span>
+              <span class="order" title="Order by track number" ng-click="orderByVal='trackNr';orderReverse=!orderReverse">&#9776;</span>
+              
+            </td>
+            <td><span class="order" ng-click="orderByVal='val';orderReverse=!orderReverse">Date &#9660;</span></td>
+            <td><span class="order" ng-click="orderByVal='sub';orderReverse=!orderReverse">Title &#9660;</span></td>
           </tr></table>
         </div>
 
       <div id="listData">
           <table>
           <tr ng-repeat="tx in timexes | orderBy: orderByVal : orderReverse" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
-            <td><span class="bgColor_{{ tx.trackNr }} symbol_{{ tx.typ }}" ng-class="{ untouched: !tx.touched }"></span></td>
-            <td><b>{{ tx.title }}</b></td>
-            <td><small>{{ tx.sub }}</small></td>
+            <td><span class="bgColor_{{ tx.trackNr }} symbol_{{ tx.typ }}" ng-class="{ untouched: !tx.touched }">
+              <p ng-if="tx.touched"> &#10003; </p>
+            </span></td>
+            <td>{{ tx.title }}</td>
+            <td>{{ tx.sub }}</td>
           </tr>
         </table>
     </div>
@@ -90,7 +106,7 @@
           <span ng-if="sent.tx=='NoTx'" ng-bind-html="sent.sent"></span>
 
         </span>
-      <div class="statusBox"><b>Number events: {{ countTxs(docNr,"event") }}</b>, Number vague expressions: {{ countTxs(docNr,"vague") }}</div>
+      <div class="statusBox"><b>Events: {{ countTxs($index,"event") }}</b>, vague expressions: {{ countTxs($index,"vague") }}</div>
       </div>
     </div>
     
@@ -105,26 +121,28 @@
 
   <!-- ToolBox -->
   <div id="toolBox">
-    <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="uploadData=!uploadData"></div>
 
-    <!-- Import Data-->
-    <ul ng-if="uploadData" id="loadDataOptions">
-      <li ng-class="{ notSelectable: !prevData}" ng-click="loadData('localStorage')">Load previous state</li>
-      <li onclick="triggerUpload()">Load from file</li>
-      <input id="uploadFile" onchange="angular.element(this).scope().loadData(this)" accept=".tl" type="file" style="display:none;"/>
-    </ul>
-
-    <!-- Save current state -->
-    <a href="data:application/octet-stream;charset=utf-8;base64,Daten" download="savedstate">
-      <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="saveState()"></div>
-    </a>
+    <div id="gohome" class="ctlBtns" title="Show timeline description" ng-click="gohome()"></div>
 
     <!-- Export to Timeline js -->
     <a href="tljs" target="_blank">
       <div id="exportJson" class="ctlBtns" title="Export this dates to Timeline JS" ng-click="exportAsJson()"></div>
     </a>
 
-    <div class="tool ctlBtns" title="Delete this date" ng-click="deleteDate('one')" id="tool_delete"></div>
+    <!-- Save current state -->
+    <a href="data:application/octet-stream;charset=utf-8;base64,Daten" download="savedstate">
+      <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="saveState()"></div>
+    </a>
+
+    <!-- Import Data-->
+    <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="uploadData=!uploadData"></div>
+    <ul ng-if="uploadData" id="loadDataOptions">
+      <li ng-class="{ notSelectable: !prevData}" ng-click="loadData('localStorage')">Load previous state</li>
+      <li onclick="triggerUpload()">Load from file</li>
+      <input id="uploadFile" onchange="angular.element(this).scope().loadData(this)" accept=".tl" type="file" style="display:none;"/>
+    </ul>
+
+    <div id="addDate" class="ctlBtns" title="Add a date" ng-click="addDate()"></div>
 
     <div id="mergeDates" class="ctlBtns" ng-if="severalSelected" title="Merge these dates" ng-click="mergeDates()"></div>
 
@@ -139,16 +157,16 @@
 
     <!-- Editable TL Title -->
     <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
-      <input ng-switch-when="true" size="30" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
-      <div ng-switch-default ng-click="enableEdit('d')"><h2>{{ tlDescr[0] }}</h2></div>
+      <input ng-switch-when="true" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
+      <div ng-switch-default ng-click="enableEdit('d')"><span class="ctl">{{ tlDescr[0] }}</span></div>
     </ng-switch>
 
     <!-- Editable Content -->
     <ng-switch on="editContent" id="displayContent">
       <!-- Edit Mode -->
-      <textarea rows="4" cols="36" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
+      <textarea rows="5" style="width:80%" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
       <!-- Preview Mode -->
-      <div ng-switch-default ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
+      <div ng-switch-default class="ctl" ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
     </ng-switch>
 
   </div>
@@ -261,8 +279,7 @@
         </div>
 
         <div id="changeTrack">
-          <div id="changeTrackBtn" ng-click="changeTrackVis=!changeTrackVis"> Change Track</div>
-          <div id="changeTrackBox" ng-if="changeTrackVis">
+          <div id="changeTrackBtn" ng-click="changeTrackVis=!changeTrackVis">Track:</div>
             <!-- Doc Choice -->
             <div id="changeDoc_0" ng-click="changeTrack(0)" ng-class="{activeBtn: dateInfo[0].trackNr == 0}" class="changeDoc bgColor_0">1</div>
             <div id="changeDoc_1" ng-click="changeTrack(1)" ng-class="{activeBtn: dateInfo[0].trackNr == 1}" class="changeDoc bgColor_1">2</div>
@@ -270,8 +287,11 @@
             <div id="changeDoc_3" ng-click="changeTrack(3)" ng-class="{activeBtn: dateInfo[0].trackNr == 3}" class="changeDoc bgColor_3">4</div>
             <div id="changeDoc_4" ng-click="changeTrack(4)" ng-class="{activeBtn: dateInfo[0].trackNr == 4}" class="changeDoc bgColor_4">5</div>
             <div id="changeDoc_5" ng-click="changeTrack(5)" ng-class="{activeBtn: dateInfo[0].trackNr == 5}" class="changeDoc bgColor_5">6</div>
-          </div>
         </div>
+
+      <div id="prevDate" class="ctlBtns" title="Go to the previous date" ng-click="arrowKey('prev','btn')"></div>
+      <div class="tool ctlBtns" title="Delete this date" ng-click="deleteDate('one')" id="tool_delete"></div>
+      <div id="nextDate" class="ctlBtns" title="Go to the next date" ng-click="arrowKey('next','btn')"></div>
 
       </div>
       <div id="recoverElement" ng-show="!timexes[currIndex].visible && dateInfo.length!=0">
@@ -306,7 +326,7 @@
         <textarea name="content" id="content" placeholder="Drop the content here."></textarea><br>
 
         <label class="optional" for="date">Which date does "today" refer to in the document (optional):</label>
-        <input type="date" value="{{ today }}" size="50" name="date">
+        <input type="date" value=" {{ today }} " size="50" name="date">
 
         <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
         
@@ -339,7 +359,7 @@
 </div>
 
 <div id="saved">Current status was stored.</div>
-<div id="guide"><a href="http://www.cs.ubc.ca/~jfulda/tl-generator/tl-generator-docu.pdf" target="_blank">PDF Guide</a></div>
+<div id="guide"><a href="http://www.cs.ubc.ca/group/infovis/software/TimeLineCurator/" target="_blank">About & Help</a></div>
 
 {% endraw %}
 

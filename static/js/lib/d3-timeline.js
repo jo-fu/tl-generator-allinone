@@ -20,13 +20,10 @@
         colorCycle = d3.scale.category20(),
         colorPropertyName = null,
         display = "rect",
-        
         ending = 0,
         beginning = 0,
-        
         stacked = false,
         rotateTicks = false
-        
         itemMargin = 5,
         showTodayLine = false,
         showTodayFormat = {marginTop: 25, marginBottom: 0, width: 1, color: colorCycle},
@@ -47,7 +44,7 @@
         minTime = 946684800000,
         maxTime = 1420070400000;
 
-      width = $("#topBox").width() - 50
+      width = $("#topBox").width()
 
 
       // check how many stacks we're gonna need
