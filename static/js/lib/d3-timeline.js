@@ -167,12 +167,12 @@
         });
       });
 
-      if (width > gParentSize.width) {
+      if (height > gParentSize.height) {
         var move = function() {
-          var x = Math.min(0, Math.max(gParentSize.width - width, d3.event.translate[0]));
+          var x = Math.min(0, Math.max(gParentSize.height - height, d3.event.translate[0]));
           zoom.translate([x, 0]);
-          g.attr("transform", "translate(" + x + ",0)");
-          scroll(x*scaleFactor, xScale);
+          g.attr("transform", "translate(0," + x + ")");
+          //scroll(x*scaleFactor, xScale);
         };
 
         var zoom = d3.behavior.zoom().x(xScale).on("zoom", move);

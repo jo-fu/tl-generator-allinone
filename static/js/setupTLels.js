@@ -53,14 +53,15 @@ function getXPos(d,beg,scale) {
 
 function getYPos(d) {
     var isDate = !isNaN(d.times[0].starting_time);
-    var pos = $("#topBox").height() - 45;
+    var pos = $("#timeline svg").height() - 45;
     var hasCount = (d.count != 1);
     var hasyIndex = (d.yIndex != 1);
     
     if(isDate){
-      return pos - (d.yIndex*itemHeight) + 8 // + ((d.count-1)*8) 
+      var newX = pos - (d.yIndex*itemHeight) + 8 // + ((d.count-1)*8)
+      return newX
     }
-    else{ return 50 + d.count*10 }
+    else{ return pos - d.count*10 }
 }
 
 function getColor(d){

@@ -414,9 +414,10 @@ this.buildTl = function($scope){
 	.click(function (d, i, datum) { $scope.clickingCircle(datum) })
 
 	var myTl = d3.select("#timeline").html("").append("svg")
-			.attr("width", "100%")
-			.attr("height", $("#topBox").height())
+			.attr("width", $("#topBox").width() - 20)
+			.attr("height", $("#topBox").height() - 20)
 			.attr("fill" , "none")
+			//.attr("viewBox","0,0,"+$("#topBox").width()+","+$("#topBox").height())
 	
 	myTl.append("g").attr("class", "ref") // Add group for reference lines
 	myTl.datum($scope.timexes).call(chart)
@@ -519,15 +520,17 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		ending = 1451606400000
 	}
 	
-	var width = $("#topBox").width();
-	var height = $("#topBox").height();
+	var width = $("#topBox").width() - 30;
+	var height = $("#timeline svg").height();
 	
 	var xScale = d3.time.scale()
 			.domain([beginning, ending])
 			.range([puffer/2, width - puffer*2]);	
 	
       var xAxis = d3.svg.axis().scale(xScale).ticks(15).tickSize(15)
-	d3.select("svg").selectAll("g.axis").call(xAxis);
+	
+
+
 
       // READJUSTING PATHS
       if(beginning == 0) beginning = 1
@@ -537,7 +540,21 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
       scaleFactor = (1/(ending - beginning)) * (width - (puffer*2.5));
       
-      if(d.length!=0){ d = checkyIndizes(d,scaleFactor); }
+      // Check height of SVG
+      if(d.length!=0){
+      	d = checkyIndizes(d,scaleFactor);
+     		var newHeight = $("#topBox").height()
+     		
+     		d.forEach( function(tx){
+     			var elTop = tx.yIndex*itemHeight + 100
+     			if(tx.visible && newHeight<elTop){ console.log("bigger"); newHeight = elTop }
+     		})
+     		console.log(newHeight)
+     		
+     		d3.select("svg").attr("height",newHeight-10)
+     		d3.select("svg").selectAll("g.axis").attr("transform","translate(0,"+ (parseInt(newHeight)-55) +")").call(xAxis);
+     		$("#timeline").scrollTop(newHeight);
+      }
       
 
 	if(action == "loadData"){ d3.select("svg").select("g").selectAll(".timelineItem").remove() }
@@ -581,7 +598,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
 			return puffer/2 + (dctstamp - beginning) * scaleFactor;
 			})
-		.attr("y2", $("#topBox").height())
+		.attr("y2", $("#timeline svg").height())
 		.attr("class", "refline")
 		.style("stroke-dasharray", "3,5")
 		
@@ -611,6 +628,12 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 		.attr("x2", function(t){
 			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
 			return puffer/2 + (dctstamp - beginning) * scaleFactor;
+			})
+		.attr("y2", $("#timeline svg").height());
+		d3.select("svg").select("g.ref").selectAll("text").data(dcts).transition()
+			.attr("x", function(t){
+			var dctstamp = new Date(t.substr(0,4)+","+t.substr(5,2)+","+t.substr(8,2)).getTime();
+			return puffer/2 + (dctstamp - beginning) * scaleFactor + 3;
 			});
 
 	paths
@@ -632,7 +655,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 	/* In case there will be any difference between move and delete */
 	if(action=="resize"){
-		var newHeight = $("#topBox").height()
+		var newHeight = $("#timeline svg").height()
 		var newWidth = $("#topBox").width()
 
 		d3.select("#timeline").select("svg")
