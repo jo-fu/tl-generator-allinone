@@ -7,7 +7,7 @@ $btnsSize:25px;
 
 $shadow:2px 2px 0px #ccc;
 $noshadow:0px 0px 0px #ccc;
-$activeBorder: 1px solid #000;
+$activeBorder: 2px inset #fff;
 
 $doc-1: rgb(111,111,111);
 $doc0: rgb(55,126,184);
@@ -62,7 +62,7 @@ html, body{
 
   #leftBox{ height:100%; width:30%; float:left; overflow-y: auto; border-right: 1px solid #999; box-sizing: border-box; position:relative; }
   #centerBox{ height:100%; width:30%; float:left; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #999; box-sizing: border-box; }
-  #rightBox{ height:100%; width: 40%; float:left; position:relative; }
+  #rightBox{ height:100%; width: 40%; float:left; position:relative; overflow-y: auto; }
   
   }
 
@@ -149,9 +149,16 @@ html, body{
     #mergeDates{ background-image:url(../img/merge.png); }
     #deleteAll{ background-image:url(../img/deleteAll.png); }
   }
-  .display{
-    @include calc(width, "100% - 60px"); padding:15px;
-    .media p{ font-size:0.8em; }
+  .display{ height:100%; overflow-y:auto; box-sizing: border-box; @include calc(width, "100% - 35px"); padding:15px;
+    #tracks{ margin-top:15px; 
+      .track{ @include shadow(); margin:5px 20px 5px 0; width:175px; padding:5px 10px; color:#fff; font-weight:bold; font-size:12px; }
+      input{ margin:3px 20px 2px 2px; width:180px; }
+    }
+    .mediaBtn input{ @include calc(width, "100% - 25px"); margin: 12px;}
+    .media { margin:10px; padding:5px;
+      p{ font-size:0.8em; margin:0 }
+
+    }
     #addMedia{ width: 80px; height: $btnsSize + 10;  margin: 20px 0 0 0px; 
       #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; color: #333; 
       @include shadow(); float:left; }
@@ -162,7 +169,7 @@ html, body{
     #addMediaBox{ padding:1px 10px; background-color:#efefef; }
     #changeTrack{ height:35px; width: auto; }
     #changeTrackBtn{ font-weight: bold; font-size: 0.7em; padding: 4px 8px; margin-right:10px; float:left; }
-    .activeBtn{ @include noshadow(); margin: 0 5px 2px 3px; border: $activeBorder; }
+    .activeBtn{ @include noshadow(); margin: 0 5px 2px 3px; border: $activeBorder; box-sizing: border-box; }
     #tool_delete{ float:left; background-image:url(../img/delete.png); }
     #prevDate, #nextDate{ float:left; background-image:url(../img/arrows.png) }
     #prevDate{ background-position:left; }
@@ -176,7 +183,7 @@ html, body{
 .ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 8px 0 0; border:1px solid #efefef; background-repeat:no-repeat;
     background-color:#fff; background-position:center; cursor:pointer;
     @include shadow(); }
-.ctlBtns:active,  .ctl:active{ @include noshadow(); margin: 2px 0px 0px 2px; }
+.ctlBtns:active, .ctl:active{ @include noshadow(); margin: 2px 0px 0px 2px; }
 
 #addDoc, #addDate{ background-image:url(../img/add.png); }
 
@@ -258,8 +265,8 @@ html, body{
 .datelabel{ display: none; text-align: center; }
 .visible{ display: block; }
 
-.chooseDoc, .changeDoc{ float:left; margin:0 5px 2px 3px; padding: 0 8px; font-size: 0.8em; font-weight:bold; color:#fff; @include shadow(); }
-.chosen, .changeDoc:active, .chooseDoc:active{
+.chooseTrack, .changeTrack{ float:left; margin:0 5px 2px 3px; padding: 0 8px; font-size: 0.8em; font-weight:bold; color:#fff; @include shadow(); }
+.chosen, .changeTrack:active, .chooseTrack:active{
   margin:2px 3px 0 5px; outline:2px solid #efefef; @include noshadow();
 }
 
@@ -331,3 +338,7 @@ html, body{
 #saved{ display:none; position:fixed; bottom:25px; right:0; color:#999; font-size:10px; padding:3px 5px 3px 25px; font-style:italic; background-image:url(../img/check.png); background-repeat:no-repeat; background-position:left;}
 #guide{ position:fixed; bottom:0; right: 0; padding: 5px; }
 #guide a{ text-decoration: none; font-weight:bold; color:#666; font-size:0.8em; }
+
+
+.help{ cursor:pointer; border: 1px solid #999; color:#999; font-size:10px; font-weight:bold; margin:0px; border-radius:50%; padding:1px 7px; @include shadow(); text-align:center; }
+.help:active{  @include noshadow(); margin:2px; }

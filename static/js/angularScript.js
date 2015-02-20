@@ -7,10 +7,11 @@ app
 	$scope.docNr = -1;
 	$scope.orderByVal = "val"
 	$scope.orderReverse = false
-
+	$scope.editTrack = [false,false,false,false,false,false];
 	$scope.tlDescr = ["Timeline Generator", "Insert a short description for your timeline here"]
 	$scope.tempFiles = ["iceland", "journalism", "nasa", "newspapers", "ubc"]
 	$scope.fileNames = []
+	$scope.trackNames = ["1","2","3","4","5","6"]
 
 	$scope.files = [];
 	$scope.dcts = [];
@@ -82,6 +83,9 @@ app
 			$scope.editDate = false;
 			var currIndex = $scope.currIndex;
 
+			if($scope.timexes[currIndex].typ == "neither" && updatedDate!="????"){ var action = "vagueToDate" } 
+			else var action = "move"
+
 			if(updatedDate=="????"){ $scope.timexes[currIndex].typ = "neither"; }
 			else if(updatedDate.indexOf(" - ")>0){ $scope.timexes[currIndex].typ = "duration"; }
 			else{ $scope.timexes[currIndex].typ = "date"; }
@@ -93,7 +97,7 @@ app
 			var dateVals = dateConversion(updatedDate)
 			$scope.timexes[currIndex].times[0].starting_time = dateVals.startVal;
 			$scope.timexes[currIndex].times[0].ending_time = dateVals.endVal;
-			$scope.updateD3Tl($scope.timexes, $scope.dcts, "move")
+			$scope.updateD3Tl($scope.timexes, $scope.dcts, action)
 		}
 	}
 
@@ -141,17 +145,17 @@ app
 		if(el=="t"){
 			$scope.editDate = true;
 			$scope.dateInfo[0].dateArray = DateHandling.checkSize($scope.timexes[$scope.currIndex].val)
-			var thisid = "#startdateYear"
-		} else{ $scope.editDate = false; }
-
-		if(el=="d"){ $scope.editSubtitle = true; var thisid = "#displaySubtitle input"}
+			var thisid = "#dateEditMode input"
+		}
+		else if(el=="d"){ $scope.editSubtitle = true; var thisid = "#displaySubtitle input"}
 		else if(el=="c"){ $scope.editContent = true; }
 		else if(el=="ms"){ $scope.editMediaSource = true; var thisid = "#mediaSource input"  }
 		else if(el=="mcr"){ $scope.editMediaCredit = true; var thisid = "#mediaCredit input"}
 		else if(el=="mca"){ $scope.editMediaCaption = true; var thisid = "#mediaCaption input"}
-
-		//TODO: tabbing through input fields
-		if(thisid) setTimeout( function(){ $(thisid).select() } , 50 )
+		else{ var nr = el.split("_")[1]; $scope.editTrack[nr] = true;  var thisid = "#trackName_"+nr+" input" }
+		
+		if(el!="t"){ $scope.editDate = false; }
+		if(thisid) setTimeout( function(){ console.log(thisid); $(thisid).select(); } , 50 )
 	}
 	$scope.disableEdit = function(el) {
 
@@ -161,8 +165,7 @@ app
 				if($scope.timexes[$scope.currIndex].sub!=$scope.dateInfo[0].subtitle){
 					$scope.markAsTouched($scope.timexes,$scope.currIndex);
 					$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
-				}
-				
+				}	
 			}
 			else{
 				$scope.dateInfo[0].subtitle = " "
@@ -201,6 +204,11 @@ app
 			if($scope.dateInfo[0].medium["caption"].length > 0){ $scope.timexes[$scope.currIndex].mediaCaption = $scope.dateInfo[0].medium["caption"]; }
 			else{ $scope.dateInfo[0].medium["caption"] = "Caption" }
 		}
+		else{
+			var nr = el.split("_")[1]
+			$scope.editTrack[nr] = false;
+			//$scope.trackNames[nr]
+		}
 		return $scope;
 	}
 
@@ -233,8 +241,8 @@ app
 		$scope.updateD3Tl($scope.timexes,$scope.dcts, "delete")
 	}
 	$scope.changeTrack = function(nr){
-		$(".changeDoc").removeClass("activeBtn")
-		$("#changeDoc_"+nr).addClass("activeBtn")
+		$(".changeTrack").removeClass("activeBtn")
+		$("#changeTrack_"+nr).addClass("activeBtn")
 		$scope.timexes[$scope.currIndex].trackNr = nr;
 		var paths = d3.select("svg").selectAll(".timelineItem").data($scope.timexes);
 		paths.attr("fill" , function(d){ return getColor(d) })
@@ -252,7 +260,7 @@ app
 			
 			var docTitle = data.match(/<TITLE>([^<]*)<\/TITLE>/)[1]
 			docTitle = cleanSubtitle(docTitle)
-
+			if($scope.trackNames[trackNr] == trackNr.toString()) $scope.trackNames[trackNr] = docTitle;
 			if($scope.tlDescr[0] == "Timeline Generator" && docNr==0){
 				$scope.tlDescr[0] = docTitle
 			}
@@ -307,7 +315,7 @@ app
 
 	$scope.loadData = function(source){ $scope = DateExporting.loadData(source,$scope,$sce,CreateArray,CreateTimeline) }
 	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
-	$scope.exportAsJson = function(){ $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr) }
+	$scope.exportAsJson = function(){ $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
 	
 	$scope.arrowKey = function(dir,btn){
 		if($scope.dateSelected){
@@ -547,9 +555,8 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
      		
      		d.forEach( function(tx){
      			var elTop = tx.yIndex*itemHeight + 100
-     			if(tx.visible && newHeight<elTop){ console.log("bigger"); newHeight = elTop }
+     			if(tx.visible && newHeight<elTop){ newHeight = elTop }
      		})
-     		console.log(newHeight)
      		
      		d3.select("svg").attr("height",newHeight-10)
      		d3.select("svg").selectAll("g.axis").attr("transform","translate(0,"+ (parseInt(newHeight)-55) +")").call(xAxis);
@@ -561,26 +568,22 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 	if(action=="add" || action == "merge" || action=="newDoc" || action=="loadData"){
 		if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
-		else{ var newpath = "M 500, " + height + " M -0, 0 a 0,0 0 1,0 0,0 a 0,0 0 1,0 -0,0" }
-
+		else{ var x = $("#topBox").width(); var newpath = "M "+x+" 40 L"+x+" 20 L"+x+" 40 L"+x+" 40 L"+x+" 20 Z" }
 		var timexElements = d3.select("svg").select("g.allthedates").selectAll(".timelineItem").data(d).enter();
 		timexElements
 		.append('path')
 		.attr("d", newpath )
 		.attr("class" , function(d){
 
-			if(action=="newDoc" || action=="loadData"){
-				var classes = " timelineItem_sent_"+d.sentNr }
+			if(action=="newDoc" || action=="loadData"){ var classes = "timelineItem_sent_"+d.sentNr }
 			else{ var classes = ""}
 
-			if(d.typ=="duration"){ return "timelineItem duration" + classes }
-			else{ return "timelineItem date"+classes }
+			return "timelineItem " + d.typ + " " + classes
+			
 		})
 		.attr("id", function(d){ return "timelineItem_"+ d.id })
 		.attr("fill" , function(d){ return getColor(d) })
 		.on("click", function (d) { clickFct(d) })
-		//.append('title')
-    		//.text("xxx")
 
 	}
 	
@@ -616,7 +619,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 
 	// Update all paths - without transition, if shape changes from circle to span-shape
-	if(action == "unitChange"){ var paths = d3.select("svg").selectAll(".timelineItem").data(d); }
+	if(action == "unitChange" || action == "vagueToDate"){ var paths = d3.select("svg").selectAll(".timelineItem").data(d); }
 	else{ var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition(); }
 	
 	// Update all refs
@@ -1058,7 +1061,7 @@ app.service('DateHandling', function(){
 		var newDate = {
 			id : number , timex : "manually added" , docNr : currDoc, trackNr : trackNr, 
 			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "neither",  touched : false ,
-			val : "????" , title : "0000", mod : "" , count : 1 , yIndex : 1 ,
+			val : "????" , title : "????", mod : "" , count : 1 , yIndex : 1 ,
 			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
 			times : [{ starting_time : "????" , ending_time : "????"}], visible : true
 			}
@@ -1208,7 +1211,7 @@ app.filter('iif', function () {
 
 app.service('DateExporting', function(){
 
-	this.exportAsJson = function(txs,filenames,tlDescr){
+	this.exportAsJson = function(txs,filenames,tlDescr,trackNames){
 		var dateEls = []
 
 		txs.forEach( function(el){
@@ -1259,7 +1262,7 @@ app.service('DateExporting', function(){
 					"endDate" : endDate ,
 					"headline" : el.sub ,
 					"text" : el.sent,
-					"tag" : (parseInt(el.trackNr) + 1),
+					"tag" : trackNames[el.trackNr],
 					"asset" : thisMedia
 					})
 			}

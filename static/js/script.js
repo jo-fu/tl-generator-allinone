@@ -62,11 +62,11 @@ function triggerUpload(){ $('#uploadFile').click() }
 // Behaviour
 function openInput(){
     $("#inputOverlay").fadeIn(300);
-    $("#chooseDoc_"+(trackNr)).addClass("chosen")
+    $("#chooseTrack_"+(trackNr)).addClass("chosen")
 
     if(!openedInput){
-      $(".chooseDoc").on( "click" , function(){
-        $(".chooseDoc").removeClass("chosen")
+      $(".chooseTrack").on( "click" , function(){
+        $(".chooseTrack").removeClass("chosen")
         // CONTINUE HERE
         trackNr = $(this).attr("id").split("_")[1]
         $("#"+$(this).attr("id")).addClass("chosen")

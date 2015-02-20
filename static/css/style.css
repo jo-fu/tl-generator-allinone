@@ -74,7 +74,8 @@ html, body {
     height: 100%;
     width: 40%;
     float: left;
-    position: relative; }
+    position: relative;
+    overflow-y: auto; }
 
 #topBox #tlc {
   position: absolute;
@@ -253,7 +254,7 @@ html, body {
     background-image: url("../img/reload.png") !important; }
   #centerBox #docSwitcher .docBtn:active, #centerBox #docSwitcher .activeBtn {
     margin: 0px 3px 5px 0px;
-    border: 1px solid black;
+    border: 2px inset white;
     -moz-box-shadow: 0px 0px 0px #cccccc;
     -webkit-box-shadow: 0px 0px 0px #cccccc;
     box-shadow: 0px 0px 0px #cccccc; }
@@ -300,12 +301,39 @@ html, body {
   #rightBox #toolBox #deleteAll {
     background-image: url(../img/deleteAll.png); }
 #rightBox .display {
-  width: -webkit-calc(100% - 60px);
-  width: -moz-calc(100% - 60px);
-  width: calc(100% - 60px);
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: -webkit-calc(100% - 35px);
+  width: -moz-calc(100% - 35px);
+  width: calc(100% - 35px);
   padding: 15px; }
-  #rightBox .display .media p {
-    font-size: 0.8em; }
+  #rightBox .display #tracks {
+    margin-top: 15px; }
+    #rightBox .display #tracks .track {
+      -moz-box-shadow: 2px 2px 0px #cccccc;
+      -webkit-box-shadow: 2px 2px 0px #cccccc;
+      box-shadow: 2px 2px 0px #cccccc;
+      margin: 5px 20px 5px 0;
+      width: 175px;
+      padding: 5px 10px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px; }
+    #rightBox .display #tracks input {
+      margin: 3px 20px 2px 2px;
+      width: 180px; }
+  #rightBox .display .mediaBtn input {
+    width: -webkit-calc(100% - 25px);
+    width: -moz-calc(100% - 25px);
+    width: calc(100% - 25px);
+    margin: 12px; }
+  #rightBox .display .media {
+    margin: 10px;
+    padding: 5px; }
+    #rightBox .display .media p {
+      font-size: 0.8em;
+      margin: 0; }
   #rightBox .display #addMedia {
     width: 80px;
     height: 35px;
@@ -351,7 +379,8 @@ html, body {
     -webkit-box-shadow: 0px 0px 0px #cccccc;
     box-shadow: 0px 0px 0px #cccccc;
     margin: 0 5px 2px 3px;
-    border: 1px solid black; }
+    border: 2px inset white;
+    box-sizing: border-box; }
   #rightBox .display #tool_delete {
     float: left;
     background-image: url(../img/delete.png); }
@@ -566,7 +595,7 @@ input {
 .visible {
   display: block; }
 
-.chooseDoc, .changeDoc {
+.chooseTrack, .changeTrack {
   float: left;
   margin: 0 5px 2px 3px;
   padding: 0 8px;
@@ -577,7 +606,7 @@ input {
   -webkit-box-shadow: 2px 2px 0px #cccccc;
   box-shadow: 2px 2px 0px #cccccc; }
 
-.chosen, .changeDoc:active, .chooseDoc:active {
+.chosen, .changeTrack:active, .chooseTrack:active {
   margin: 2px 3px 0 5px;
   outline: 2px solid #efefef;
   -moz-box-shadow: 0px 0px 0px #cccccc;
@@ -753,3 +782,23 @@ input {
   font-weight: bold;
   color: #666;
   font-size: 0.8em; }
+
+.help {
+  cursor: pointer;
+  border: 1px solid #999;
+  color: #999;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 0px;
+  border-radius: 50%;
+  padding: 1px 7px;
+  -moz-box-shadow: 2px 2px 0px #cccccc;
+  -webkit-box-shadow: 2px 2px 0px #cccccc;
+  box-shadow: 2px 2px 0px #cccccc;
+  text-align: center; }
+
+.help:active {
+  -moz-box-shadow: 0px 0px 0px #cccccc;
+  -webkit-box-shadow: 0px 0px 0px #cccccc;
+  box-shadow: 0px 0px 0px #cccccc;
+  margin: 2px; }

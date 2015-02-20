@@ -57,7 +57,6 @@ function getXPos(d,beg,scale) {
   var isDate = !isNaN(d.times[0].starting_time);
   if(isDate) var newXPos = puffer/2 + (d.times[0].starting_time - beg) * scale;
   else{
-     console.log(d.count);
     if(d.count % 3 === 0){ var newXPos = $("#topBox").width() - 56 } 
     else if(d.count % 3 == 1){ var newXPos = $("#topBox").width() - 42 } 
     else{ var newXPos = $("#topBox").width() - 28 }
@@ -77,7 +76,6 @@ function getYPos(d) {
     }
     else{
       var vagueY = $("#timeline svg").height() - $("#topBox").height() + 40 + d.count*5
-      console.log(vagueY)
       return vagueY }
 }
 
