@@ -322,9 +322,9 @@ app
 
 	$scope.loadData = function(source){ $scope = DateExporting.loadData(source,$scope,$sce,CreateArray,CreateTimeline) }
 	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
-	$scope.downloadJson = function(){ $scope.exportAsJson(); downloadJson($scope.dataAsJson) }
-	$scope.downloadZip = function(){ $scope.exportAsJson(); downloadZip($scope.dataAsJson) }
-	$scope.exportAsJson = function(){ $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
+	$scope.downloadJson = function(){ $scope.downloadData = false; console.log($scope.downloadData); $scope.exportAsJson(); downloadJson($scope.dataAsJson) }
+	$scope.downloadZip = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadZip($scope.dataAsJson) }
+	$scope.exportAsJson = function(){ $scope.downloadData = false; $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
 	
 	$scope.arrowKey = function(dir,btn){
 		if($scope.dateSelected){
