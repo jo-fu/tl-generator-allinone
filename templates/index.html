@@ -135,7 +135,7 @@
 
     <!-- Save current state -->
     
-    <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="downloadData=!downloadData"></div>
+    <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="uploadData=false;downloadData=!downloadData"></div>
     <ul ng-if="downloadData" id="downloadDataOptions">
       <li ng-click="saveState()">TLC's .tl file</li>
       <li ng-click="downloadJson()">JSON file</li>
@@ -143,7 +143,7 @@
     </ul>
 
     <!-- Import Data-->
-    <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="uploadData=!uploadData"></div>
+    <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="downloadData=false;uploadData=!uploadData"></div>
     <ul ng-if="uploadData" id="loadDataOptions">
       <li ng-class="{ notSelectable: !prevData}" ng-click="loadData('localStorage')">Load previous state</li>
       <li onclick="triggerUpload()">Load from file</li>
