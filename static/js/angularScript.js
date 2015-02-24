@@ -42,10 +42,17 @@ app
 		    url: "/dothenlp",
 		    contentType: 'application/json;charset=UTF-8',
 		    success: function(data){
-		    	console.log(data)
-		        $(".loading").fadeOut(300)
-		        closeInput()
-			  $scope.addDocument(data.result,"fromInput")
+		    	if(data.result=="something wrong"){
+		    		closeInput()
+		    		$(".loading").fadeOut(300)
+		    		alert("There seems to be something wrong with your input. Please just paste in plain text (for now).")
+		    	}
+		    	else{
+		    		$(".loading").fadeOut(300)
+		      	closeInput()
+				$scope.addDocument(data.result,"fromInput")
+		    	}
+		        
 		    }
 		})
 	}
@@ -155,7 +162,7 @@ app
 		else{ var nr = el.split("_")[1]; $scope.editTrack[nr] = true;  var thisid = "#trackName_"+nr+" input" }
 		
 		if(el!="t"){ $scope.editDate = false; }
-		if(thisid) setTimeout( function(){ console.log(thisid); $(thisid).select(); } , 50 )
+		if(thisid) setTimeout( function(){ $(thisid).select(); } , 50 )
 	}
 	$scope.disableEdit = function(el) {
 
@@ -315,6 +322,8 @@ app
 
 	$scope.loadData = function(source){ $scope = DateExporting.loadData(source,$scope,$sce,CreateArray,CreateTimeline) }
 	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
+	$scope.downloadJson = function(){ $scope.exportAsJson(); downloadJson($scope.dataAsJson) }
+	$scope.downloadZip = function(){ $scope.exportAsJson(); downloadZip($scope.dataAsJson) }
 	$scope.exportAsJson = function(){ $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
 	
 	$scope.arrowKey = function(dir,btn){
@@ -360,12 +369,12 @@ app
 		this.id = setTimeout($scope.updateD3Tl($scope.timexes, $scope.dcts, "resize"), 500);
 	});
 
-	// AUTOSAVE DEACTIVATED
-	/*window.setInterval(function(){
+	// AUTOSAVE 
+	window.setInterval(function(){
   		// TODO: Only autosave when there were changes??
   		// Or when window is in focus
   		$scope.saveState($scope, "autosave")
-	}, 60000);*/
+	}, 60000);
 })
 
 // DIRECTIVES
@@ -567,12 +576,21 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	if(action == "loadData"){ d3.select("svg").select("g").selectAll(".timelineItem").remove() }
 
 	if(action=="add" || action == "merge" || action=="newDoc" || action=="loadData"){
-		if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
-		else{ var x = $("#topBox").width(); var newpath = "M "+x+" 40 L"+x+" 20 L"+x+" 40 L"+x+" 40 L"+x+" 20 Z" }
+		
+		var x = $("#timeline").width();
+
 		var timexElements = d3.select("svg").select("g.allthedates").selectAll(".timelineItem").data(d).enter();
 		timexElements
 		.append('path')
-		.attr("d", newpath )
+		.attr("d", function(d){
+			if(action=="merge"){ var newpath = $("#timelineItem_"+nr).attr("d"); }
+			else{
+				if(d.typ=="date") return "M 300 -10 m -10, 0 a 10,10 0 1,0 20,0 a 10,10 0 1,0 -20,0"
+				else if(d.typ=="duration") return "M100 -10 L100 -5 L100 -6 L120 -5 L120 -5 L120 -10 L120 -7 L100-6 Z"
+				else return "M "+x+" 40 L"+x+" 20 L"+x+" 40 L"+x+" 40 L"+x+" 20 Z"
+			}
+			
+		})
 		.attr("class" , function(d){
 
 			if(action=="newDoc" || action=="loadData"){ var classes = "timelineItem_sent_"+d.sentNr }
@@ -1299,6 +1317,7 @@ app.service('DateExporting', function(){
 		$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
 		
 		if(!auto){ download($scope.tlDescr[0]+".tl", saveData) }
+		$scope.downloadData = false;
 		//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
 	}
 	this.triggerUploading = function(){ $("#uploadFile").click() }

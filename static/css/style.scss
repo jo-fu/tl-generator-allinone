@@ -75,7 +75,7 @@ html, body{
 
 #leftBox{
 
-  #tablehead{ position:fixed; background-color:#fff; border-bottom:2px solid #333; width:30%; z-index:1; box-shadow:0px 1px 2px #999;
+  #tablehead{ width:100%; position:fixed; background-color:#fff; border-bottom:2px solid #333; width:30%; z-index:1; box-shadow:0px 1px 2px #999;
     td:nth-child(1){ width:50px; }
     td:nth-child(2){ min-width:100px; }
     td{ text-align:left; padding:2px; font-size:0.7em;
@@ -141,7 +141,8 @@ html, body{
 #rightBox{ 
   #toolBox{ position:absolute; right:0; top:0; height:100%; width: ($btnsSize+10px);
     #loadData{ background-image:url(../img/loadData.png); }
-    #loadDataOptions{ position:absolute; top:3px; z-index:1; right:37px; width:175px; }
+    #loadDataOptions{ position:absolute; top:94px; z-index:1; right:37px; width:175px; }
+    #downloadDataOptions{ position:absolute; top:64px; z-index:1; right:37px; width:175px; }
     #saveState{ background-image:url(../img/saveState.png); }
     #exportJson{ background-image:url(../img/exportJson.png); }
     #gohome{ background-image:url(../img/home.png); }

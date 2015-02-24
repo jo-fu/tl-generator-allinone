@@ -13,6 +13,8 @@
   <script src="{{ url_for('static', filename='js/script.js')}}"></script>
   <script src="{{ url_for('static', filename='js/setupTLels.js')}}"></script>
   <script src="{{ url_for('static', filename='js/angularScript.js')}}"></script>
+  
+  <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jszip.min.js')}}"></script>
 
   <!--script src="{{ url_for('static', filename='js/help.js')}}"></script-->
   
@@ -132,9 +134,13 @@
     </a>
 
     <!-- Save current state -->
-    <a href="data:application/octet-stream;charset=utf-8;base64,Daten" download="savedstate">
-      <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="saveState()"></div>
-    </a>
+    
+    <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="downloadData=!downloadData"></div>
+    <ul ng-if="downloadData" id="downloadDataOptions">
+      <li ng-click="saveState()">TLC file</li>
+      <li ng-click="downloadJson()">JSON file</li>
+      <li ng-click="downloadZip()">ZIP folder<br><small>(full TimelineJS project)</small></li>
+    </ul>
 
     <!-- Import Data-->
     <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="uploadData=!uploadData"></div>

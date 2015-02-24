@@ -97,6 +97,7 @@ html, body {
     font-weight: normal; }
 
 #leftBox #tablehead {
+  width: 100%;
   position: fixed;
   background-color: #fff;
   border-bottom: 2px solid #333;
@@ -286,7 +287,13 @@ html, body {
     background-image: url(../img/loadData.png); }
   #rightBox #toolBox #loadDataOptions {
     position: absolute;
-    top: 3px;
+    top: 94px;
+    z-index: 1;
+    right: 37px;
+    width: 175px; }
+  #rightBox #toolBox #downloadDataOptions {
+    position: absolute;
+    top: 64px;
     z-index: 1;
     right: 37px;
     width: 175px; }

@@ -9,7 +9,7 @@ function getCirclePath(datum,beginning,scaleFactor){
   
   if(datum.visible){ var r = itemHeight/2; }
   else{ var r = 0; }
-  var path = "M "+cx+" "+cy+" m -"+r+", 0 a "+r+","+r+" 0 1,0 "+(r*2)+",0 a "+r+", "+r+" 0 1, 0 -"+(r*2)+",0"
+  var path = "M "+cx+" "+cy+" m -"+r+", 0 a "+r+","+r+" 0 1,0 "+(r*2)+",0 a "+r+","+r+" 0 1,0 -"+(r*2)+",0"
   return path
 }
 
