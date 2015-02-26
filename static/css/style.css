@@ -229,8 +229,8 @@ html, body {
   position: absolute;
   max-width: 29%; }
   #centerBox #docSwitcher .docBtn {
-    padding: 0px 15px 0px 6px;
-    margin: 0 5px 7px 5px;
+    padding: 2px 15px 2px 6px;
+    margin: 0 5px 5px 0px;
     float: left;
     cursor: pointer;
     position: relative;
@@ -254,8 +254,9 @@ html, body {
   #centerBox #docSwitcher .inactive .hideDoc {
     background-image: url("../img/reload.png") !important; }
   #centerBox #docSwitcher .docBtn:active, #centerBox #docSwitcher .activeBtn {
-    margin: 0px 3px 5px 0px;
-    border: 2px inset white;
+    padding: 0px 13px 0px 4px;
+    margin: 0 3px 3px 2px;
+    border: 2px inset #999999;
     -moz-box-shadow: 0px 0px 0px #cccccc;
     -webkit-box-shadow: 0px 0px 0px #cccccc;
     box-shadow: 0px 0px 0px #cccccc; }
@@ -386,7 +387,7 @@ html, body {
     -webkit-box-shadow: 0px 0px 0px #cccccc;
     box-shadow: 0px 0px 0px #cccccc;
     margin: 0 5px 2px 3px;
-    border: 2px inset white;
+    border: 2px inset #999999;
     box-sizing: border-box; }
   #rightBox .display #tool_delete {
     float: left;
@@ -605,7 +606,7 @@ input {
 .chooseTrack, .changeTrack {
   float: left;
   margin: 0 5px 2px 3px;
-  padding: 0 8px;
+  padding: 2px 9px;
   font-size: 0.8em;
   font-weight: bold;
   color: #fff;
@@ -618,7 +619,9 @@ input {
   outline: 2px solid #efefef;
   -moz-box-shadow: 0px 0px 0px #cccccc;
   -webkit-box-shadow: 0px 0px 0px #cccccc;
-  box-shadow: 0px 0px 0px #cccccc; }
+  box-shadow: 0px 0px 0px #cccccc;
+  border: 2px inset #999999;
+  padding: 0px 7px; }
 
 #fileinfo {
   position: absolute;

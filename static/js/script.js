@@ -108,8 +108,10 @@ function downloadZip(data) {
 // Behaviour
 function openInput(){
     $("#inputOverlay").fadeIn(300);
+    $(".chooseTrack").removeClass("chosen")
     $("#chooseTrack_"+(trackNr)).addClass("chosen")
-
+    var today = getToday()
+    $("#todayInput").val(today)
     if(!openedInput){
       $(".chooseTrack").on( "click" , function(){
         $(".chooseTrack").removeClass("chosen")

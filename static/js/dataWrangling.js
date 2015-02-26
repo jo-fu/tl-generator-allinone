@@ -10,14 +10,16 @@ function preprocessing(){
   var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
   //console.log(content.length)
   if(content.length==0){
-    content = "You have to enter some text, otherwise we can't find any temporal expressions."
+    alert("You have to enter some text, otherwise we can't find any temporal expressions. If you don't have one handy, choose one from the example files below.");
+    var jsonout = ""
   }
-  var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
+  else{
+    var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
     "\n<TITLE>"+title+"</TITLE>"+
     "\n<DATE_TIME>"+dct+"</DATE_TIME>"+
     "\n<TEXT>"+content+"</TEXT>\n"+
     "</BODY>\n</DOC>"
-
+    }
     return jsonout
   }
 
@@ -268,6 +270,14 @@ function cleanSubtitle(val){
 }
 
 function cleanUpInput(input){
+  
+  // Added because "Jan. 29" broke everything (split into 2 sentences)
+  var month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+  month.forEach( function(el){
+    var abbr = el+"."
+    input = input.replace(abbr, el)
+  })
+
   cleanedUp = input
               .replace(/[–—–]/g, "-")
               .replace(/[’']/g, "_APOSTROPHE_")

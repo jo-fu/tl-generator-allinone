@@ -49,7 +49,8 @@ function getSquarePath(datum,beginning,scaleFactor){
   var xRight = xLeft + 12;
   var yTop = parseInt(getYPos(datum)) - 6
   var yBottom = yTop + 12;
-  var path = "M "+xLeft+" "+yTop+" L"+xRight+" "+yTop+" L"+xRight+" "+yBottom+" L"+xLeft+" "+yBottom+" L"+xLeft+" "+yTop+" Z";
+  if(datum.visible){ var path = "M "+xLeft+" "+yTop+" L"+xRight+" "+yTop+" L"+xRight+" "+yBottom+" L"+xLeft+" "+yBottom+" L"+xLeft+" "+yTop+" Z"; }
+  else{ var path = "M "+xLeft+" "+yBottom+" L"+xLeft+" "+yBottom+" L"+xLeft+" "+yBottom+" L"+xLeft+" "+yBottom+" L"+xLeft+" "+yBottom+" Z"}
   return path
 }
 

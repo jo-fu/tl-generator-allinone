@@ -140,6 +140,7 @@
       <li ng-click="saveState()">TLC's .tl file</li>
       <li ng-click="downloadJson()">JSON file</li>
       <li ng-click="downloadZip()" style="line-height:18px;padding:8px;">ZIP folder<br><small><i>TimelineJS project</i></small></li>
+      <li ng-click="downloadTimexes()" style="line-height:18px;padding:8px;">TLC Export<br><small><i>our own export</i></small></li>
     </ul>
 
     <!-- Import Data-->
@@ -371,7 +372,7 @@
         <textarea name="content" id="content" placeholder="Drop the content here."></textarea><br>
 
         <label class="optional" for="date">Which date does "today" refer to in the document (optional):</label>
-        <input type="date" value=" {{ today }} " size="50" name="date">
+        <input id="todayInput" type="date" size="50" name="date">
 
         <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
         

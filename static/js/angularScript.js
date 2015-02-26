@@ -3,7 +3,6 @@ var app = angular.module('tlApp', []);
 app
 .controller('MainCtrl', function($scope, $http, $sce, CreateArray, CreateTimeline, DateHandling, DateExporting) {
 	
-	$scope.today = getToday()
 	$scope.docNr = -1;
 	$scope.orderByVal = "val"
 	$scope.orderReverse = false
@@ -33,28 +32,31 @@ app
 	// PYTHON CALL
 	$scope.getTimexes = function(){
 		var myData = preprocessing()
-
-		thisData = { 'myData' : myData }
-		$(".loading").fadeIn(300)
-		$.ajax({
-		    type: "POST",
-		    data: JSON.stringify(thisData, null, '\t'),
-		    url: "/dothenlp",
-		    contentType: 'application/json;charset=UTF-8',
-		    success: function(data){
-		    	if(data.result=="something wrong"){
-		    		closeInput()
-		    		$(".loading").fadeOut(300)
-		    		alert("There seems to be something wrong with your input. Please just paste in plain text (for now).")
-		    	}
-		    	else{
-		    		$(".loading").fadeOut(300)
-		      	closeInput()
-				$scope.addDocument(data.result,"fromInput")
-		    	}
-		        
-		    }
-		})
+		if(myData!=""){
+			thisData = { 'myData' : myData }
+			$(".loading").fadeIn(300)
+			$.ajax({
+			    type: "POST",
+			    data: JSON.stringify(thisData, null, '\t'),
+			    url: "/dothenlp",
+			    contentType: 'application/json;charset=UTF-8',
+			    success: function(data){
+			    	console.log(data.result)
+			    	if(data.result=="something wrong"){
+			    		closeInput()
+			    		$(".loading").fadeOut(300)
+			    		alert("There seems to be something wrong with your input. Please just paste in plain text (for now).")
+			    	}
+			    	else{
+			    		$(".loading").fadeOut(300)
+			      	closeInput()
+					$scope.addDocument(data.result,"fromInput")
+			    	}
+			        
+			    }
+			})	
+		}
+		
 	}
 
 	$scope.showDateInfo = function(txObject){ return CreateTimeline.showDateInfo(txObject) }
@@ -68,7 +70,8 @@ app
 
       $scope.clickingSent = function(s){
       	var d = $.grep($scope.timexes, function(tx){ return tx.sentNr == s });
-	     	$scope.makeSelection(s,d,"fromSent")
+      	if($("#timeSent_"+s).hasClass("highlighted")){ $scope.gohome() }
+      	else{ $scope.makeSelection(s,d,"fromSent") }
       	}
 
       $scope.clickingCircle = function(d){
@@ -236,7 +239,13 @@ app
 	}
 
 	// TOOLS
-	$scope.gohome = function(){ $scope.dateSelected = false; $scope.currIndex = -1; d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec", false); $(".timex, .listEl").removeClass("highlighted");  }
+	$scope.gohome = function(){
+		$scope.dateSelected = false;
+		$scope.currIndex = -1;
+		d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec", false);
+		$(".timex, .listEl").removeClass("highlighted");
+		$scope.dateInfo = []
+	}
 	$scope.deleteDate = function(nr){ $scope.timexes = DateHandling.deleteDate($scope,nr) }
 	$scope.recoverDate = function(){ $scope.timexes = DateHandling.recoverDate($scope) }
 	$scope.addDate = function(){ $scope = DateHandling.addDate($scope,CreateTimeline) }
@@ -297,6 +306,9 @@ app
 				$("#centerBox #docText").css("padding-top", pT )
 			} , 500 )
 
+			// Increase TrackNr for next document
+			if(trackNr<6) trackNr++
+			
 			if(source=="fromInput"){ $scope.$apply($scope) }
         	}
 
@@ -324,44 +336,46 @@ app
 	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
 	$scope.downloadJson = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadJson($scope.dataAsJson) }
 	$scope.downloadZip = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadZip($scope.dataAsJson) }
+	$scope.downloadTimexes = function(){ $scope.downloadData = false; DateExporting.downloadTimexes($scope.timexes); }
 	$scope.exportAsJson = function(){ $scope.downloadData = false; $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
 	
 	$scope.arrowKey = function(dir,btn){
 		if($scope.dateSelected){
 			
 			var listLength = $('#listData tr').length
-			var currListEl = parseInt($("#listEl_" + $scope.currIndex).index()) + 1
-			var newEl = $("#listData tr:nth-child("+ (parseInt(currListEl)+1) +")").attr("id")
+			var deleted = $('#listData .deleted').length
 
-
-			if(dir=="next"){
-				if(currListEl==listLength){ var newIndex = 1 }
-				else{ var newIndex = parseInt(currListEl)+1 }
-				var newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
-				
-				// If not visible go one further
-				while (!$scope.timexes[newListEl].visible) {
-					if(newIndex==listLength){ newIndex = 1 }
-					else{ newIndex++ }
-					newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
+			// If timeline is all empty deselect everything
+			if(listLength==deleted){ $scope.dateSelected = false; }
+			else{
+			
+				var currListEl = parseInt($("#listEl_" + $scope.currIndex).index()) + 1
+				if(dir=="next"){
+					if(currListEl==listLength){ var newIndex = 1 }
+					else{ var newIndex = parseInt(currListEl)+1 }
+					var newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
+					
+					// If not visible go one further
+					while (!$scope.timexes[newListEl].visible) {
+						if(newIndex==listLength){ newIndex = 1 }
+						else{ newIndex++ }
+						newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
+					}
 				}
-			}
-			else if(dir=="prev"){
-				if(currListEl==1){ var newIndex = listLength }
-				else{ var newIndex = parseInt(currListEl)-1 }
-				var newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
-				// If not visible go one further
-				while (!$scope.timexes[newListEl].visible) {
-					if(newIndex==1){ newIndex = listLength }
-					else{ newIndex-- }
-					newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
+				else if(dir=="prev"){
+					if(currListEl==1){ var newIndex = listLength }
+					else{ var newIndex = parseInt(currListEl)-1 }
+					var newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
+					// If not visible go one further
+					while (!$scope.timexes[newListEl].visible) {
+						if(newIndex==1){ newIndex = listLength }
+						else{ newIndex-- }
+						newListEl = $("#listData tr:nth-child("+ newIndex +")").attr("id").split("_")[1]
+					}
 				}
+				$scope.makeSelection($scope.timexes[newListEl].sentNr, $scope.timexes[newListEl], "arrowKey")
 			}
-			if(btn){ var origin = "arrowBtn" }
-			else{ var origin = "arrowKey" }
-			$scope.makeSelection($scope.timexes[newListEl].sentNr, $scope.timexes[newListEl], origin)
 		}
-		
 	}
 
 	$(window).bind( "resize" , function() {
@@ -727,7 +741,6 @@ app.service('CreateArray', function(SplitSents){
 	            	// Get: ID, Timex, Surrounding Sentence, Value, Mod, Count (=1)
 	            	var x = nTimexes[n]
 	            	var thistempex = x.split(/\<TIMEX2.*?\>/)[1].replace("&#039;","'");
-
 	            	// Check if VAL
 	            	if(x.indexOf("VAL") >= 0){ var thisVal = x.match(/VAL=\"([^<]*)\"/)[1] }
 	            	else{ var thisVal = x.split(">")[1]; }
@@ -817,7 +830,10 @@ app.service('CreateArray', function(SplitSents){
 			var txSent = ""
 		  	for(var n = 0; n<nTimexes.length; n++){
 		  		if(n!=(nTimexes.length-1)){
-			            txSent += nTimexes[n].replace(/<TIMEX2([ ]*[^>]*)>/g , "<span id='tx_"+thisId+"' class='tx txSent_"+sentNr+"'>")
+		  			var span = "<span id='tx_"+thisId+"' class='tx txSent_"+sentNr+"'>"
+		  			// Clicking on one ty-span triggers sentence click event as well - messes things up
+		  			//var span = "<span id='tx_"+thisId+"' onclick='angular.element(this).scope().clickingCircle("+thisId+"); event.stopPropagation()' class='tx txSent_"+sentNr+"'>"
+			            txSent += nTimexes[n].replace(/<TIMEX2([ ]*[^>]*)>/g , span)
 			            txSent += "</span>"
 
 			      	thisId++;
@@ -1035,23 +1051,24 @@ app.service('DateHandling', function(){
       	return $scope;
 	}
 
-	this.deleteDate = function($scope){
-
-		$scope.dateSelected = false;
+	this.deleteDate = function($scope,nr){
 
 		$scope.dateInfo.forEach( function(el){
-			var thisIndex = el.currId
+			if(nr){ var thisIndex = nr }
+			else{ var thisIndex = el.currId }
 			d3.select("#timelineItem_"+thisIndex).classed("selected",false).classed("selectedSec",false);
 			d3.select("#timelineItem_"+thisIndex+1).classed("selected",true);
 			$("#listEl_"+thisIndex).addClass("deleted")
 			$scope.timexes[thisIndex].visible = false;
 		})	
 		
-		$(".timex, .listEl").removeClass("highlighted");
-
+		
 		$scope.updateD3Tl($scope.timexes, $scope.dcts, "delete");
 		$scope.severalSelected = false;
 
+		// Automatically select next date
+	      $scope.arrowKey("next")
+	      
 		return $scope.timexes;
 		
 	}
@@ -1228,6 +1245,17 @@ app.filter('iif', function () {
 })
 
 app.service('DateExporting', function(){
+
+	this.downloadTimexes = function(txs){
+
+		var exportTxs = [];
+		txs.forEach( function(tx){
+			if(tx.visible && tx.typ != "neither"){ exportTxs.push(tx) }
+		})
+
+		var exportStr = JSON.stringify(exportTxs)
+		console.log(exportStr)
+	}
 
 	this.exportAsJson = function(txs,filenames,tlDescr,trackNames){
 		var dateEls = []
