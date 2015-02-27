@@ -100,7 +100,6 @@ function downloadZip(data) {
   });       
   }
 
-
 // DOWNLOAD STUFF END
 
 

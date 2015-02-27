@@ -140,7 +140,7 @@
       <li ng-click="saveState()">TLC's .tl file</li>
       <li ng-click="downloadJson()">JSON file</li>
       <li ng-click="downloadZip()" style="line-height:18px;padding:8px;">ZIP folder<br><small><i>TimelineJS project</i></small></li>
-      <li ng-click="downloadTimexes()" style="line-height:18px;padding:8px;">TLC Export<br><small><i>our own export</i></small></li>
+      <li ng-click="saveState('final')" style="line-height:18px;padding:8px;">TLC Export<br><small><i>our own export</i></small></li>
     </ul>
 
     <!-- Import Data-->
@@ -166,7 +166,7 @@
 
     <!-- Editable TL Title -->
     <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
-      <input ng-switch-when="true" onkeypress='validate(event,"sub")' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
+      <input ng-switch-when="true" onkeypress='validate(event,this)' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
       <div ng-switch-default ng-click="enableEdit('d')"><span class="ctl">{{ tlDescr[0] }}</span></div>
     </ng-switch>
 

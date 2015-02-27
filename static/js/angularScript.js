@@ -333,10 +333,10 @@ app
 	}
 
 	$scope.loadData = function(source){ $scope = DateExporting.loadData(source,$scope,$sce,CreateArray,CreateTimeline) }
-	$scope.saveState = function(auto){ DateExporting.saveState($scope, auto) }
+	$scope.saveState = function(state){ DateExporting.saveState($scope, state) }
 	$scope.downloadJson = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadJson($scope.dataAsJson) }
 	$scope.downloadZip = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadZip($scope.dataAsJson) }
-	$scope.downloadTimexes = function(){ $scope.downloadData = false; DateExporting.downloadTimexes($scope.timexes); }
+	$scope.downloadTimexes = function(){ $scope.downloadData = false; DateExporting.downloadTimexes($scope); }
 	$scope.exportAsJson = function(){ $scope.downloadData = false; $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
 	
 	$scope.arrowKey = function(dir,btn){
@@ -1246,15 +1246,19 @@ app.filter('iif', function () {
 
 app.service('DateExporting', function(){
 
-	this.downloadTimexes = function(txs){
+	this.downloadTimexes = function($scope){
 
+		var txs = $scope.timexes;
+		
 		var exportTxs = [];
 		txs.forEach( function(tx){
 			if(tx.visible && tx.typ != "neither"){ exportTxs.push(tx) }
 		})
+		var trackNames = $scope.trackNames
 
 		var exportStr = JSON.stringify(exportTxs)
 		console.log(exportStr)
+		download($scope.tlDescr[0]+".tl", exportTxs)
 	}
 
 	this.exportAsJson = function(txs,filenames,tlDescr,trackNames){
@@ -1331,23 +1335,56 @@ app.service('DateExporting', function(){
 		return tlObject;
 	}
 
-	this.saveState = function($scope, auto){
-		
+	this.saveState = function($scope, state){
+
+		var txs = $scope.timexes;
+		var exportTxs = [];
+
+		if(state == "final"){
+			var newIndex = 0;
+			txs.forEach( function(tx){
+				if(tx.visible && tx.typ != "neither"){
+					tx.id = newIndex
+					exportTxs.push(tx)
+					newIndex++
+				}
+			})
+		}
+		else{ exportTxs = txs }
+
 		var savedData = {
 			tlDescr : $scope.tlDescr,
-			timexes : $scope.timexes,
+			timexes : exportTxs,
 			files : $scope.files,
-			fileNames : $scope.fileNames
+			fileNames : $scope.fileNames,
+			trackNames : $scope.trackNames
 		}
 
 		var saveData = JSON.stringify(savedData)
 		localStorage.setItem('savedData', saveData);
 		$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
 		
-		if(!auto){ download($scope.tlDescr[0]+".tl", saveData) }
+		if(!state){ download($scope.tlDescr[0]+".tl", saveData) }
+		else if(state=="final"){ this.saveToServer($scope.tlDescr[0]+"_final.tl", saveData) }
+
 		$scope.downloadData = false;
 		//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
 	}
+
+	this.saveToServer = function(title,data){
+		var t = title.replace(/\s/g,"")
+		saveData = { 'myData' : data.toString() , 'title' : t }
+
+		$.ajax({
+			type: "POST",
+			data : JSON.stringify(saveData, null, '\t'),
+			url: "/upload",
+			contentType: 'application/json;charset=UTF-8',
+			success: function(data){ console.log(data) }
+			})	
+	}
+
+
 	this.triggerUploading = function(){ $("#uploadFile").click() }
 
 	this.loadData = function(source,$scope,$sce,CreateArray,CreateTimeline){
@@ -1364,6 +1401,9 @@ app.service('DateExporting', function(){
 			//console.log("empty: "+$scope.timexes)
 			$scope.timexes = fromStorage.timexes
 			$scope.tlDescr = fromStorage.tlDescr
+			if(fromStorage.trackNames){
+				$scope.trackNames = fromStorage.trackNames
+			}
 			var nrSents = 0
 			var nrIds = 0
 			$scope.fileNames = fromStorage.fileNames
