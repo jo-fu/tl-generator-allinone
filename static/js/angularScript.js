@@ -7,7 +7,7 @@ app
 	$scope.orderByVal = "val"
 	$scope.orderReverse = false
 	$scope.editTrack = [false,false,false,false,false,false];
-	$scope.tlDescr = ["Timeline Generator", "Insert a short description for your timeline here"]
+	$scope.tlDescr = ["TimeLineCurator", "Insert a short description for your timeline here"]
 	$scope.tempFiles = ["iceland", "journalism", "nasa", "newspapers", "ubc"]
 	$scope.fileNames = []
 	$scope.trackNames = ["1","2","3","4","5","6"]
@@ -41,7 +41,6 @@ app
 			    url: "/dothenlp",
 			    contentType: 'application/json;charset=UTF-8',
 			    success: function(data){
-			    	console.log(data.result)
 			    	if(data.result=="something wrong"){
 			    		closeInput()
 			    		$(".loading").fadeOut(300)
@@ -96,13 +95,22 @@ app
 			if($scope.timexes[currIndex].typ == "neither" && updatedDate!="????"){ var action = "vagueToDate" } 
 			else var action = "move"
 
-			if(updatedDate=="????"){ $scope.timexes[currIndex].typ = "neither"; }
-			else if(updatedDate.indexOf(" - ")>0){ $scope.timexes[currIndex].typ = "duration"; }
-			else{ $scope.timexes[currIndex].typ = "date"; }
+			if(updatedDate=="????"){
+				$scope.timexes[currIndex].typ = "neither";
+				var newTitle=updatedDate;
+			}
+			else if(updatedDate.indexOf(" - ")>0){
+				var newTitle=prettifyDate(updatedDate.split(" - ")[0])+" - "+prettifyDate(updatedDate.split(" - ")[1]);
+				$scope.timexes[currIndex].typ = "duration";
+			}
+			else{
+				$scope.timexes[currIndex].typ = "date";
+				var newTitle=prettifyDate(updatedDate)
+			}
 
 			if($scope.timexes[currIndex].val!=updatedDate) $scope.markAsTouched($scope.timexes,$scope.currIndex)
 			$scope.timexes[currIndex].val = updatedDate;
-			$scope.timexes[currIndex].title = updatedDate;
+			$scope.timexes[currIndex].title = newTitle;
 			$scope.dateInfo[0].title = checkIfDate(updatedDate);
 			var dateVals = dateConversion(updatedDate)
 			$scope.timexes[currIndex].times[0].starting_time = dateVals.startVal;
@@ -168,25 +176,28 @@ app
 		if(thisid) setTimeout( function(){ $(thisid).select(); } , 50 )
 	}
 	$scope.disableEdit = function(el) {
-
 		if(el=="d"){
 			$scope.editSubtitle = false;
-			if($scope.dateInfo[0].subtitle.length>0){
-				if($scope.timexes[$scope.currIndex].sub!=$scope.dateInfo[0].subtitle){
-					$scope.markAsTouched($scope.timexes,$scope.currIndex);
-					$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
+			if($scope.dateInfo>0){
+				if($scope.dateInfo[0].subtitle.length>0){
+					if($scope.timexes[$scope.currIndex].sub!=$scope.dateInfo[0].subtitle){
+						$scope.markAsTouched($scope.timexes,$scope.currIndex);
+						$scope.timexes[$scope.currIndex].sub = $scope.dateInfo[0].subtitle;
+					}
 				}	
+				else{
+					$scope.dateInfo[0].subtitle = " "
+					$scope.timexes[$scope.currIndex].sub = " " }
 			}
-			else{
-				$scope.dateInfo[0].subtitle = " "
-				$scope.timexes[$scope.currIndex].sub = " " }
 		}
 		else if(el=="c"){
 			$scope.editContent = false;
-			if($scope.timexes[$scope.currIndex].sent!=$scope.dateInfo[0].sent){
-				$scope.markAsTouched($scope.timexes,$scope.currIndex);
-				if($scope.dateInfo.length>0){
-					$scope.timexes[$scope.currIndex].sent = $scope.dateInfo[0].sent;
+			if($scope.dateInfo>0){
+				if($scope.timexes[$scope.currIndex].sent!=$scope.dateInfo[0].sent){
+					$scope.markAsTouched($scope.timexes,$scope.currIndex);
+					if($scope.dateInfo.length>0){
+						$scope.timexes[$scope.currIndex].sent = $scope.dateInfo[0].sent;
+					}
 				}
 			}
 		}
@@ -257,8 +268,8 @@ app
 		$scope.updateD3Tl($scope.timexes,$scope.dcts, "delete")
 	}
 	$scope.changeTrack = function(nr){
-		$(".changeTrack").removeClass("activeBtn")
-		$("#changeTrack_"+nr).addClass("activeBtn")
+		$(".changeTrack").removeClass("chosen")
+		$("#changeTrack_"+nr).addClass("chosen")
 		$scope.timexes[$scope.currIndex].trackNr = nr;
 		var paths = d3.select("svg").selectAll(".timelineItem").data($scope.timexes);
 		paths.attr("fill" , function(d){ return getColor(d) })
@@ -277,14 +288,17 @@ app
 			var docTitle = data.match(/<TITLE>([^<]*)<\/TITLE>/)[1]
 			docTitle = cleanSubtitle(docTitle)
 			if($scope.trackNames[trackNr] == trackNr.toString()) $scope.trackNames[trackNr] = docTitle;
-			if($scope.tlDescr[0] == "Timeline Generator" && docNr==0){
-				$scope.tlDescr[0] = docTitle
-			}
-			else if($scope.tlDescr[0] == $scope.fileNames[0].title && docNr==1){
-				$scope.tlDescr[0] = $scope.tlDescr[0] + " & " + docTitle
-			}
-			else if($scope.tlDescr[0] == $scope.fileNames[0].title + " & " + $scope.fileNames[1].title ){
-				$scope.tlDescr[0] = "Comparing Several Documents"
+
+			if($scope.tlDescr.length>0){
+				if($scope.tlDescr[0] == "TimeLineCurator" && docNr==0){
+					$scope.tlDescr[0] = docTitle
+				}
+				else if($scope.fileNames.length>=1 && $scope.tlDescr[0] == $scope.fileNames[0].title && docNr==1){
+					$scope.tlDescr[0] = $scope.tlDescr[0] + " & " + docTitle
+				}
+				else if($scope.fileNames.length>=2 && $scope.tlDescr[0] == $scope.fileNames[0].title + " & " + $scope.fileNames[1].title ){
+					$scope.tlDescr[0] = "Comparing Several Documents"
+				}
 			}
 
 			$scope.fileNames[$scope.docNr] = { title : docTitle , trackNr : trackNr }
@@ -651,7 +665,9 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 
 	// Update all paths - without transition, if shape changes from circle to span-shape
-	if(action == "unitChange" || action == "vagueToDate"){ var paths = d3.select("svg").selectAll(".timelineItem").data(d); }
+	if(action == "unitChange" || action == "vagueToDate"|| action == "resize" || action=="loadData"){
+		var paths = d3.select("svg").selectAll(".timelineItem").data(d);
+	}
 	else{ var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition(); }
 	
 	// Update all refs
@@ -775,7 +791,7 @@ app.service('CreateArray', function(SplitSents){
 				}
 				// If Value is DURATION
 				else if(d.typ=="duration"){
-					var durTitle = d.startDate +" - "+d.endDate;
+					var durTitle = prettifyDate(d.startDate) +" - " + prettifyDate(d.endDate);
 					timexes[number] = {
 					id : number , docNr : docNr , trackNr : trackNr, timex : thistempex , typ : "duration", touched : false ,
 					sent : thisS , sub : sub , sentNr : sentNr , val : durTitle ,
@@ -961,7 +977,7 @@ app.service('DateHandling', function(){
 		$scope.editDate = false;
 		$scope.addMedia = false;
 		$scope.changeTrackVis = false;
-		
+		$(".display .changeTrack").removeClass("chosen");
 		if(sentNr===false){ sentNr = -1 }
 
 		// If coming from Sentence selection, take first timex from sentence as new index
@@ -1054,8 +1070,7 @@ app.service('DateHandling', function(){
 	this.deleteDate = function($scope,nr){
 
 		$scope.dateInfo.forEach( function(el){
-			if(nr){ var thisIndex = nr }
-			else{ var thisIndex = el.currId }
+			var thisIndex = el.currId
 			d3.select("#timelineItem_"+thisIndex).classed("selected",false).classed("selectedSec",false);
 			d3.select("#timelineItem_"+thisIndex+1).classed("selected",true);
 			$("#listEl_"+thisIndex).addClass("deleted")
@@ -1167,7 +1182,6 @@ app.service('DateHandling', function(){
 	}
 
 	this.changeUnit = function($scope,unit){
-
 		if(unit=="toDate"){
 			var newTyp = "date"
 			$scope.dateInfo[0].dateArray.pop()
@@ -1189,13 +1203,22 @@ app.service('DateHandling', function(){
 		
 		var updatedDate = this.checkThisDate($scope.dateInfo[0].dateArray)
 		
-		if(updatedDate=="????") $scope.timexes[thisIndex].typ = "neither"
-		else if(updatedDate.indexOf(" - ") > 0) $scope.timexes[thisIndex].typ = "duration"
-		else $scope.timexes[thisIndex].typ = "date"
+		if(updatedDate=="????"){
+			$scope.timexes[thisIndex].typ = "neither"
+			var updatedTitle = updatedDate
+		} 
+		else if(updatedDate.indexOf(" - ") > 0){
+			$scope.timexes[thisIndex].typ = "duration"
+			var updatedTitle = prettifyDate(updatedDate.split(" - ")[0])+" - "+prettifyDate(updatedDate.split(" - ")[1])
+		} 
+		else{
+			$scope.timexes[thisIndex].typ = "date"
+			var updatedTitle = prettifyDate(updatedDate)
+		} 
 
 		$scope.timexes[thisIndex].typ = newTyp
 		$scope.timexes[thisIndex].val = updatedDate;
-		$scope.timexes[thisIndex].title = updatedDate;
+		$scope.timexes[thisIndex].title = updatedTitle;
 		
 		var newDate = dateConversion(updatedDate)
 		$scope.timexes[thisIndex].times[0].starting_time = newDate.startVal;
@@ -1338,37 +1361,46 @@ app.service('DateExporting', function(){
 	this.saveState = function($scope, state){
 
 		var txs = $scope.timexes;
-		var exportTxs = [];
-
-		if(state == "final"){
-			var newIndex = 0;
-			txs.forEach( function(tx){
-				if(tx.visible && tx.typ != "neither"){
-					tx.id = newIndex
-					exportTxs.push(tx)
-					newIndex++
-				}
-			})
-		}
-		else{ exportTxs = txs }
-
-		var savedData = {
-			tlDescr : $scope.tlDescr,
-			timexes : exportTxs,
-			files : $scope.files,
-			fileNames : $scope.fileNames,
-			trackNames : $scope.trackNames
-		}
-
-		var saveData = JSON.stringify(savedData)
-		localStorage.setItem('savedData', saveData);
-		$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
-		
-		if(!state){ download($scope.tlDescr[0]+".tl", saveData) }
-		else if(state=="final"){ this.saveToServer($scope.tlDescr[0]+"_final.tl", saveData) }
-
 		$scope.downloadData = false;
-		//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
+
+		if(txs.length!=0){
+			var exportTxs = [];
+
+			if(state == "final"){
+				var newIndex = 0;
+				txs.forEach( function(tx){
+					if(tx.visible && tx.typ != "neither"){
+						tx.id = newIndex
+						exportTxs.push(tx)
+						newIndex++
+					}
+				})
+			}
+			else{ exportTxs = txs }
+
+			var savedData = {
+				tlDescr : $scope.tlDescr,
+				timexes : exportTxs,
+				files : $scope.files,
+				fileNames : $scope.fileNames,
+				trackNames : $scope.trackNames
+			}
+			var saveData = JSON.stringify(savedData)
+			localStorage.setItem('savedData', saveData);
+			$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
+			
+			var filetitle = $scope.tlDescr[0].replace(/\s/g , "_");
+			if(!state){ download(filetitle+".tl", saveData) }
+			else if(state=="final"){
+				download(filetitle+"-final.tl", saveData)
+				// Doesn't work
+				//this.saveToServer($scope.tlDescr[0]+"_final.tl", saveData)
+			}
+
+			
+			//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
+		}
+		
 	}
 
 	this.saveToServer = function(title,data){

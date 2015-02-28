@@ -170,7 +170,7 @@ html, body{
     #addMediaBox{ padding:1px 10px; background-color:#efefef; }
     #changeTrack{ height:35px; width: auto; }
     #changeTrackBtn{ font-weight: bold; font-size: 0.7em; padding: 4px 8px; margin-right:10px; float:left; }
-    .activeBtn{ @include noshadow(); margin: 0 5px 2px 3px; border: $activeBorder; box-sizing: border-box; }
+   
     #tool_delete{ float:left; background-image:url(../img/delete.png); }
     #prevDate, #nextDate{ float:left; background-image:url(../img/arrows.png) }
     #prevDate{ background-position:left; }
