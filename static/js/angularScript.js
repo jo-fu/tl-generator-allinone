@@ -1397,15 +1397,16 @@ app.service('DateExporting', function(){
 	}
 
 	this.saveToServer = function(title,data){
-		$(".loading").fadeIn(300)
+		
 		var myTitle = title
 				.replace(/\s/g,"")
 				.replace(/[^a-zA-Z0-9]/g, "")
 
 		if(myTitle.length<5){
-			alert("Please give your timeline a title with at least 5 letters.")
+			alert("Please give your timeline a title with at least 5 letters.");
 		}
-		else{
+		else{	
+			$(".loading").fadeIn(300)
 			saveData = { 'myData' : "callback(" + data.toString() + ")" , 'title' : myTitle + ".tl" }
 			console.log("uploading...")
 			$.ajax({
