@@ -124,31 +124,33 @@
 
 
   <!-- ToolBox -->
-  <div id="toolBox">
+  <div id="toolBox" ng-click="editDate=false">
 
     <div id="gohome" class="ctlBtns" title="Show timeline description" ng-click="gohome()"></div>
 
     <!-- Export to Timeline js -->
-    <a href="tljs" target="_blank">
-      <div id="exportJson" class="ctlBtns" title="Export this dates to Timeline JS" ng-click="exportAsJson()"></div>
-    </a>
+    <div id="exportState" class="ctlBtns" title="Export the Timeline" ng-click="uploadData=false;downloadData=false;exportData=!exportData">
+      <ul ng-if="exportData" id="exportDataOptions">
+        <li ng-click="saveState('final')">
+          TLC Export<br>
+          <p><i>Generats unique, distributable URL (data is saved in the cloud and publicly available through the generated link)</i></p>
+        </li>
+        <li ng-click="exportAsJson()"><a href="tljs" target="_blank">TimelineJS Export<br>
+          <p><i>Opens TimelineJS project (only temporarily available, but can be downloaded as ZIP file via the "Save"-Button below)</i></p></a></li>
+      </ul>
+    </div>
 
     <!-- Save current state -->
     
-    <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="uploadData=false;downloadData=!downloadData"></div>
+    <div id="saveState" class="ctlBtns" title="Save this state of the Timeline" ng-click="uploadData=false;exportData=false;downloadData=!downloadData"></div>
     <ul ng-if="downloadData" id="downloadDataOptions">
       <li ng-click="saveState()">TLC's .tl file</li>
       <li ng-click="downloadJson()">JSON file</li>
       <li ng-click="downloadZip()" style="line-height:18px;padding:8px;">ZIP folder<br><small><i>TimelineJS project</i></small></li>
-      <!--li ng-click="saveState('final')" style="line-height:18px;padding:8px;">
-        <a href="tlcOutput" target="_blank">
-          TLC Export<br><small><i>our own export</i></small>
-        </a>
-      </li-->
     </ul>
 
     <!-- Import Data-->
-    <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="downloadData=false;uploadData=!uploadData"></div>
+    <div id="loadData" class="ctlBtns" title="Load previous saved data" ng-click="downloadData=false;exportData=false;uploadData=!uploadData"></div>
     <ul ng-if="uploadData" id="loadDataOptions">
       <li ng-class="{ notSelectable: !prevData}" ng-click="loadData('localStorage')">Load previous state</li>
       <li onclick="triggerUpload()">Load from file</li>
@@ -341,13 +343,15 @@
       <div class="tool ctlBtns" title="Delete this date" ng-click="deleteDate('one')" id="tool_delete"></div>
       <div id="nextDate" class="ctlBtns" title="Go to the next date" ng-click="arrowKey('next','btn')"></div>
 
-      <div id="recoverElement" ng-show="!timexes[currIndex].visible && dateInfo.length!=0">
+      
+
+      </div>
+      
+  <div id="recoverElement" ng-show="!timexes[currIndex].visible && dateInfo.length!=0">
           <i>You deleted this element</i><br>
           <div ng-click="recoverDate()" style="cursor:pointer; color:#ff6138;"><b>No!</b> Bring it back please!</div>
       </div>
 
-      </div>
-      
   </div>
   </div>
 
@@ -398,14 +402,16 @@
       </div>
 
 
-      <div class="loading">
-        <img src="../static/img/waiting.gif">
-      </div>
+      
       <!--div id="addDoc" class="ctlBtns" title="Add a new document" ng-click="uploadDoc=!uploadDoc"></div>
       <div id="selectBox" ng-if="uploadDoc">
       <ul><li ng-repeat="file in tempFiles" ng-click="addDocument(file)"> {{file}} </li></ul>
       </div-->
     </div>
+</div>
+
+<div class="loading">
+  <img src="../static/img/waiting.gif">
 </div>
 
 <div id="saved">Current status was stored.</div>

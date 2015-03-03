@@ -89,12 +89,13 @@ html, body {
   position: absolute;
   right: 0px;
   top: 0px;
-  height: auto;
-  width: 90px; }
+  height: 23px;
+  width: auto; }
   #topBox #vagueDatesArea h1 {
     font-size: 0.7em;
-    margin: 10px;
-    font-weight: normal; }
+    margin: 10px 10px 0 0;
+    font-weight: normal;
+    text-align: right; }
 
 #leftBox #tablehead {
   width: 100%;
@@ -298,10 +299,25 @@ html, body {
     z-index: 1;
     right: 37px;
     width: 175px; }
+  #rightBox #toolBox #exportDataOptions {
+    position: absolute;
+    top: 32px;
+    z-index: 1;
+    right: 37px;
+    width: 175px; }
   #rightBox #toolBox #saveState {
     background-image: url(../img/saveState.png); }
-  #rightBox #toolBox #exportJson {
+  #rightBox #toolBox #exportState {
     background-image: url(../img/exportJson.png); }
+    #rightBox #toolBox #exportState a {
+      text-decoration: none;
+      color: #000; }
+    #rightBox #toolBox #exportState p {
+      padding: 0 0 8px 0;
+      line-height: 12px;
+      font-size: 0.65em;
+      color: #666;
+      margin: 0; }
   #rightBox #toolBox #gohome {
     background-image: url(../img/home.png); }
   #rightBox #toolBox #mergeDates {
@@ -726,23 +742,6 @@ input {
     color: #666;
     font-style: italic;
     font-size: 0.8em; }
-  #inputOverlay .loading {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.7);
-    z-index: 12; }
-    #inputOverlay .loading img {
-      width: 80px;
-      height: 85px;
-      position: absolute;
-      top: 50%;
-      margin-top: -42px;
-      left: 50%;
-      margin-left: -40px; }
   #inputOverlay .btn {
     margin: 0 auto;
     border: 1px solid #efefef;
@@ -760,6 +759,24 @@ input {
     -webkit-box-shadow: 0px 0px 0px #cccccc;
     box-shadow: 0px 0px 0px #cccccc;
     margin: 2px 0px 0px 2px; }
+
+.loading {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 12; }
+  .loading img {
+    width: 80px;
+    height: 85px;
+    position: absolute;
+    top: 50%;
+    margin-top: -42px;
+    left: 50%;
+    margin-left: -40px; }
 
 #saved {
   display: none;

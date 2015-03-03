@@ -178,7 +178,7 @@ app
 	$scope.disableEdit = function(el) {
 		if(el=="d"){
 			$scope.editSubtitle = false;
-			if($scope.dateInfo>0){
+			if($scope.dateInfo.length>0){
 				if($scope.dateInfo[0].subtitle.length>0){
 					if($scope.timexes[$scope.currIndex].sub!=$scope.dateInfo[0].subtitle){
 						$scope.markAsTouched($scope.timexes,$scope.currIndex);
@@ -192,7 +192,7 @@ app
 		}
 		else if(el=="c"){
 			$scope.editContent = false;
-			if($scope.dateInfo>0){
+			if($scope.dateInfo.length>0){
 				if($scope.timexes[$scope.currIndex].sent!=$scope.dateInfo[0].sent){
 					$scope.markAsTouched($scope.timexes,$scope.currIndex);
 					if($scope.dateInfo.length>0){
@@ -983,11 +983,11 @@ app.service('DateHandling', function(){
 		// If coming from Sentence selection, take first timex from sentence as new index
 		if(origin=="fromSent"){
 			var numberNewElement = d.length
-			$scope.currIndex = $scope.timexes.indexOf(d[0]);
+			$scope.currIndex = d[0].id;
 			}
 		else{
 			var numberNewElement = 1
-			$scope.currIndex = $scope.timexes.indexOf(d);
+			$scope.currIndex = d.id;
 		}
 
 		// Should not be needed - but DOM not updating after Media Input change...
@@ -1391,29 +1391,41 @@ app.service('DateExporting', function(){
 			
 			var filetitle = $scope.tlDescr[0].replace(/\s/g , "_");
 			if(!state){ download(filetitle+".tl", saveData) }
-			else if(state=="final"){
-				download(filetitle+"-final.tl", saveData)
-				// Doesn't work
-				//this.saveToServer($scope.tlDescr[0]+"_final.tl", saveData)
-			}
-
-			
-			//alert("The current state of the timeline \""+ $scope.tlDescr[0] + "\" was saved.")
+			else if(state=="final"){ this.saveToServer($scope.tlDescr[0], saveData) }
 		}
 		
 	}
 
 	this.saveToServer = function(title,data){
-		var t = title.replace(/\s/g,"")
-		saveData = { 'myData' : data.toString() , 'title' : t }
+		$(".loading").fadeIn(300)
+		var myTitle = title
+				.replace(/\s/g,"")
+				.replace(/[^a-zA-Z0-9]/g, "")
 
-		$.ajax({
+		if(myTitle.length<5){
+			alert("Please give your timeline a title with at least 5 letters.")
+		}
+		else{
+			saveData = { 'myData' : "callback(" + data.toString() + ")" , 'title' : myTitle + ".tl" }
+			console.log("uploading...")
+			$.ajax({
 			type: "POST",
 			data : JSON.stringify(saveData, null, '\t'),
 			url: "/upload",
 			contentType: 'application/json;charset=UTF-8',
-			success: function(data){ console.log(data) }
-			})	
+			success: function(data){
+				console.log("done.")
+				console.log(data.result)
+				// Wait a little ...
+				setTimeout( function(){
+					$(".loading").fadeOut(300)
+					window.open("http://www.johannafulda.de/ubc/newOutput?tl="+myTitle);
+				},1000)
+				
+			}
+			})
+		}
+			
 	}
 
 
@@ -1432,6 +1444,7 @@ app.service('DateExporting', function(){
 			//$scope.updateD3Tl($scope.timexes,"empty")
 			//console.log("empty: "+$scope.timexes)
 			$scope.timexes = fromStorage.timexes
+			$scope.files = fromStorage.files
 			$scope.tlDescr = fromStorage.tlDescr
 			if(fromStorage.trackNames){
 				$scope.trackNames = fromStorage.trackNames
@@ -1440,6 +1453,7 @@ app.service('DateExporting', function(){
 			var nrIds = 0
 			$scope.fileNames = fromStorage.fileNames
 			var thisFiles = fromStorage.files
+
 			thisFiles.forEach( function(file,i){
 				$scope.singleSents[i] = CreateArray.recreateText(file, $sce, nrSents,nrIds)
 				
