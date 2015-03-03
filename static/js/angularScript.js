@@ -1419,7 +1419,7 @@ app.service('DateExporting', function(){
 				// Wait a little ...
 				setTimeout( function(){
 					$(".loading").fadeOut(300)
-					window.open("http://www.johannafulda.de/ubc/newOutput?tl="+myTitle);
+					window.open("http://www.cs.ubc.ca/group/infovis/software/TimeLineCurator/tlcExport/?tl="+myTitle);
 				},1000)
 				
 			}
