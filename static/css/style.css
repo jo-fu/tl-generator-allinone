@@ -55,7 +55,9 @@ html, body {
   border-top: 1px solid #999;
   box-sizing: border-box; }
   #bottomBox #leftBox {
-    height: 100%;
+    height: -webkit-calc(100% - 18px);
+    height: -moz-calc(100% - 18px);
+    height: calc(100% - 18px);
     width: 30%;
     float: left;
     overflow-y: auto;
@@ -63,7 +65,9 @@ html, body {
     box-sizing: border-box;
     position: relative; }
   #bottomBox #centerBox {
-    height: 100%;
+    height: -webkit-calc(100% - 18px);
+    height: -moz-calc(100% - 18px);
+    height: calc(100% - 18px);
     width: 30%;
     float: left;
     overflow-y: auto;
