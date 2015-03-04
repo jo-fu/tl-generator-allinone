@@ -61,10 +61,10 @@
       <div id="tablehead">
           <table><tr>
             <td>
-              <span class="order" title="Order by type" ng-click="orderByVal='typ';orderReverse=!orderReverse">&#9679;</span>
-              <span class="order" title="Order by status" ng-click="orderByVal='touched';orderReverse=!orderReverse">&#9680;</span>
-              <span class="order" title="Order by document" ng-click="orderByVal='docNr';orderReverse=!orderReverse">&#9726;</span>
-              <span class="order" title="Order by track number" ng-click="orderByVal='trackNr';orderReverse=!orderReverse">&#9776;</span>
+              <span class="order" title="Sort by type" ng-click="orderByVal='typ';orderReverse=!orderReverse">&#9679;</span>
+              <span class="order" title="Sort by status" ng-click="orderByVal='touched';orderReverse=!orderReverse">&#9680;</span>
+              <span class="order" title="Sort by document" ng-click="orderByVal='docNr';orderReverse=!orderReverse">&#9636;</span>
+              <span class="order" title="Sort by track number" ng-click="orderByVal='trackNr';orderReverse=!orderReverse">&#9776;</span>
               
             </td>
             <td><span class="order" ng-click="orderByVal='val';orderReverse=!orderReverse">Date &#9660;</span></td>
@@ -83,7 +83,7 @@
           </tr>
         </table>
     </div>
-
+<div class="statusBox" style="left:0;"><b>Events: {{ countTxs("total","event") }}</b>, vague expressions: {{ countTxs("total","vague") }}</div>
 </div>
 
 
@@ -110,7 +110,7 @@
           <span ng-if="sent.tx=='NoTx'" ng-bind-html="sent.sent"></span>
 
         </span>
-      <div class="statusBox"><b>Events: {{ countTxs($index,"event") }}</b>, vague expressions: {{ countTxs($index,"vague") }}</div>
+      <div class="statusBox"><b>{{ countTxs($index) }}</b> temporal expressions in this doc</div>
       </div>
     </div>
     

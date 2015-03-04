@@ -240,12 +240,18 @@ app
 	};
 	$scope.countTxs = function(docNr,date){
 		var nr = 0;
-		if(date == "event"){ $scope.timexes.forEach( function(d){
-				if(d.docNr == docNr && (d.typ=="date" || d.typ=="duration")) nr++
+		if(docNr=="total"){
+			if(date == "event"){ $scope.timexes.forEach( function(d){
+				if(d.typ=="date" || d.typ=="duration") nr++
 			})}
-		else if(date == "vague"){ $scope.timexes.forEach( function(d){
-			if(d.docNr == docNr && d.typ=="neither") nr++
+			else if(date == "vague"){ $scope.timexes.forEach( function(d){
+				if(d.typ=="neither") nr++
 			})}
+		}
+		else{
+			$scope.timexes.forEach( function(d){ if(d.docNr == docNr) nr++ })
+		}
+		
 		return nr
 	}
 
@@ -1111,7 +1117,7 @@ app.service('DateHandling', function(){
 		
 
 		var newDate = {
-			id : number , timex : "manually added" , docNr : currDoc, trackNr : trackNr, 
+			id : number , timex : "manually added" , docNr : -1, trackNr : trackNr, 
 			sent : "manually added" , sub : "New Event", sentNr : -1 , typ : "neither",  touched : false ,
 			val : "????" , title : "????", mod : "" , count : 1 , yIndex : 1 ,
 			mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
@@ -1146,8 +1152,8 @@ app.service('DateHandling', function(){
 		var newSubtitle = "";
 		var newTyp = dateInfo[0].typ;
 		if(newTyp=="neither"){ var newTitle = "????"; }
-		else{ var newTitle = dateInfo[0].val; }
-		
+		else{ var newTitle = dateInfo[0].title; }
+
 		dateInfo.forEach( function(el, index){
 			var thisId = el.currId;
 			if(index==0){
