@@ -287,7 +287,9 @@ app
 			
 			var docTitle = data.match(/<TITLE>([^<]*)<\/TITLE>/)[1]
 			docTitle = cleanSubtitle(docTitle)
-			if($scope.trackNames[trackNr] == trackNr.toString()) $scope.trackNames[trackNr] = docTitle;
+			console.log("TrackNr: "+(parseInt(trackNr)+1).toString())
+			console.log("TrackName: "+$scope.trackNames[trackNr])
+			if($scope.trackNames[trackNr] == (parseInt(trackNr)+1).toString()) $scope.trackNames[trackNr] = docTitle;
 
 			if($scope.tlDescr.length>0){
 				if($scope.tlDescr[0] == "TimeLineCurator" && docNr==0){
@@ -665,10 +667,10 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 
 	// Update all paths - without transition, if shape changes from circle to span-shape
-	if(action == "unitChange" || action == "vagueToDate"|| action == "resize" || action=="loadData"){
-		var paths = d3.select("svg").selectAll(".timelineItem").data(d);
+	if(action == "move"){
+		var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition();
 	}
-	else{ var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition(); }
+	else{ var paths = d3.select("svg").selectAll(".timelineItem").data(d); }
 	
 	// Update all refs
 	var refs = d3.select("svg").select("g.ref").selectAll("line").data(dcts).transition()
