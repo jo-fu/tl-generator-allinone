@@ -181,11 +181,20 @@ function dateConversion(d,mod){
     // Duration with XXXX TO XXXX
     // TODO: what about XXXX,XX TO XXXX,XX,XX etc
     if(d.indexOf("TO")>0){
-      var startDate = d.substr(0,4)
-      var start = new Date(startDate).getTime()
-      if(d.length==10){ var endDate = d.substr(6,4) } /* XXXX - XXXX */ 
-      else{ var endDate = d.substr(0,2) + d.substr(6,2) } /* XXXX - XX */
-      var end = new Date(endDate).getTime()
+      var startDate = d.split("TO")[0]
+      var endDate = d.split("TO")[1]
+      // For the case XXXX - XX
+      if(endDate.length==2){ endDate = startDate.substr(0,2) + endDate; }
+      var start = checkDateLength(startDate)
+      var end = checkDateLength(endDate)
+      //console.log("End: "+end+", Start: "+start)
+      //console.log("Enddate: "+endDate+", Startdate: "+startDate)
+
+      //var startDate = d.substr(0,4)
+      //var start = new Date(startDate).getTime()
+      //if(d.length==10){ var endDate = d.substr(6,4) } /* XXXX - XXXX */ 
+      //else{ var endDate = d.substr(0,2) + d.substr(6,2) } /* XXXX - XX */
+      //var end = new Date(endDate).getTime()
     }
     // Duration e.g. 1980DECADE
     else if(d.indexOf("DECADE")>0){
@@ -303,6 +312,6 @@ function cleanUpInput(input){
               .replace(/>/g,"&gt;")
               .replace(/&/g, "_AND_") // to also replace the HTML special chars
               // All the rest is replaced with ?
-              .replace(/[^\x00-\x7F]/g, "...")
+              .replace(/[^\x00-\x7F]/g, "")
   return cleanedUp;
 }

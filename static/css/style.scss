@@ -120,11 +120,12 @@ html, body{
 }
 // Center Box
 #centerBox{
-  
+  #startHere{ background-image:url(../img/start.png); height:114px; width:220px; margin:40px 0 0 5px; background-repeat:no-repeat; }
+
    #docSwitcher{ z-index:10; height:auto; min-height:40px; position:absolute; max-width:29%;
     .docBtn{ padding: 2px 15px 2px 6px; margin: 0 5px 5px 0px; float:left; cursor:pointer; position:relative; color:#fff; font-weight:bold;
       @include shadow(); font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
-    #addDoc{ float:left; margin: 0 0 0 5px; }
+    #addDoc{ float:left; margin: 2px 0 0 5px; }
     .inactive{ font-size: 5px; background-color: #999 !important; color:#fff !important }
     .inactive .hideDoc{ background-image: url("../img/reload.png") !important; }
     .docBtn:active, .activeBtn{ padding: 0px 13px 0px 4px; margin:2px 3px 3px 2px; border:$activeBorder; @include noshadow(); }

@@ -44,12 +44,14 @@ app
 			    	if(data.result=="something wrong"){
 			    		closeInput()
 			    		$(".loading").fadeOut(300)
-			    		alert("There seems to be something wrong with your input. Please just paste in plain text (for now).")
+			    		alert("Sorry, something went wrong. Something inside the input...")
 			    	}
 			    	else{
 			    		$(".loading").fadeOut(300)
 			      	closeInput()
+			      	//console.log(data.result)
 					$scope.addDocument(data.result,"fromInput")
+
 			    	}
 			        
 			    }
@@ -293,8 +295,6 @@ app
 			
 			var docTitle = data.match(/<TITLE>([^<]*)<\/TITLE>/)[1]
 			docTitle = cleanSubtitle(docTitle)
-			console.log("TrackNr: "+(parseInt(trackNr)+1).toString())
-			console.log("TrackName: "+$scope.trackNames[trackNr])
 			if($scope.trackNames[trackNr] == (parseInt(trackNr)+1).toString()) $scope.trackNames[trackNr] = docTitle;
 
 			if($scope.tlDescr.length>0){
@@ -490,7 +490,7 @@ this.showDateInfo = function(datum){
   	}
   	else{
   		dateInfo.val = datum.title;
-  		dateInfo.title = checkIfDate(datum.title);	
+  		dateInfo.title = datum.title;	
 	}
 
 	dateInfo.subtitle = datum.sub;
@@ -802,7 +802,7 @@ app.service('CreateArray', function(SplitSents){
 					var durTitle = prettifyDate(d.startDate) +" - " + prettifyDate(d.endDate);
 					timexes[number] = {
 					id : number , docNr : docNr , trackNr : trackNr, timex : thistempex , typ : "duration", touched : false ,
-					sent : thisS , sub : sub , sentNr : sentNr , val : durTitle ,
+					sent : thisS , sub : sub , sentNr : sentNr , val : d.startDate+" - "+d.endDate ,
 					title : durTitle , mod : thisMod , count : 1 , yIndex : 1 ,
 					times : [{starting_time : d.startVal , ending_time : d.endVal}],
 					mediaSource : "Enter URL" , mediaCredit : "Credit" , mediaCaption : "Caption" , hasMedia : false ,
@@ -882,7 +882,6 @@ app.service('DateHandling', function(){
 		var dateL = d.length;
 		var thisVal = d;
 		var dateArray = []
-		
 		if(isNaN(d) && d!="????"){
 			var startVal = d.split(" - ")[0]
 			var endVal = d.split(" - ")[1]
@@ -1399,19 +1398,24 @@ app.service('DateExporting', function(){
 			
 			var filetitle = $scope.tlDescr[0].replace(/\s/g , "_");
 			if(!state){ download(filetitle+".tl", saveData) }
-			else if(state=="final"){ this.saveToServer($scope.tlDescr[0], saveData) }
+			else if(state=="final"){ this.saveToServer($scope.tlDescr[0], saveData, $scope.gohome) }
 		}
 		
 	}
 
-	this.saveToServer = function(title,data){
+	this.saveToServer = function(title,data,gohome){
 		
 		var myTitle = title
 				.replace(/\s/g,"")
 				.replace(/[^a-zA-Z0-9]/g, "")
 
 		if(myTitle.length<5){
+			gohome()
 			alert("Please give your timeline a title with at least 5 letters.");
+		}
+		else if(myTitle == "TimeLineCurator"){
+			gohome()
+			alert("Please give your timeline a title.");
 		}
 		else{	
 			$(".loading").fadeIn(300)
@@ -1434,7 +1438,7 @@ app.service('DateExporting', function(){
 			}
 			})
 		}
-			
+		return	
 	}
 
 

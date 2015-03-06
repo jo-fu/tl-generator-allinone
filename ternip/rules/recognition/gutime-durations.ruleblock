@@ -97,15 +97,45 @@ After-Guard: ^(<since~.+>|<after~.+>|<following~.+>|<later~.+>|<earlier~.+>|<bef
 Before-Guard: !<(the|for|in)~.+>$
 
 ---
-# 14 - NEW - get time spans that are xxxx to/until xxxx
+# 14 - NEW - get time spans that are xx month xxxx to/until xx month xxxx
 
 Type: duration
-Match: (<\d{4}~.+>)(<to~.+>|<until~.+>|<till~.+>|<\-~.+>)(<\d{4}~.+>|<\d{2}~.+>)
+Match: (<(\d\d?)\.?~.+>(<$MONTHS~.+>|<$MONTH_ABBRS\.?~.+>(<.~.+>)?)<(\d\d(\d\d)?)~.+>)(<to~.+>|<until~.+>|<till~.+>|<\-~.+>)(<(\d\d?)\.?~.+>(<$MONTHS~.+>|<$MONTH_ABBRS\.?~.+>(<.~.+>)?)<(\d\d(\d\d)?)~.+>)
+Deliminate-Numbers: True
+
+---
+# 14 - NEW - get time spans that are xx.xx.xxxx to/until xx.xx.xxxx
+
+Type: duration
+Match: (<\d\d?\.\d\d?\.\d\d(\d\d)?~.+>)(<to~.+>|<until~.+>|<till~.+>|<\-~.+>)(<\d\d?\.\d\d?\.\d\d(\d\d)?~.+>)
+Deliminate-Numbers: True
+
+---
+# 14 - NEW - Between xxxx and xxxx
+
+Type: duration
+Match: <(B|b)etween~.+><\d\d(\d\d)?~.+><and~.+><\d\d(\d\d)?~.+>
 Deliminate-Numbers: True
 
 ---
 # 14 - NEW - get time spans that are xxxx - xxxx
 
 Type: duration
-Match: <(\d\d\d\d)-?(\d\d~.+)>
+Match: <(\d\d\d\d)~.+><\-~.+><(\d\d)~.+>
 Deliminate-Numbers: True
+
+---
+# 14 - NEW - get time spans that are xxxx - xxxx
+
+Type: duration
+Match: <(\d\d\d\d)(\-)(\d\d~.+)>
+Deliminate-Numbers: True
+
+---
+# 14 - NEW - get time spans that are xxxx to/until xxxx
+
+Type: duration
+Match: (<\d{4}~.+>)(<to~.+>|<until~.+>|<till~.+>|<\-~.+>)(<\d{4}~.+>)
+Deliminate-Numbers: True
+
+

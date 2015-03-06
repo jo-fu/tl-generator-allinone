@@ -1,6 +1,7 @@
 <!doctype html>
 <html ng-app="tlApp">
 <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}" />
@@ -98,11 +99,12 @@
         <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
       </div>
       <div id="addDoc" class="ctlBtns" title="Add a new document" onclick="openInput()"></div>
-
+      <div ng-hide="singleSents.length" id="startHere"></div>
       <!--div id="button_list" class="docBtn" ng-click="switchView( 'list' )" style="background-color:#efefef;">List View</div-->
     </div>
 
     <div id="docText">
+      
       <div id="txtData_{{$index}}" ng-repeat="doc in singleSents" class="txtData" ng-class="{ activetab: $index == docNr}">
         
         <span ng-repeat="sent in doc">
@@ -366,29 +368,29 @@
 
       <div id="insertText">
         <h1>Insert your text here</h1>
-        <label for="title" style="float:left;padding-right: 10px;"><b>Title</b> </label>
-        <input type="text" style="float:left; width:255px;" name="title" placeholder="Document Title"> 
+        <form style="height:100%" accept-charset="UTF-8">
+          <label for="title" style="float:left;padding-right: 10px;"><b>Title</b> </label>
+          <input type="text" style="float:left; width:255px;" name="title" placeholder="Document Title"> 
 
-        <!-- Doc Choice -->
-        <div id="chooseTrack_0" class="chooseTrack bgColor_0">1</div>
-        <div id="chooseTrack_1" class="chooseTrack bgColor_1">2</div>
-        <div id="chooseTrack_2" class="chooseTrack bgColor_2">3</div>
-        <div id="chooseTrack_3" class="chooseTrack bgColor_3">4</div>
-        <div id="chooseTrack_4" class="chooseTrack bgColor_4">5</div>
-        <div id="chooseTrack_5" class="chooseTrack bgColor_5">6</div><br><br>
-
-
-        <label for="content"><b>Content</b></label><br>
-        <textarea name="content" id="content" placeholder="Drop the content here."></textarea><br>
-
-        <label class="optional" for="date">Which date does "today" refer to in the document (optional):</label>
-        <input id="todayInput" type="date" size="50" name="date">
-
-        <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
+          <!-- Doc Choice -->
+          <div id="chooseTrack_0" class="chooseTrack bgColor_0">1</div>
+          <div id="chooseTrack_1" class="chooseTrack bgColor_1">2</div>
+          <div id="chooseTrack_2" class="chooseTrack bgColor_2">3</div>
+          <div id="chooseTrack_3" class="chooseTrack bgColor_3">4</div>
+          <div id="chooseTrack_4" class="chooseTrack bgColor_4">5</div>
+          <div id="chooseTrack_5" class="chooseTrack bgColor_5">6</div><br><br>
         
+          <label for="content"><b>Content</b></label><br>
+          <textarea name="content" id="content" placeholder="Drop the content here."></textarea><br>
+
+          <label class="optional" for="date">Which date does "today" refer to in the document (optional):</label>
+          <input id="todayInput" type="date" size="50" name="date">
+        
+        <!--label class="optional" for="source">Source</label> <input type="text" size="50" name="source"-->
         <p style="text-align:right; margin:0;">
           <span class="btn" ng-click="getTimexes()" style="padding: 5px 10px;">Go!</span>
         </p>
+        </form>
       </div>
 
       <div id="insertFile">

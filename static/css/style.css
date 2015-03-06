@@ -227,6 +227,12 @@ html, body {
       stroke-color: #666;
       stroke-width: 3px; }
 
+#centerBox #startHere {
+  background-image: url(../img/start.png);
+  height: 114px;
+  width: 220px;
+  margin: 40px 0 0 5px;
+  background-repeat: no-repeat; }
 #centerBox #docSwitcher {
   z-index: 10;
   height: auto;
@@ -251,7 +257,7 @@ html, body {
     line-height: 25px; }
   #centerBox #docSwitcher #addDoc {
     float: left;
-    margin: 0 0 0 5px; }
+    margin: 2px 0 0 5px; }
   #centerBox #docSwitcher .inactive {
     font-size: 5px;
     background-color: #999 !important;
