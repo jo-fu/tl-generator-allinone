@@ -358,7 +358,7 @@ app
 	$scope.saveState = function(state){ DateExporting.saveState($scope, state) }
 	$scope.downloadJson = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadJson($scope.dataAsJson) }
 	$scope.downloadZip = function(){ $scope.downloadData = false; $scope.exportAsJson(); downloadZip($scope.dataAsJson) }
-	$scope.downloadTimexes = function(){ $scope.downloadData = false; DateExporting.downloadTimexes($scope); }
+	//$scope.downloadTimexes = function(){ $scope.downloadData = false; DateExporting.downloadTimexes($scope); }
 	$scope.exportAsJson = function(){ $scope.downloadData = false; $scope.dataAsJson = DateExporting.exportAsJson($scope.timexes,$scope.fileNames,$scope.tlDescr,$scope.trackNames) }
 	
 	$scope.arrowKey = function(dir,btn){
@@ -481,7 +481,7 @@ this.buildTl = function($scope){
 
 
 this.showDateInfo = function(datum){
-  	
+	
   	var dateInfo = {}
 
   	if(datum.typ=="date"){
@@ -504,7 +504,7 @@ this.showDateInfo = function(datum){
 	dateInfo.medium["credit"] = datum.mediaCredit;
 	dateInfo.medium["caption"] = datum.mediaCaption;
 	dateInfo.medium["hasMedia"] = datum.hasMedia;
-	
+
 	// Save current values
 	dateInfo.currId = datum.id;
 	dateInfo.currSent = datum.sentNr;
@@ -628,16 +628,14 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 			
 		})
 		.attr("class" , function(d){
-
 			if(action=="newDoc" || action=="loadData"){ var classes = "timelineItem_sent_"+d.sentNr }
 			else{ var classes = ""}
-
 			return "timelineItem " + d.typ + " " + classes
 			
 		})
 		.attr("id", function(d){ return "timelineItem_"+ d.id })
 		.attr("fill" , function(d){ return getColor(d) })
-		.on("click", function (d) { clickFct(d) })
+		.on("click", function (d) { clickFct(d); })
 
 	}
 	
@@ -981,11 +979,14 @@ app.service('DateHandling', function(){
 	}
 
 	this.makeSelection = function($scope, sentNr, d, origin){
+		
 		$scope.editDate = false;
 		$scope.addMedia = false;
 		$scope.changeTrackVis = false;
 		$(".display .changeTrack").removeClass("chosen");
 		if(sentNr===false){ sentNr = -1 }
+
+		//console.log(d)
 
 		// If coming from Sentence selection, take first timex from sentence as new index
 		if(origin=="fromSent"){
@@ -1053,14 +1054,14 @@ app.service('DateHandling', function(){
 
          // Highlighting List
 		$(".listEl").removeClass("highlighted")
-		$scope.dateInfo.forEach( function(d){ $("#listEl_"+d.currId).addClass("highlighted") })
+		$scope.dateInfo.forEach( function(el){ $("#listEl_"+el.currId).addClass("highlighted") })
 
 	   // Highlighting Circle
 	   	d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec", false)
-		$scope.dateInfo.forEach( function(d,i){
+		$scope.dateInfo.forEach( function(el,i){
 			// First Selection is primar selection
-			if(i==0){ d3.select("#timelineItem_"+d.currId).classed("selected" , true) }
-			else{ d3.select("#timelineItem_"+d.currId).classed("selectedSec" , true) }
+			if(i==0){ d3.select("#timelineItem_"+el.currId).classed("selected" , true) }
+			else{ d3.select("#timelineItem_"+el.currId).classed("selectedSec" , true) }
 		}) 
 		if($scope.dateInfo.length!=0){ $scope.dateSelected = true }
 		else{ $scope.dateSelected = false }
@@ -1276,7 +1277,7 @@ app.filter('iif', function () {
 
 app.service('DateExporting', function(){
 
-	this.downloadTimexes = function($scope){
+	/*this.downloadTimexes = function($scope){
 
 		var txs = $scope.timexes;
 		
@@ -1289,7 +1290,7 @@ app.service('DateExporting', function(){
 		var exportStr = JSON.stringify(exportTxs)
 		console.log(exportStr)
 		download($scope.tlDescr[0]+".tl", exportTxs)
-	}
+	}*/
 
 	this.exportAsJson = function(txs,filenames,tlDescr,trackNames){
 		var dateEls = []
@@ -1371,33 +1372,38 @@ app.service('DateExporting', function(){
 		$scope.downloadData = false;
 
 		if(txs.length!=0){
-			var exportTxs = [];
+			var exportingTxs = [];
 
 			if(state == "final"){
-				var newIndex = 0;
 				txs.forEach( function(tx){
 					if(tx.visible && tx.typ != "neither"){
-						tx.id = newIndex
-						exportTxs.push(tx)
-						newIndex++
+						exportingTxs.push(tx)
 					}
 				})
 			}
-			else{ exportTxs = txs }
-
+			else{
+				exportingTxs = txs
+				}
 			var savedData = {
-				tlDescr : $scope.tlDescr,
-				timexes : exportTxs,
-				files : $scope.files,
-				fileNames : $scope.fileNames,
-				trackNames : $scope.trackNames
-			}
+					tlDescr : $scope.tlDescr,
+					timexes : exportingTxs,
+					files : $scope.files,
+					fileNames : $scope.fileNames,
+					trackNames : $scope.trackNames
+				}
 			var saveData = JSON.stringify(savedData)
-			localStorage.setItem('savedData', saveData);
-			$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
 			
-			var filetitle = $scope.tlDescr[0].replace(/\s/g , "_");
-			if(!state){ download(filetitle+".tl", saveData) }
+			if(state!="final"){
+				
+				
+				localStorage.setItem('savedData', saveData);
+				$("#saved").fadeIn(300 , function(){ setTimeout( function(){ $("#saved").fadeOut(300) },2000)})
+				var filetitle = $scope.tlDescr[0].replace(/\s/g , "_");
+				if(!state){ download(filetitle+".tl", saveData) }
+			}
+			
+			
+			
 			else if(state=="final"){ this.saveToServer($scope.tlDescr[0], saveData, $scope.gohome) }
 		}
 		
@@ -1419,26 +1425,24 @@ app.service('DateExporting', function(){
 		}
 		else{	
 			$(".loading").fadeIn(300)
-			saveData = { 'myData' : "callback(" + data.toString() + ")" , 'title' : myTitle + ".tl" }
+			var send = { 'myData' : "callback(" + data.toString() + ")" , 'title' : myTitle + ".tl" }
 			console.log("uploading...")
 			$.ajax({
-			type: "POST",
-			data : JSON.stringify(saveData, null, '\t'),
-			url: "/upload",
-			contentType: 'application/json;charset=UTF-8',
-			success: function(data){
-				console.log("done.")
-				console.log(data.result)
-				// Wait a little ...
-				setTimeout( function(){
-					$(".loading").fadeOut(300)
-					window.open("http://www.cs.ubc.ca/group/infovis/software/TimeLineCurator/tlcExport/?tl="+myTitle);
-				},1000)
-				
-			}
+				type: "POST",
+				data : JSON.stringify(send, null, '\t'),
+				url: "/upload",
+				contentType: 'application/json;charset=UTF-8',
+				success: function(data){
+					console.log("done.")
+					console.log(data.result)
+					// Wait a little ...
+					setTimeout( function(){
+						$(".loading").fadeOut(300)
+						window.open("http://www.cs.ubc.ca/group/infovis/software/TimeLineCurator/tlcExport/?tl="+myTitle);
+					},500)
+				}
 			})
-		}
-		return	
+		}	
 	}
 
 
