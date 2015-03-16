@@ -68,7 +68,7 @@ Case-Sensitive: True
 # 11
 
 Type: date
-Match: (<alternate~.+>|<every~.+>(<(other|$ORDINAL_NUMS|$ORDINAL_WORDS)~.+>)?)<(minute|hour|day|week|month|year)s?>
+Match: (<same~.+>|<alternate~.+>|<every~.+>(<(other|$ORDINAL_NUMS|$ORDINAL_WORDS)~.+>)?)<(minute|hour|day|week|month|year)s?>
 
 ---
 # 12
@@ -183,7 +183,7 @@ Match: (<medieval~.+>|(<the~.+>)?<future~.+>)
 # 29
 
 Type: date
-Match: (<alternate~.+>|<each~.+>|<every~.+>(<(other|$ORDINAL_NUMS|$ORDINAL_WORDS)~.+>)?)<(minute|hour|day|week|month|year)s?~.+>
+Match: (<same~.+>|<alternate~.+>|<each~.+>|<every~.+>(<(other|$ORDINAL_NUMS|$ORDINAL_WORDS)~.+>)?)<(minute|hour|day|week|month|year)s?~.+>
 
 ---
 # 30

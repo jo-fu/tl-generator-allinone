@@ -546,7 +546,7 @@ Quant: {#1}
 # 61
 
 Type: date
-Match: ((every|each|alternate)\s+(other|$ORDINAL_WORDS|$ORDINAL_NUMS)?).*\b(minute|hour|day|week|month|year)s?\b
+Match: ((every|each|same|alternate)\s+(other|$ORDINAL_WORDS|$ORDINAL_NUMS)?).*\b(minute|hour|day|week|month|year)s?\b
 Tokenise: space
 Value: 'P1' + units_to_gran({#6})
 Change-Type: 'set'
