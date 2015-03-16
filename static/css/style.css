@@ -284,8 +284,7 @@ html, body {
   #centerBox #docText .txtData {
     display: none; }
     #centerBox #docText .txtData .tx {
-      color: #ff6138;
-      font-weight: bold; }
+      color: #ff6138; }
   #centerBox #docText .activetab {
     display: block; }
 
@@ -470,6 +469,12 @@ html, body {
   background-color: #333;
   color: #fff; }
 
+.activeTx {
+  color: #ff6138;
+  line-height: 22px;
+  font-size: 1.5em;
+  font-weight: bold; }
+
 .timex {
   cursor: pointer; }
 
@@ -530,8 +535,7 @@ h2 {
 
 .hltx {
   color: #fff;
-  background-color: #333;
-  font-weight: bold; }
+  background-color: #333; }
 
 p, .content {
   font-size: 12px;

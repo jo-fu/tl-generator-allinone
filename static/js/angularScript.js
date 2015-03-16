@@ -262,6 +262,7 @@ app
 		$scope.dateSelected = false;
 		$scope.currIndex = -1;
 		d3.selectAll(".timelineItem").classed("selected", false).classed("selectedSec", false);
+		$(".tx").removeClass("activeTx")
 		$(".timex, .listEl").removeClass("highlighted");
 		$scope.dateInfo = []
 	}
@@ -1032,22 +1033,19 @@ app.service('DateHandling', function(){
 
          // Highlighting Sentence (if path is connected to a sentence)
       	if(sentNr!=-1){
-      		// If in List-View
-      		if($("#listData").hasClass("activetab")){
-      			var thisId = newDate.currId
-      			var thisDocNr = $scope.timexes[newDate.currId].docNr;
-      			var view = "list"
-      		}
-      		// If in wrong doc-view - switch View to selected Doc
-      		else{
-      			var thisDocNr = $scope.timexes[newDate.currId].docNr
-      			var activeDoc = $(".activetab").attr("id").split("_")[1]
-      			if(thisDocNr!=activeDoc){ $scope.switchView(thisDocNr); }
-      			var thisId = newDate.currId
-      			var view = "text"
-      		}
+      		
+			var thisDocNr = $scope.timexes[newDate.currId].docNr
+			var activeDoc = $(".activetab").attr("id").split("_")[1]
+			if(thisDocNr!=activeDoc){ $scope.switchView(thisDocNr); }
+			var thisId = newDate.currId
+			var view = "text"
+      		
       		$scope.highlightSent($scope.dateInfo,thisDocNr);
-      		$scope.scrollToSent(thisId,sentNr,thisDocNr)	
+      		$scope.scrollToSent(thisId,sentNr,thisDocNr)
+
+      		//Highlight corresponding timex
+      		$(".tx").removeClass("activeTx")
+      		$("#tx_"+$scope.currIndex).addClass("activeTx")
       	}
       	// if manually added Date
       	else{ if(!shifted) $(".timex").removeClass("highlighted"); }
