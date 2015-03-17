@@ -51,7 +51,7 @@ html, body {
   position: relative;
   height: 50%;
   width: 100%;
-  background-color: #f9f9f9;
+  background-color: #fff;
   border-top: 1px solid #999;
   box-sizing: border-box; }
   #bottomBox #leftBox {
@@ -344,18 +344,38 @@ html, body {
   #rightBox .display #tracks {
     margin-top: 15px; }
     #rightBox .display #tracks .track {
+      border-width: 1px 1px 4px;
+      border-style: solid;
+      border-color: #ddd;
       -moz-box-shadow: 2px 2px 0px #cccccc;
       -webkit-box-shadow: 2px 2px 0px #cccccc;
       box-shadow: 2px 2px 0px #cccccc;
       margin: 5px 20px 5px 0;
       width: 175px;
-      padding: 5px 10px;
-      color: #fff;
+      padding: 8px 10px 1px;
       font-weight: bold;
       font-size: 12px; }
     #rightBox .display #tracks input {
-      margin: 3px 20px 2px 2px;
+      margin: 5px 20px 4px 2px;
       width: 180px; }
+    #rightBox .display #tracks .trackColor_0 {
+      border-bottom-color: #377eb8;
+      color: #377eb8; }
+    #rightBox .display #tracks .trackColor_1 {
+      border-bottom-color: #4daf4a;
+      color: #4daf4a; }
+    #rightBox .display #tracks .trackColor_2 {
+      border-bottom-color: #984ea3;
+      color: #984ea3; }
+    #rightBox .display #tracks .trackColor_3 {
+      border-bottom-color: #ff7f00;
+      color: #ff7f00; }
+    #rightBox .display #tracks .trackColor_4 {
+      border-bottom-color: #e41a1c;
+      color: #e41a1c; }
+    #rightBox .display #tracks .trackColor_5 {
+      border-bottom-color: #a65628;
+      color: #a65628; }
   #rightBox .display .mediaBtn input {
     width: -webkit-calc(100% - 25px);
     width: -moz-calc(100% - 25px);
@@ -638,7 +658,7 @@ input {
   box-shadow: 2px 2px 0px #cccccc; }
 
 .chosen, .changeTrack:active, .chooseTrack:active {
-  margin: 2px 3px 0 5px;
+  margin: 1px 3px 0 5px;
   outline: 2px solid #efefef;
   -moz-box-shadow: 0px 0px 0px #cccccc;
   -webkit-box-shadow: 0px 0px 0px #cccccc;

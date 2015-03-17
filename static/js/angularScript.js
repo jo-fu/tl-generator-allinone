@@ -304,6 +304,7 @@ app
 		function processInput(data){
         		//$scope.myfile = data;
 			$scope.files.push(data);
+			console.log(data)
 			dct = getDCT(data);
 			$scope.dcts.push(dct);
 			
@@ -335,7 +336,6 @@ app
 
 			// Adjust DOM
 			$("#button_"+docNr).css("background-color", "rgb("+colorDate[trackNr]+")")
-			
 			
 			setTimeout( function(){
 				var pT = $("#docSwitcher").height()

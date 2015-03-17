@@ -107,8 +107,8 @@ Case-Sensitive: True
 # 17
 
 Type: date
-Match: ((<late~.+>|<early~.+>|<the~.+><(beginning|start|dawn|middle|end)~.+><of~.+>)(<in~.+>)?)?(<the~.+>)?(<next~.+>|<last~.+>|<coming~.+>|<this~.+>(<(coming|past)~.+>)?)<(week|month|quarter|year|decade|century|spring|summer|winter|fall|autumn)~.+>
-Guard: (next|last|coming|this)
+Match: ((<late~.+>|<early~.+>|<$MONTHS~.+>|<$MONTH_ABBRS\.?~.+>|<the~.+><(beginning|start|dawn|middle|end)~.+><of~.+>)(<in~.+>)?)?(<the~.+>)?(<next~.+>|<last~.+>|<coming~.+>|<that~.+>|<this~.+>(<(coming|past)~.+>)?)<(week|month|quarter|year|decade|century|spring|summer|winter|fall|autumn)~.+>
+Guard: (next|last|coming|this|that)
 
 ---
 # 18
@@ -159,7 +159,7 @@ Match: (<this~.+>(<(coming|past)~.+>)?|<next~.+>|<last~.+>|<each~.+>|<every~.+>(
 # 25
 
 Type: date
-Match: <the~.+>((<early~.+>|<late~.+>|<(beginning|start|middle|end)~.+><of~.+><the~.+>))?(<\'~.+>)?\d0s|<\'\d0s~.+>|(<\w+teen~.+>)?<(twen|thir|for|fif|six|seven|eigh|nine)ties~.+>
+Match: <the~.+>((<early~.+>|<late~.+>|<(beginning|start|middle|end)~.+><of~.+><the~.+>))?(<\'~.+>)?\d0s|<\d0s~.+>|<\d\d\d0s~.+>|<\d0_APOSTROPHE_s~.+>|<\d\d\d0_APOSTROPHE_s~.+>|(<\w+teen~.+>)?<(twen|thir|for|fif|six|seven|eigh|nine)ties~.+>
 
 ---
 # 26
