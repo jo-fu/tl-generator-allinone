@@ -2,6 +2,8 @@ var scaleFactor;
 var itemHeight = 20;
 var puffer = 60;
 
+var sentTx = false;
+
 var numberTimexes = 0;
 var timexes = [];
 var currId, dct;
@@ -21,6 +23,7 @@ $(document).on('keyup keydown', function(e){
 
 function getDCT(file){ return file.match(/<DATE_TIME>([^<]*)<\/DATE_TIME>/)[1] }
 
+function setSentTx(id){ sentTx = id; }
 
 // Check Date Input
 function validate(event,el) {

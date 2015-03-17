@@ -70,9 +70,22 @@ app
 	}
 
       $scope.clickingSent = function(s){
-      	var d = $.grep($scope.timexes, function(tx){ return tx.sentNr == s });
-      	if($("#timeSent_"+s).hasClass("highlighted")){ $scope.gohome() }
-      	else{ $scope.makeSelection(s,d,"fromSent") }
+      	
+      	if(sentTx===false){
+      		if($("#timeSent_"+s).hasClass("highlighted")){ $scope.gohome() }
+      		else{
+      			var d = $.grep($scope.timexes, function(tx){ return tx.sentNr == s });
+      			$scope.makeSelection(s,d,"fromSent")
+      		}	
+      	}
+     		else{
+     			var d = [];
+     			d[0] = $scope.timexes[sentTx]
+     			$scope.makeSelection(s,d,"fromSent")
+     		}
+      	
+      	
+      	sentTx = false
       	}
 
       $scope.clickingCircle = function(d){
@@ -853,7 +866,7 @@ app.service('CreateArray', function(SplitSents){
 			var txSent = ""
 		  	for(var n = 0; n<nTimexes.length; n++){
 		  		if(n!=(nTimexes.length-1)){
-		  			var span = "<span id='tx_"+thisId+"' class='tx txSent_"+sentNr+"'>"
+		  			var span = "<span id='tx_"+thisId+"' onclick='setSentTx("+thisId+")' class='tx txSent_"+sentNr+"'>"
 		  			// Clicking on one ty-span triggers sentence click event as well - messes things up
 		  			//var span = "<span id='tx_"+thisId+"' onclick='angular.element(this).scope().clickingCircle("+thisId+"); event.stopPropagation()' class='tx txSent_"+sentNr+"'>"
 			            txSent += nTimexes[n].replace(/<TIMEX2([ ]*[^>]*)>/g , span)
@@ -993,6 +1006,7 @@ app.service('DateHandling', function(){
 		if(origin=="fromSent"){
 			var numberNewElement = d.length
 			$scope.currIndex = d[0].id;
+			
 			}
 		else{
 			var numberNewElement = 1
