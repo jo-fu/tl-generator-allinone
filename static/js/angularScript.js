@@ -304,7 +304,6 @@ app
 		function processInput(data){
         		//$scope.myfile = data;
 			$scope.files.push(data);
-			console.log(data)
 			dct = getDCT(data);
 			$scope.dcts.push(dct);
 			
