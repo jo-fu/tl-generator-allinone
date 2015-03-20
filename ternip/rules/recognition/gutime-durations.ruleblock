@@ -125,11 +125,12 @@ Match: <(\d\d\d\d)~.+><\-~.+><(\d\d)~.+>
 Deliminate-Numbers: True
 
 ---
-# 14 - NEW - get time spans that are xxxx - xxxx
+# 14 - NEW - get time spans that are xxxx - xx
 
 Type: duration
-Match: <(\d\d\d\d)(\-)(\d\d~.+)>
+Match: <(\d\d\d\d)(\-)(\d\d(\d\d)?~.+)>
 Deliminate-Numbers: True
+
 
 ---
 # 14 - NEW - get time spans that are xxxx to/until xxxx

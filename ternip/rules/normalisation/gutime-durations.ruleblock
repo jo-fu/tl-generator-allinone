@@ -77,5 +77,5 @@ Value: {#2} + 'TO' + {#4}
 
 Type: duration
 Deliminate-Numbers: false
-Match: <(\d\d\d\d)-?(\d\d)~.+>
+Match: <(\d\d\d\d)-?((\d\d)(\d\d)?)~.+>
 Value: {#1} + 'TO' + {#2}
