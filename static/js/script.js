@@ -21,6 +21,25 @@ $(document).on('keyup keydown', function(e){
   else{ $('#leftBox, #timeline').removeClass("nouserselect") }
   });
 
+$(document).ready( function(){ 
+  $(".ctlBtns")
+    .on("mouseover" , function(){ 
+      if($(this).attr("id") == "addDoc"){ var tt = "#addDocTooltip" }
+      else{ var tt = "#tooltipbox"}
+      showTooltip($(this),tt)
+    })
+    .on("mouseout" , function(){ $(".tt").css("display","none") })
+
+  //$("#addDoc").on("mouseover" , function(){ showTooltip($(this),"#tooltipbox") })
+})
+
+function showTooltip(t,tt){
+  $(tt)
+      .css({ "display": "block" , "top" : t.position().top + 5 })
+      .html(t.attr("title"))
+  if(t.attr("id")=="addDoc"){ $(tt).css("left" , t.offset().left - 5) }
+}
+
 function getDCT(file){ return file.match(/<DATE_TIME>([^<]*)<\/DATE_TIME>/)[1] }
 
 function setSentTx(id){ sentTx = id; }

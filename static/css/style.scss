@@ -58,7 +58,7 @@ html, body{
   td:nth-child(3){ width:40%}
 }
 
-#bottomBox{ position:relative; height: 50%; width: 100%; background-color:#f9f9f9; border-top: 1px solid #999; box-sizing: border-box;
+#bottomBox{ position:relative; height: 50%; width: 100%; background-color:#fff; border-top: 1px solid #999; box-sizing: border-box;
 
 
   #leftBox{ @include calc(height, "100% - 18px"); width:30%; float:left; overflow-y: auto; border-right: 1px solid #999; box-sizing: border-box; position:relative; }
@@ -121,11 +121,12 @@ html, body{
 // Center Box
 #centerBox{
   #startHere{ background-image:url(../img/start.png); height:114px; width:220px; margin:40px 0 0 5px; background-repeat:no-repeat; }
-
+  #addDocTooltip{ margin-left: 34px; z-index:1 }
    #docSwitcher{ z-index:10; height:auto; min-height:40px; position:absolute; max-width:29%;
     .docBtn{ padding: 2px 15px 2px 6px; margin: 0 5px 5px 0px; float:left; cursor:pointer; position:relative; color:#fff; font-weight:bold;
       @include shadow(); font-size:12px; max-width:170px; height:$btnsSize; overflow:hidden; line-height:$btnsSize }
     #addDoc{ float:left; margin: 2px 0 0 5px; }
+    
     .inactive{ font-size: 5px; background-color: #999 !important; color:#fff !important }
     .inactive .hideDoc{ background-image: url("../img/reload.png") !important; }
     .docBtn:active, .activeBtn{ padding: 0px 13px 0px 4px; margin:2px 3px 3px 2px; border:$activeBorder; @include noshadow(); }
@@ -134,7 +135,7 @@ html, body{
   #docText{ padding:40px 15px 15px;
     
     .txtData{ display:none;
-      .tx{ color: $highlightColor; font-weight: bold; }
+      .tx{ color: $highlightColor; }
     }
     .activetab{ display:block; }
   }
@@ -159,8 +160,14 @@ html, body{
   }
   .display{ height:100%; overflow-y:auto; box-sizing: border-box; @include calc(width, "100% - 35px"); padding:15px;
     #tracks{ margin-top:15px; 
-      .track{ @include shadow(); margin:5px 20px 5px 0; width:175px; padding:5px 10px; color:#fff; font-weight:bold; font-size:12px; }
-      input{ margin:3px 20px 2px 2px; width:180px; }
+      .track{ border-width:1px 1px 4px; border-style:solid; border-color:#ddd; @include shadow(); margin:5px 20px 5px 0; width:175px; padding:8px 10px 1px; font-weight:bold; font-size:12px; }
+      input{ margin:5px 20px 4px 2px; width:180px; }
+      .trackColor_0{ border-bottom-color:$doc0; color:$doc0 }
+      .trackColor_1{ border-bottom-color:$doc1; color:$doc1 }
+      .trackColor_2{ border-bottom-color:$doc2; color:$doc2 }
+      .trackColor_3{ border-bottom-color:$doc3; color:$doc3 }
+      .trackColor_4{ border-bottom-color:$doc4; color:$doc4 }
+      .trackColor_5{ border-bottom-color:$doc5; color:$doc5 }
     }
     .mediaBtn input{ @include calc(width, "100% - 25px"); margin: 12px;}
     .media { margin:10px; padding:5px;
@@ -192,7 +199,8 @@ html, body{
     background-color:#fff; background-position:center; cursor:pointer;
     @include shadow(); }
 .ctlBtns:active, .ctl:active{ @include noshadow(); margin: 2px 0px 0px 2px; }
-
+#tooltipbox,#addDocTooltip{ display:none; background-color:#333; color:#fff; position:absolute; padding:2px 5px; font-size:0.8em; }
+#tooltipbox{ right:35px;}
 #addDoc, #addDate{ background-image:url(../img/add.png); }
 
 
@@ -205,6 +213,7 @@ html, body{
 
 
   .highlighted{ background-color:#333; color:#fff; }
+  .activeTx{ color: $highlightColor; line-height:22px; font-size:1.5em; font-weight:bold; }
   .timex{ cursor:pointer; }
   
   #listData{
@@ -237,7 +246,7 @@ html, body{
   h1, .datetitle{ font-size: 18px; }
   h2{ font-size: 15px; color:#333; }
 
-  .hltx{ color: #fff; background-color:#333; font-weight:bold; }
+  .hltx{ color: #fff; background-color:#333; }
   p, .content{ font-size: 12px; font-weight:normal; }
   .label{ font-size:0.8em; color:#999; font-weight:bold; }
   input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
@@ -275,7 +284,7 @@ html, body{
 
 .chooseTrack, .changeTrack{ float:left; margin:0 5px 2px 3px; padding: 2px 9px; font-size: 0.8em; font-weight:bold; color:#fff; @include shadow(); }
 .chosen, .changeTrack:active, .chooseTrack:active{
-  margin:2px 3px 0 5px; outline:2px solid #efefef; @include noshadow(); border:$activeBorder; padding: 0px 7px;
+  margin:1px 3px 0 5px; outline:2px solid #efefef; @include noshadow(); border:$activeBorder; padding: 0px 7px;
 }
 
 

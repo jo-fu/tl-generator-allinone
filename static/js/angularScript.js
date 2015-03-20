@@ -4,7 +4,7 @@ app
 .controller('MainCtrl', function($scope, $http, $sce, CreateArray, CreateTimeline, DateHandling, DateExporting) {
 	
 	$scope.docNr = -1;
-	$scope.orderByVal = "val"
+	$scope.orderByVal = "id"
 	$scope.orderReverse = false
 	$scope.editTrack = [false,false,false,false,false,false];
 	$scope.tlDescr = ["TimeLineCurator", "Insert a short description for your timeline here"]
