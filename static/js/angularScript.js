@@ -9,6 +9,15 @@ app
 	$scope.editTrack = [false,false,false,false,false,false];
 	$scope.tlDescr = ["TimeLineCurator", "Insert a short description for your timeline here"]
 	$scope.tempFiles = ["iceland", "journalism", "nasa", "newspapers", "ubc"]
+	
+	$scope.sortBy = [
+		{ title : "Order inside document" , val : "id" },
+		{ title : "Chronology of dates" , val : "val" },
+		{ title : "Type of event" , val : "typ"},
+		{ title : "State of curation" , val : "touched"},
+		{ title : "Document" , val : "document" },
+		{ title : "Track" , val : "trackNr" }
+	]
 	$scope.fileNames = []
 	$scope.trackNames = ["1","2","3","4","5","6"]
 
@@ -335,11 +344,11 @@ app
 
 			// Adjust DOM
 			$("#button_"+docNr).css("background-color", "rgb("+colorDate[trackNr]+")")
-			
-			setTimeout( function(){
+			$scope.switchView(docNr)
+			/*setTimeout( function(){
 				var pT = $("#docSwitcher").height()
 				$("#centerBox #docText").css("padding-top", pT )
-			} , 500 )
+			} , 500 )*/
 
 			// Increase TrackNr for next document
 			if(trackNr<6) trackNr++
@@ -1252,11 +1261,21 @@ app.service('DateHandling', function(){
 
 	this.switchView = function(v){
 
-	$(".txtData").removeClass("activetab")
-	$(".docBtn").removeClass("activeBtn")
-	$("#button_"+v).addClass("activeBtn")
-	$("#txtData_"+v).addClass("activetab")
-
+	if($("#button_"+v).hasClass("activeBtn")){
+		if($("#docSwitcher").css("overflow") == "visible"){
+			$("#docSwitcher").css("overflow" , "hidden" )
+		}
+		else{ $("#docSwitcher").css("overflow", "visible") }
+	}
+	else{
+		$(".txtData").removeClass("activetab")
+		$(".docBtn").removeClass("activeBtn")
+		$("#button_"+v).addClass("activeBtn")
+		$("#txtData_"+v).addClass("activetab")
+		$("#docList").animate({ "top" : (v*27*(-1)) }, 200)
+		$("#docSwitcher").css("overflow" , "hidden" )
+	}
+		
 	}
 
 	this.hideDoc = function(v,tx){

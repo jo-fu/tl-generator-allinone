@@ -39,13 +39,15 @@ html, body {
   #descriptionBox td {
     text-align: center;
     font-size: 12px;
-    color: #666; }
+    color: #666;
+    border-right: 1px solid #999; }
   #descriptionBox td:nth-child(1) {
     width: 30%; }
   #descriptionBox td:nth-child(2) {
     width: 30%; }
   #descriptionBox td:nth-child(3) {
-    width: 40%; }
+    width: 40%;
+    border-width: 0px; }
 
 #bottomBox {
   position: relative;
@@ -112,25 +114,17 @@ html, body {
     text-align: right; }
 
 #leftBox #tablehead {
+  font-size: 0.8em;
+  line-height: 25px;
   width: 100%;
+  height: 25px;
+  padding-left: 10px;
   position: fixed;
   background-color: #fff;
   border-bottom: 2px solid #333;
   width: 30%;
   z-index: 1;
   box-shadow: 0px 1px 2px #999; }
-  #leftBox #tablehead td:nth-child(1) {
-    min-width: 50px; }
-  #leftBox #tablehead td:nth-child(2) {
-    min-width: 100px; }
-  #leftBox #tablehead td {
-    text-align: left;
-    padding: 2px;
-    font-size: 0.7em; }
-    #leftBox #tablehead td .order {
-      cursor: pointer; }
-    #leftBox #tablehead td .order:hover {
-      color: #666; }
 #leftBox #listData {
   position: relative;
   height: -webkit-calc(100% - 30px);
@@ -237,49 +231,73 @@ html, body {
   margin-left: 34px;
   z-index: 1; }
 #centerBox #docSwitcher {
-  z-index: 10;
-  height: auto;
-  min-height: 40px;
-  position: absolute;
-  max-width: 29%; }
+  overflow: hidden;
+  width: 30%;
+  height: 25px;
+  position: fixed;
+  background-color: #fff;
+  border-bottom: 2px solid #333;
+  z-index: 1;
+  box-shadow: 0px 1px 2px #999; }
+  #centerBox #docSwitcher ul {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 30px;
+    width: -webkit-calc(100% - 30px);
+    width: -moz-calc(100% - 30px);
+    width: calc(100% - 30px); }
   #centerBox #docSwitcher .docBtn {
-    padding: 2px 15px 2px 6px;
-    margin: 0 5px 5px 0px;
-    float: left;
-    cursor: pointer;
     position: relative;
+    cursor: pointer;
     color: #fff;
     font-weight: bold;
-    -moz-box-shadow: 2px 2px 0px #cccccc;
-    -webkit-box-shadow: 2px 2px 0px #cccccc;
-    box-shadow: 2px 2px 0px #cccccc;
     font-size: 12px;
-    max-width: 170px;
     height: 25px;
-    overflow: hidden;
-    line-height: 25px; }
+    line-height: 25px;
+    margin: 0 0 2px 0px;
+    padding: 0 10px;
+    overflow: hidden; }
+  #centerBox #docSwitcher .docBtn:hover {
+    opacity: 0.9; }
   #centerBox #docSwitcher #addDoc {
     float: left;
-    margin: 2px 0 0 5px; }
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    margin: 0 2px; }
+  #centerBox #docSwitcher .doctitle {
+    width: -webkit-calc(100% - 30px);
+    width: -moz-calc(100% - 30px);
+    width: calc(100% - 30px); }
+  #centerBox #docSwitcher .doctools {
+    position: absolute;
+    width: 25px;
+    right: 0;
+    top: 0;
+    height: 25px;
+    text-align: right;
+    font-size: 0.7em;
+    font-weight: normal;
+    padding: 6px 2px 2px 0;
+    background-color: #fff;
+    color: #333; }
   #centerBox #docSwitcher .inactive {
-    font-size: 5px;
+    font-size: 0.7em;
     background-color: #999 !important;
-    color: white !important; }
+    color: #fff !important;
+    font-weight: normal;
+    font-style: italic; }
   #centerBox #docSwitcher .inactive .hideDoc {
     background-image: url("../img/reload.png") !important; }
   #centerBox #docSwitcher .docBtn:active, #centerBox #docSwitcher .activeBtn {
-    padding: 0px 13px 0px 4px;
-    margin: 2px 3px 3px 2px;
-    border: 2px inset #999999;
-    -moz-box-shadow: 0px 0px 0px #cccccc;
-    -webkit-box-shadow: 0px 0px 0px #cccccc;
-    box-shadow: 0px 0px 0px #cccccc; }
+    display: block; }
   #centerBox #docSwitcher .hideDoc {
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
     position: absolute;
-    top: 3px;
-    right: 2px;
+    top: 0;
+    right: 0;
     background-image: url("../img/delete.png");
     background-size: 100%; }
 #centerBox #docText {
@@ -291,6 +309,25 @@ html, body {
   #centerBox #docText .activetab {
     display: block; }
 
+#rightBox ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer; }
+#rightBox li {
+  background-color: #fff;
+  margin: 2px 0;
+  padding: 2px 10px;
+  -moz-box-shadow: 2px 2px 0px #cccccc;
+  -webkit-box-shadow: 2px 2px 0px #cccccc;
+  box-shadow: 2px 2px 0px #cccccc; }
+#rightBox li:hover {
+  background-color: #efefef; }
+#rightBox li:active {
+  -moz-box-shadow: 0px 0px 0px #cccccc;
+  -webkit-box-shadow: 0px 0px 0px #cccccc;
+  box-shadow: 0px 0px 0px #cccccc;
+  margin: 4px 0 0 2px; }
 #rightBox #toolBox {
   position: absolute;
   right: 0;
@@ -462,11 +499,12 @@ html, body {
   -webkit-box-shadow: 2px 2px 0px #cccccc;
   box-shadow: 2px 2px 0px #cccccc; }
 
-.ctlBtns:active, .ctl:active {
+.ctlBtns:active, .ctl:active, .home {
   -moz-box-shadow: 0px 0px 0px #cccccc;
   -webkit-box-shadow: 0px 0px 0px #cccccc;
   box-shadow: 0px 0px 0px #cccccc;
-  margin: 2px 0px 0px 2px; }
+  margin: 4px 0px 4px 2px;
+  background-color: #eee; }
 
 #tooltipbox, #addDocTooltip {
   display: none;
@@ -536,29 +574,6 @@ html, body {
   top: 40px;
   left: 11px;
   z-index: 1; }
-
-ul {
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px;
-  cursor: pointer; }
-
-li {
-  background-color: #fff;
-  margin: 2px 0;
-  padding: 2px 10px;
-  -moz-box-shadow: 2px 2px 0px #cccccc;
-  -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc; }
-
-li:hover {
-  background-color: #efefef; }
-
-li:active {
-  -moz-box-shadow: 0px 0px 0px #cccccc;
-  -webkit-box-shadow: 0px 0px 0px #cccccc;
-  box-shadow: 0px 0px 0px #cccccc;
-  margin: 4px 0 0 2px; }
 
 h1, .datetitle {
   font-size: 18px; }

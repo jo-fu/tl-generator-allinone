@@ -21,7 +21,7 @@
 
   <!--script src="{{ url_for('static', filename='js/help.js')}}"></script-->
   
-  <title>TimeLineCurator v0.2</title>
+  <title>TimeLineCurator v0.3</title>
 
 </head>
 
@@ -62,17 +62,23 @@
 
 <!-- List Viewer -->
       <div id="tablehead">
-          <table><tr>
-            <td>
-              <span class="order" title="Sort by type" ng-click="orderByVal='typ';orderReverse=!orderReverse">&#9679;</span>
-              <span class="order" title="Sort by status" ng-click="orderByVal='touched';orderReverse=!orderReverse">&#9680;</span>
-              <span class="order" title="Sort by document" ng-click="orderByVal='docNr';orderReverse=!orderReverse">&#9636;</span>
-              <span class="order" title="Sort by track number" ng-click="orderByVal='trackNr';orderReverse=!orderReverse">&#9776;</span>
+          <!--table><tr>
+            <td-->
+
+              Sort list by:
+              <select
+                ng-model="sortval"
+                ng-change="orderByVal=sortval;"
+                ng-options="item.val as item.title for item in sortBy"
+                ng-init="sortval=sortBy[0].val">
+              </select>
+              <span ng-click="orderReverse=!orderReverse">
+                <span ng-if="orderReverse">&#9650;</span>
+                <span ng-if="!orderReverse">&#9660;</span>
+                </span>
+
               
-            </td>
-            <td><span class="order" ng-click="orderByVal='val';orderReverse=!orderReverse">Date &#9660;</span></td>
-            <td><span class="order" ng-click="orderByVal='sub';orderReverse=!orderReverse">Title &#9660;</span></td>
-          </tr></table>
+             
         </div>
 
       <div id="listData">
@@ -94,15 +100,24 @@
 <div id="centerBox">
 
     <div id="docSwitcher">
-      <div ng-repeat="file in fileNames track by $index" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{ $index }}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[file.trackNr] }} )">
-        {{ file.title }}
-        <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
-      </div>
-      <div id="addDoc" class="ctlBtns" title="Add a new document" onclick="openInput()"></div>
-      <div ng-hide="singleSents.length" id="startHere"></div>
+      
+      <div id="addDoc" class="" title="Add a new document" onclick="openInput()"></div>
+
+      <ul id="docList">
+        <li ng-repeat="file in fileNames track by $index" ng-click="switchView( $index )" id="button_{{ $index }}" class="docBtn docBtn_{{ $index }}" ng-class="{ activeBtn: $index == docNr }" style="background-color : rgb( {{ colorDate[file.trackNr] }} )">
+          <div class="doctitle"> {{ file.title }} </div>
+          <div class="doctools"> 
+            <b>{{ $index+1 }}</b>/{{ fileNames.length }}
+            <div class="hideDoc" id="hideDoc_{{$index}}" ng-click="hideDoc( $index )"></div>
+          </div>
+          
+        </li>
+      </ul>
+      
+      
       <!--div id="button_list" class="docBtn" ng-click="switchView( 'list' )" style="background-color:#efefef;">List View</div-->
     </div>
-
+    <div ng-hide="singleSents.length" id="startHere"></div>
     <div id="addDocTooltip" class="tt">Add a new document</div>
 
     <div id="docText">
@@ -133,7 +148,7 @@
   <div id="toolBox" ng-click="editDate=false">
 
 
-    <div id="gohome" class="ctlBtns toolBoxBtn" title="Show timeline description" ng-click="gohome()"></div>
+    <div id="gohome" class="ctlBtns toolBoxBtn" ng-class="{ home: !dateSelected}" title="Show timeline description" ng-click="gohome()"></div>
 
     <!-- Export to Timeline js -->
     <div id="exportState" class="ctlBtns toolBoxBtn" title="Export the Timeline" ng-click="uploadData=false;downloadData=false;exportData=!exportData">
