@@ -12,11 +12,11 @@ app
 	
 	$scope.sortBy = [
 		{ title : "Order inside document" , val : "id" },
-		{ title : "Chronology of dates" , val : "val" },
+		{ title : "All dates chronologically" , val : "val" },
 		{ title : "Type of event" , val : "typ"},
 		{ title : "State of curation" , val : "touched"},
-		{ title : "Document" , val : "document" },
-		{ title : "Track" , val : "trackNr" }
+		{ title : "Single documents" , val : "document" },
+		{ title : "Single tracks" , val : "trackNr" }
 	]
 	$scope.fileNames = []
 	$scope.trackNames = ["1","2","3","4","5","6"]

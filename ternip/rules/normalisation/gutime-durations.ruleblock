@@ -48,7 +48,7 @@ Value: 'P' + build_duration_value('X', {#2})
 Type: duration
 Deliminate-Numbers: false
 Match: <(\d\d?)\.?~.+><($MONTHS|$MONTH_ABBRS)~.+><(\d\d\d?\d?)~.+>(<to~.+>|<until~.+>|<till~.+>|<\-~.+>)<(\d\d?)\.?~.+><($MONTHS|$MONTH_ABBRS)~.+><(\d\d\d?\d?)~.+>
-Value: "%4d%02d%02d" % (int(normalise_two_digit_year({#5})), month_to_num({#3}), ordinal_to_num({#1})) + "TO" + "%4d%02d%02d" % (int(normalise_two_digit_year({#5}))+10, month_to_num({#9}), ordinal_to_num({#7})) 
+Value: "%4d%02d%02d" % (int(normalise_two_digit_year({#5})), month_to_num({#3}), ordinal_to_num({#1})) + "TO" + "%4d%02d%02d" % (int(normalise_two_digit_year({#11})), month_to_num({#9}), ordinal_to_num({#7})) 
 
 ---
 

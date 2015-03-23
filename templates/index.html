@@ -72,7 +72,7 @@
                 ng-options="item.val as item.title for item in sortBy"
                 ng-init="sortval=sortBy[0].val">
               </select>
-              <span ng-click="orderReverse=!orderReverse">
+              <span style="cursor:pointer;" ng-click="orderReverse=!orderReverse">
                 <span ng-if="orderReverse">&#9650;</span>
                 <span ng-if="!orderReverse">&#9660;</span>
                 </span>
