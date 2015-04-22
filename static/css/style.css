@@ -380,7 +380,7 @@ html, body {
   width: -webkit-calc(100% - 35px);
   width: -moz-calc(100% - 35px);
   width: calc(100% - 35px);
-  padding: 15px; }
+  padding: 10px; }
   #rightBox .display #tracks {
     margin-top: 15px; }
     #rightBox .display #tracks .track {
@@ -390,9 +390,9 @@ html, body {
       -moz-box-shadow: 2px 2px 0px #cccccc;
       -webkit-box-shadow: 2px 2px 0px #cccccc;
       box-shadow: 2px 2px 0px #cccccc;
-      margin: 5px 20px 5px 0;
+      margin: 4px 20px 4px 0;
       width: 175px;
-      padding: 8px 10px 1px;
+      padding: 2px 10px 2px;
       font-weight: bold;
       font-size: 12px; }
     #rightBox .display #tracks input {
@@ -479,12 +479,14 @@ html, body {
     background-position: right; }
 
 .ctl {
-  padding: 5px 10px;
+  padding: 1px 10px;
+  border: 1px solid #ccc;
   background-color: #fff;
   cursor: pointer;
   -moz-box-shadow: 2px 2px 0px #cccccc;
   -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc; }
+  box-shadow: 2px 2px 0px #cccccc;
+  background-color: #fafafa; }
 
 .ctlBtns {
   width: 25px;
@@ -588,7 +590,9 @@ h2 {
 
 p, .content {
   font-size: 12px;
-  font-weight: normal; }
+  font-weight: normal;
+  padding: 2px 5px;
+  margin: 0; }
 
 .label {
   font-size: 0.8em;
@@ -628,10 +632,10 @@ input {
 
 #displaySubtitle input {
   font-size: 14px;
-  margin: 15px 0; }
+  margin: 1px 0 2px 0; }
 #displaySubtitle div, #displaySubtitle textarea {
   font-size: 18px;
-  margin: 15px 0;
+  margin: 0 0 5px;
   width: -webkit-calc(100% - 100px);
   width: -moz-calc(100% - 100px);
   width: calc(100% - 100px); }

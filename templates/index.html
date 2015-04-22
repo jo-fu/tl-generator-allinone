@@ -68,7 +68,7 @@
               Sort list by:
               <select
                 ng-model="sortval"
-                ng-change="orderByVal=sortval;"
+                ng-change="orderByVal=sortval"
                 ng-options="item.val as item.title for item in sortBy"
                 ng-init="sortval=sortBy[0].val">
               </select>
@@ -83,7 +83,7 @@
 
       <div id="listData">
           <table>
-          <tr ng-repeat="tx in timexes | orderBy: orderByVal : orderReverse" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
+          <tr ng-repeat="tx in timexes | orderBy: orderByVal track by tx.id" class="listEl doc_{{tx.docNr}}" ng-click="clickList(tx)" id="listEl_{{tx.id}}" ng-class="{ deleted: !tx.visible }">
             <td><span class="bgColor_{{ tx.trackNr }} symbol_{{ tx.typ }}" ng-class="{ untouched: !tx.touched }">
               <p ng-if="tx.touched"> &#10003; </p>
             </span></td>
@@ -195,8 +195,8 @@
 
     <!-- Editable TL Title -->
     <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
-      <input ng-switch-when="true" onkeypress='validate(event,this)' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
-      <div ng-switch-default ng-click="enableEdit('d')"><span class="ctl">{{ tlDescr[0] }}</span></div>
+      <input style="margin-bottom:10px;" ng-switch-when="true" onkeypress='validate(event,this)' ng-model="$parent.tlDescr[0]" unfocus="disableEdit('d')"></input>
+      <div style="margin-bottom:10px;" ng-switch-default ng-click="enableEdit('d')"><span class="ctl">{{ tlDescr[0] }}</span></div>
     </ng-switch>
 
     <!-- Editable Content -->
@@ -248,7 +248,7 @@
     <!-- Single dates information -->
     <div class="display" ng-show="dateSelected && timexes[currIndex].visible">
       
-     <div style="margin-bottom:25px;">
+     <div style="margin-bottom:10px;">
       <!-- Editable Date -->
       <ng-switch on="editDate" id="displayDate" class="editorfield">
         <span class="label">Date:</span>
@@ -300,7 +300,7 @@
       </ng-switch>
     </div>
 
-      <div style="margin-bottom:25px;">
+      <div style="margin-bottom:10px;">
         <!-- Editable Subtitle -->
         <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
           <span class="label">Title:<br></span>
@@ -317,7 +317,7 @@
           <!-- Edit Mode -->
           <span class="label">Content:<br></span>
 
-          <textarea rows="15" cols="44" ng-switch-when="true" ng-model="$parent.dateInfo[0].sent" unfocus="disableEdit('c')"></textarea>
+          <textarea style="width:100%; height:40px;" ng-switch-when="true" ng-model="$parent.dateInfo[0].sent" unfocus="disableEdit('c')"></textarea>
           <!-- Preview Mode -->
           <div class="content ctl" ng-switch-default ng-click="enableEdit('c')">
             <p ng-bind-html="highlightTimex(dateInfo[0].sent, dateInfo[0].timex)"></p>

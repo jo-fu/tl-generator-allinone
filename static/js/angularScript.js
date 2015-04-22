@@ -560,10 +560,12 @@ this.scrollToSent = function(thisid,sent,thisDocNr,view){
     	$("#listData").animate({ scrollTop: topListPos }, 300);
 
 	// Text View
-  	var thisTextEl = "#timeSent_"+sent
-    	var topTextPos = $("#centerBox").scrollTop() + $(thisTextEl).position().top
-    		- $("#centerBox").height()/2 + $(thisTextEl).height()/2;
-    	$("#centerBox").animate({ scrollTop: topTextPos }, 300);
+	if(thisDocNr!=-1){
+	  	var thisTextEl = "#timeSent_"+sent
+	    	var topTextPos = $("#centerBox").scrollTop() + $(thisTextEl).position().top
+	    		- $("#centerBox").height()/2 + $(thisTextEl).height()/2;
+	    	$("#centerBox").animate({ scrollTop: topTextPos }, 300);
+    	}
   }
 
 this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
@@ -1068,9 +1070,13 @@ app.service('DateHandling', function(){
       		//Highlight corresponding timex
       		$(".tx").removeClass("activeTx")
       		$("#tx_"+$scope.currIndex).addClass("activeTx")
+
       	}
       	// if manually added Date
-      	else{ if(!shifted) $(".timex").removeClass("highlighted"); }
+      	else{
+			$scope.scrollToSent(newDate.currId,false,-1)
+      		if(!shifted) $(".timex").removeClass("highlighted");
+      	}
 
          // Highlighting List
 		$(".listEl").removeClass("highlighted")
