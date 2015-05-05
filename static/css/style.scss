@@ -163,9 +163,9 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
     #mergeDates{ background-image:url(../img/merge.png); }
     #deleteAll{ background-image:url(../img/deleteAll.png); }
   }
-  .display{ height:100%; overflow-y:auto; box-sizing: border-box; @include calc(width, "100% - 35px"); padding:15px;
+  .display{ height:100%; overflow-y:auto; box-sizing: border-box; @include calc(width, "100% - 35px"); padding:10px;
     #tracks{ margin-top:15px; 
-      .track{ border-width:1px 1px 4px; border-style:solid; border-color:#ddd; @include shadow(); margin:5px 20px 5px 0; width:175px; padding:8px 10px 1px; font-weight:bold; font-size:12px; }
+      .track{ border-width:1px 1px 4px; border-style:solid; border-color:#ddd; @include shadow(); margin:4px 20px 4px 0; width:175px; padding:2px 10px 2px; font-weight:bold; font-size:12px; }
       input{ margin:5px 20px 4px 2px; width:180px; }
       .trackColor_0{ border-bottom-color:$doc0; color:$doc0 }
       .trackColor_1{ border-bottom-color:$doc1; color:$doc1 }
@@ -199,7 +199,7 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
 }
 
 // BUTTON STYLE
-.ctl{ padding:5px 10px; background-color:#fff; cursor:pointer; @include shadow();}
+.ctl{ padding:1px 10px; border:1px solid #ccc; background-color:#fff; cursor:pointer; @include shadow(); background-color:#fafafa; }
 .ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 8px 0 0; border:1px solid #efefef; background-repeat:no-repeat;
     background-color:#fff; background-position:center; cursor:pointer;
     @include shadow(); }
@@ -250,7 +250,7 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   h2{ font-size: 15px; color:#333; }
 
   .hltx{ color: #fff; background-color:#333; }
-  p, .content{ font-size: 12px; font-weight:normal; }
+  p, .content{ font-size: 12px; font-weight:normal; padding:2px 5px; margin:0; }
   .label{ font-size:0.8em; color:#999; font-weight:bold; }
   input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
 
@@ -263,8 +263,8 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   #check{ background-image:url(../img/check.png); margin:2px 5px; padding:1px 13px; }
   #dateEditMode{ }
   #displaySubtitle{
-    input{ font-size: 14px; margin: 15px 0; }
-    div, textarea{ font-size:18px; margin: 15px 0; @include calc(width, "100% - 100px"); }
+    input{ font-size: 14px; margin: 1px 0 2px 0; }
+    div, textarea{ font-size:18px; margin: 0 0 5px; @include calc(width, "100% - 100px"); }
   }
 
   #recoverElement{ position:absolute; text-align:left; bottom:10px; left:10px; font-size:10px; }

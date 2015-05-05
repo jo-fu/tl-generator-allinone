@@ -318,15 +318,15 @@ html, body {
   background-color: #fff;
   margin: 2px 0;
   padding: 2px 10px;
-  -moz-box-shadow: 2px 2px 0px #cccccc;
-  -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc; }
+  -moz-box-shadow: 2px 2px 0px #ccc;
+  -webkit-box-shadow: 2px 2px 0px #ccc;
+  box-shadow: 2px 2px 0px #ccc; }
 #rightBox li:hover {
   background-color: #efefef; }
 #rightBox li:active {
-  -moz-box-shadow: 0px 0px 0px #cccccc;
-  -webkit-box-shadow: 0px 0px 0px #cccccc;
-  box-shadow: 0px 0px 0px #cccccc;
+  -moz-box-shadow: 0px 0px 0px #ccc;
+  -webkit-box-shadow: 0px 0px 0px #ccc;
+  box-shadow: 0px 0px 0px #ccc;
   margin: 4px 0 0 2px; }
 #rightBox #toolBox {
   position: absolute;
@@ -387,9 +387,9 @@ html, body {
       border-width: 1px 1px 4px;
       border-style: solid;
       border-color: #ddd;
-      -moz-box-shadow: 2px 2px 0px #cccccc;
-      -webkit-box-shadow: 2px 2px 0px #cccccc;
-      box-shadow: 2px 2px 0px #cccccc;
+      -moz-box-shadow: 2px 2px 0px #ccc;
+      -webkit-box-shadow: 2px 2px 0px #ccc;
+      box-shadow: 2px 2px 0px #ccc;
       margin: 4px 20px 4px 0;
       width: 175px;
       padding: 2px 10px 2px;
@@ -439,14 +439,14 @@ html, body {
       font-size: 0.7em;
       padding: 3px 8px;
       color: #333;
-      -moz-box-shadow: 2px 2px 0px #cccccc;
-      -webkit-box-shadow: 2px 2px 0px #cccccc;
-      box-shadow: 2px 2px 0px #cccccc;
+      -moz-box-shadow: 2px 2px 0px #ccc;
+      -webkit-box-shadow: 2px 2px 0px #ccc;
+      box-shadow: 2px 2px 0px #ccc;
       float: left; }
     #rightBox .display #addMedia #addMediaBtn:active {
-      -moz-box-shadow: 0px 0px 0px #cccccc;
-      -webkit-box-shadow: 0px 0px 0px #cccccc;
-      box-shadow: 0px 0px 0px #cccccc; }
+      -moz-box-shadow: 0px 0px 0px #ccc;
+      -webkit-box-shadow: 0px 0px 0px #ccc;
+      box-shadow: 0px 0px 0px #ccc; }
     #rightBox .display #addMedia #mediaIndicator {
       width: 25px;
       height: 25px;
@@ -483,9 +483,9 @@ html, body {
   border: 1px solid #ccc;
   background-color: #fff;
   cursor: pointer;
-  -moz-box-shadow: 2px 2px 0px #cccccc;
-  -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc;
+  -moz-box-shadow: 2px 2px 0px #ccc;
+  -webkit-box-shadow: 2px 2px 0px #ccc;
+  box-shadow: 2px 2px 0px #ccc;
   background-color: #fafafa; }
 
 .ctlBtns {
@@ -497,14 +497,14 @@ html, body {
   background-color: #fff;
   background-position: center;
   cursor: pointer;
-  -moz-box-shadow: 2px 2px 0px #cccccc;
-  -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc; }
+  -moz-box-shadow: 2px 2px 0px #ccc;
+  -webkit-box-shadow: 2px 2px 0px #ccc;
+  box-shadow: 2px 2px 0px #ccc; }
 
 .ctlBtns:active, .ctl:active, .home {
-  -moz-box-shadow: 0px 0px 0px #cccccc;
-  -webkit-box-shadow: 0px 0px 0px #cccccc;
-  box-shadow: 0px 0px 0px #cccccc;
+  -moz-box-shadow: 0px 0px 0px #ccc;
+  -webkit-box-shadow: 0px 0px 0px #ccc;
+  box-shadow: 0px 0px 0px #ccc;
   margin: 4px 0px 4px 2px;
   background-color: #eee; }
 
@@ -686,17 +686,17 @@ input {
   font-size: 0.8em;
   font-weight: bold;
   color: #fff;
-  -moz-box-shadow: 2px 2px 0px #cccccc;
-  -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc; }
+  -moz-box-shadow: 2px 2px 0px #ccc;
+  -webkit-box-shadow: 2px 2px 0px #ccc;
+  box-shadow: 2px 2px 0px #ccc; }
 
 .chosen, .changeTrack:active, .chooseTrack:active {
   margin: 1px 3px 0 5px;
   outline: 2px solid #efefef;
-  -moz-box-shadow: 0px 0px 0px #cccccc;
-  -webkit-box-shadow: 0px 0px 0px #cccccc;
-  box-shadow: 0px 0px 0px #cccccc;
-  border: 2px inset #999999;
+  -moz-box-shadow: 0px 0px 0px #ccc;
+  -webkit-box-shadow: 0px 0px 0px #ccc;
+  box-shadow: 0px 0px 0px #ccc;
+  border: 2px inset #999;
   padding: 0px 7px; }
 
 #fileinfo {
@@ -818,13 +818,13 @@ input {
     text-align: center;
     height: 30px;
     line-height: 30px;
-    -moz-box-shadow: 2px 2px 0px #cccccc;
-    -webkit-box-shadow: 2px 2px 0px #cccccc;
-    box-shadow: 2px 2px 0px #cccccc; }
+    -moz-box-shadow: 2px 2px 0px #ccc;
+    -webkit-box-shadow: 2px 2px 0px #ccc;
+    box-shadow: 2px 2px 0px #ccc; }
   #inputOverlay .btn:active {
-    -moz-box-shadow: 0px 0px 0px #cccccc;
-    -webkit-box-shadow: 0px 0px 0px #cccccc;
-    box-shadow: 0px 0px 0px #cccccc;
+    -moz-box-shadow: 0px 0px 0px #ccc;
+    -webkit-box-shadow: 0px 0px 0px #ccc;
+    box-shadow: 0px 0px 0px #ccc;
     margin: 2px 0px 0px 2px; }
 
 .loading {
@@ -879,13 +879,15 @@ input {
   margin: 0px;
   border-radius: 50%;
   padding: 1px 7px;
-  -moz-box-shadow: 2px 2px 0px #cccccc;
-  -webkit-box-shadow: 2px 2px 0px #cccccc;
-  box-shadow: 2px 2px 0px #cccccc;
+  -moz-box-shadow: 2px 2px 0px #ccc;
+  -webkit-box-shadow: 2px 2px 0px #ccc;
+  box-shadow: 2px 2px 0px #ccc;
   text-align: center; }
 
 .help:active {
-  -moz-box-shadow: 0px 0px 0px #cccccc;
-  -webkit-box-shadow: 0px 0px 0px #cccccc;
-  box-shadow: 0px 0px 0px #cccccc;
+  -moz-box-shadow: 0px 0px 0px #ccc;
+  -webkit-box-shadow: 0px 0px 0px #ccc;
+  box-shadow: 0px 0px 0px #ccc;
   margin: 2px; }
+
+/*# sourceMappingURL=style.css.map */

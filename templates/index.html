@@ -13,13 +13,12 @@
 
   <script src="{{ url_for('static', filename='js/lib/angular.js')}}"></script>
   <script src="{{ url_for('static', filename='js/dataWrangling.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/domScript.js')}}"></script>
   <script src="{{ url_for('static', filename='js/setupTLels.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/downloadFctns.js')}}"></script>
   <script src="{{ url_for('static', filename='js/angularScript.js')}}"></script>
   
   <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jszip.min.js')}}"></script>
-
-  <!--script src="{{ url_for('static', filename='js/help.js')}}"></script-->
   
   <title>TimeLineCurator v0.3</title>
 
@@ -183,7 +182,7 @@
 
     <div id="mergeDates" class="ctlBtns toolBoxBtn" ng-if="severalSelected" title="Merge these dates" ng-click="mergeDates()"></div>
 
-    <div id="deleteAll" class="ctlBtns toolBoxBtn" ng-if="severalSelected" title="Delete these dates" ng-click="deleteDate('all')"></div>
+    <div id="deleteAll" class="ctlBtns toolBoxBtn" ng-if="severalSelected" title="Delete these dates" ng-click="deleteDate()"></div>
 
   </div>
   <div id="tooltipbox" class="tt">Show timeline description</div>

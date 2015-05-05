@@ -6,9 +6,8 @@ function preprocessing(){
   dct = $('#inputOverlay input[name="date"]').val();
   if(!dct){ today = getToday(); dct = today; }
 
-
   var content = cleanUpInput($('#inputOverlay textarea[name="content"]').val())
-  //console.log(content.length)
+
   if(content.length==0){
     alert("You have to enter some text, otherwise we can't find any temporal expressions. If you don't have one handy, choose one from the example files below.");
     var jsonout = ""
@@ -71,9 +70,8 @@ function checkIfDate(val){
 function checkyIndizes(d,scaleFactor){
   
   var orderedD = orderArray(d)
-  //var prevX = orderedD[0].times[0].starting_time * scaleFactor-1;
   var newyIndex = 1;
-  //var prevType = orderedD[0].typ
+
   // Array that keeps track of occupation of one track
   var trackArray = [-1000000]
 
@@ -82,7 +80,6 @@ function checkyIndizes(d,scaleFactor){
     if(isDate && tx.visible){
       var newX = tx.times[0].starting_time * scaleFactor;
       // Occupy track with size of item + 2px Puffer
-      //console.log(trackArray)
       newyIndex = 1
       for(var i=0; i<trackArray.length; i++){
 
@@ -103,15 +100,13 @@ function checkyIndizes(d,scaleFactor){
             else{ trackArray.push((tx.times[0].ending_time * scaleFactor) + itemHeight + 2); }
             
             break;
-          }
-        
+        }
       }
     }
   })
 
   var newArray = orderArrayByIndex(orderedD)
   return newArray
-
 }
 
 function checkDuplicates(t){
@@ -156,7 +151,6 @@ function checkDateLength(d){
   else if(l==6){ date = new Date(d.substr(0,4) , d.substr(4,2)-1).getTime() }
   else if(l==4){ date = new Date(d).getTime() }
   
-  //return [date,modality]
   return date
 }
 
@@ -187,14 +181,6 @@ function dateConversion(d,mod){
       if(endDate.length==2){ endDate = startDate.substr(0,2) + endDate; }
       var start = checkDateLength(startDate)
       var end = checkDateLength(endDate)
-      //console.log("End: "+end+", Start: "+start)
-      //console.log("Enddate: "+endDate+", Startdate: "+startDate)
-
-      //var startDate = d.substr(0,4)
-      //var start = new Date(startDate).getTime()
-      //if(d.length==10){ var endDate = d.substr(6,4) } /* XXXX - XXXX */ 
-      //else{ var endDate = d.substr(0,2) + d.substr(6,2) } /* XXXX - XX */
-      //var end = new Date(endDate).getTime()
     }
     // Duration e.g. 1980DECADE
     else if(d.indexOf("DECADE")>0){
@@ -229,11 +215,9 @@ function dateConversion(d,mod){
       var endDate = d.split(" - ")[1]
       var start = checkDateLength(startDate);
       var end = checkDateLength(endDate);
-
     }
     
     else{ var typ = "neither"; }
-
       newD = {
         typ : typ ,
         startVal : start,
