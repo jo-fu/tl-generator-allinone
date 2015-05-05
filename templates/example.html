@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Answering through Python??</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <script type=text/javascript>
+    $(function() {
+      $('a#calculate').bind('click', function() {
+
+        // Preprocessing data from input fields
+        var myData = preprocessing()
+
+        $.getJSON('/dothenlp', {
+          myData: myData
+        }, function(data) {
+          $("#result").text(data.result);
+        });
+        return false;
+      });
+
+      var preprocessing = function(){
+        var title = $('input[name="title"]').val();
+    	var doc = $('input[name="date"]').val();
+
+        // If no DCT given - use today
+        if(!doc){
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if(dd<10) { dd='0'+dd }
+            if(mm<10) { mm='0'+mm }
+
+            today = yyyy+'-'+mm+'-'+dd;
+            doc = today;
+        }
+
+    	var content = $('textarea[name="content"]').val()
+                .replace("&", "and")
+                .replace(/–/g, "-")
+                .replace(/’/g, " APOSTROPHE ")
+                .replace(/"/g, " QUOTE ")
+                .replace(/[^\x00-\x7F]/g, "");
+        // What to do with the source??
+    	var jsonout = "<?xml version=\"1.0\" ?>\n<DOC>\n<BODY>"+
+    		"\n<TITLE>"+title+"</TITLE>"+
+    		"\n<DATE_TIME>"+doc+"</DATE_TIME>"+
+    		"\n<TEXT>\n\n"+content+"\n\n</TEXT>\n"+
+    		"</BODY>\n</DOC>"
+
+        return jsonout
+      }
+    });
+  </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h3 class="text-muted">Let's do some Python</h3>
+      </div>
+      <hr/>
+      <div>
+      <p>
+
+    <label for="title">Title</label><br>
+    <input type="text" size="50" name="title" placeholder="Document Title"> <br>
+
+    <label for="date">Date</label><br>
+    <input type="date" size="50" name="date"> <br>
+
+    <label for="content">Content</label><br>
+    <textarea name="content" id="content" rows="15" placeholder="Drop the content here." cols="60"></textarea><br>
+
+
+    <label for="source">Source</label><br>
+    <input type="text" size="50" name="source"> <br>
+
+
+    <span id="result">...</span>
+    <p><a href="javascript:void();" id="calculate">Gimme the Timexes</a>
+
+      </div>
+    </div>
+  </body>
+</html>
