@@ -1,0 +1,5 @@
+venv
+.DS_Store
+app.pyc
+heroku_notes
+setup.py
