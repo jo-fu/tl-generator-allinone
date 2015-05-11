@@ -3,3 +3,5 @@ venv
 app.pyc
 heroku_notes
 setup.py
+.gitignore
+README.md
