@@ -7,7 +7,6 @@ $btnsSize:25px;
 
 $shadow:2px 2px 0px #ccc;
 $noshadow:0px 0px 0px #ccc;
-$activeBorder: 2px inset #999;
 
 $doc-1: rgb(111,111,111);
 $doc0: rgb(55,126,184);
@@ -43,12 +42,12 @@ html, body{
 // Basic Layout
 #topBox{ position:relative; @include calc(height, "50% - 20px"); width: 100%; }
 
-.bgColor_0 { background-color: $doc0; }
-.bgColor_1 { background-color: $doc1; }
-.bgColor_2 { background-color: $doc2; }
-.bgColor_3 { background-color: $doc3; }
-.bgColor_4 { background-color: $doc4; }
-.bgColor_5 { background-color: $doc5; }
+.bgColor_0 { border-bottom-color: $doc0 !important; }
+.bgColor_1 { border-bottom-color: $doc1 !important; }
+.bgColor_2 { border-bottom-color: $doc2 !important; }
+.bgColor_3 { border-bottom-color: $doc3 !important; }
+.bgColor_4 { border-bottom-color: $doc4 !important; }
+.bgColor_5 { border-bottom-color: $doc5 !important; }
 
 #descriptionBox{ height:19px; background-color:#eee; line-height:15px; border-top: 1px solid #999;
   table{ width:100%;}
@@ -101,7 +100,7 @@ html, body{
           p{ text-align:center; color: #fff; font-size:12px; margin:0; padding:0; }
           }
         .symbol_duration{ background-color:transparent; width:0; height:0; border-width:10px 9px; border-style:solid; margin:-10px 13px; position:absolute;
-          p{ margin:-9px 1px; color:#fff; font-size:12px; }
+          p{ margin:-8px -6px; color:#fff; font-size:12px; }
           }
         .symbol_neither{ width:12px; height:12px; margin:-6px 16px; position:absolute;
           p{ text-align:center; color: #fff; font-size:12px; margin:-2px; padding:0; }
@@ -146,6 +145,8 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   li{ background-color: #fff; margin: 2px 0; padding:2px 10px; @include shadow(); }
   li:hover{ background-color:#efefef }
   li:active{ @include noshadow(); margin: 4px 0 0 2px; }
+
+  .datetitle{ float:left;}
 
   #toolBox{ position:absolute; right:0; top:0; height:100%; width: ($btnsSize+10px);
     #loadData{ background-image:url(../img/loadData.png); }
@@ -193,14 +194,14 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
     #tool_delete{ float:left; background-image:url(../img/delete.png); }
     #prevDate, #nextDate{ float:left; background-image:url(../img/arrows.png) }
     #prevDate{ background-position:left; }
-    #nextDate{ background-position:right; }
+    #nextDate{ background-position:right; margin-left:10px; }
   }
 
 }
 
 // BUTTON STYLE
 .ctl{ padding:1px 10px; border:1px solid #ccc; background-color:#fff; cursor:pointer; @include shadow(); background-color:#fafafa; }
-.ctlBtns{ width:$btnsSize; height:$btnsSize; margin:4px 8px 0 0; border:1px solid #efefef; background-repeat:no-repeat;
+.ctlBtns{ width:$btnsSize; height:$btnsSize; margin:2px 10px 4px 0; border:1px solid #efefef; background-repeat:no-repeat;
     background-color:#fff; background-position:center; cursor:pointer;
     @include shadow(); }
 .ctlBtns:active, .ctl:active,.home{ @include noshadow(); margin: 4px 0px 4px 2px; background-color:#eee; }
@@ -285,9 +286,9 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
 .datelabel{ display: none; text-align: center; }
 .visible{ display: block; }
 
-.chooseTrack, .changeTrack{ float:left; margin:0 5px 2px 3px; padding: 2px 9px; font-size: 0.8em; font-weight:bold; color:#fff; @include shadow(); }
+.chooseTrack, .changeTrack{ float:left; margin:0 5px 2px 3px; border-color:#ddd; border-style: solid; border-width:1px 1px 4px; padding: 1px 8px; font-size: 0.8em; font-weight:bold; color:#000; @include shadow(); background-color:#fff; }
 .chosen, .changeTrack:active, .chooseTrack:active{
-  margin:1px 3px 0 5px; outline:2px solid #efefef; @include noshadow(); border:$activeBorder; padding: 0px 7px;
+  margin:1px 3px 0 5px; outline:2px solid #efefef; border-width: 2px 2px 4px; @include noshadow(); border-style: inset; border-color:#999; background-color:#ccc; color:#555; padding: 0px 7px;
 }
 
 

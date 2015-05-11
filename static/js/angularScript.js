@@ -105,7 +105,7 @@ app
 	$scope.changeUnit = function(unit){ $scope = DateHandling.changeUnit($scope,unit) }
 	$scope.switchView = function(v){ DateHandling.switchView(v) }
 	$scope.hideDoc = function(v){ $scope.timexes = DateHandling.hideDoc(v,$scope.timexes); $scope.updateD3Tl($scope.timexes,$scope.dcts, "delete") }
-	$scope.changeTrack = function(nr){ DateHandling.changeTrack($scope.timexes, $scope.currIndex, nr) }
+	$scope.changeTrack = function(nr){ DateHandling.changeTrack($scope.timexes, $scope.currIndex, nr); }
 	$scope.addDocument = function(val,source){ DateHandling.addDocument($scope,$sce,$http,val,source,CreateArray) }
 	$scope.arrowKey = function(dir){ DateHandling.arrowKey($scope,dir) }
 
@@ -430,7 +430,6 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 	/* In case there will be any difference between move and delete */
 	if(action=="resize"){
 		var newHeight = parseInt($("#topBox").height())
-		console.log(newHeight)
 
 		var newWidth = $("#topBox").width()
 
@@ -904,9 +903,10 @@ app.service('DateHandling', function(){
 		$scope.addMedia = false;
 		$scope.changeTrackVis = false;
 		$(".display .changeTrack").removeClass("chosen");
+		$("#changeTrack_"+d.trackNr).addClass("chosen");
 		if(sentNr===false){ sentNr = -1 }
 
-		//console.log(d)
+		console.log(d.trackNr)
 
 		// If coming from Sentence selection, take first timex from sentence as new index
 		if(origin=="fromSent"){
