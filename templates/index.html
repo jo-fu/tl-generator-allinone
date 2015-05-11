@@ -201,9 +201,9 @@
     <!-- Editable Content -->
     <ng-switch on="editContent" id="displayContent">
       <!-- Edit Mode -->
-      <textarea rows="5" style="width:80%" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
+      <textarea rows="5" ng-switch-when="true" ng-model="$parent.tlDescr[1]" unfocus="disableEdit('c')"></textarea>
       <!-- Preview Mode -->
-      <div ng-switch-default class="ctl" ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
+      <div ng-switch-default class="content ctl" ng-click="enableEdit('c')"> <p>{{ tlDescr[1] }}</p> </div>
     </ng-switch>
 
     <!-- Change Track Names -->
@@ -309,7 +309,7 @@
     
     </div>
     <br>
-      <div style="margin:10px 0;">
+      <div>
         <!-- Editable Subtitle -->
         <ng-switch on="editSubtitle" id="displaySubtitle" class="editorfield">
           <span class="label">Title:<br></span>

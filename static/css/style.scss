@@ -165,6 +165,7 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
     #deleteAll{ background-image:url(../img/deleteAll.png); }
   }
   .display{ height:100%; overflow-y:auto; box-sizing: border-box; @include calc(width, "100% - 35px"); padding:10px;
+    #displayContent textarea{ @include calc(width, "100% - 30px") }
     #tracks{ margin-top:15px; 
       .track{ border-width:1px 1px 4px; border-style:solid; border-color:#ddd; @include shadow(); margin:4px 20px 4px 0; width:175px; padding:2px 10px 2px; font-weight:bold; font-size:12px; }
       input{ margin:5px 20px 4px 2px; width:180px; }
@@ -176,18 +177,19 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
       .trackColor_5{ border-bottom-color:$doc5; color:$doc5 }
     }
     .mediaBtn input{ @include calc(width, "100% - 25px"); margin: 12px;}
-    .media { margin:10px; padding:5px;
+    .media { margin:5px; padding:0px;
       p{ font-size:0.8em; margin:0 }
-
     }
-    #addMedia{ width: 80px; height: $btnsSize + 10;  margin: 20px 0 0 0px; 
+    #addMedia{ width: 80px; height: $btnsSize;  margin: 0; 
       #addMediaBtn{ border:1px solid #efefef; background-color:#fff; cursor:pointer; font-weight: bold; font-size: 0.7em; padding: 3px 8px; color: #333; 
       @include shadow(); float:left; }
       #addMediaBtn:active{ @include noshadow(); }
       #mediaIndicator{ width:$btnsSize; height:$btnsSize; background-image:url(../img/hasMedia.png); margin-top:-24px; margin-left:100px; }
       .hasMedia{ background-position: right; }
     }
-    #addMediaBox{ padding:1px 10px; background-color:#efefef; }
+    #addMediaBox{ padding:0; background-color:#efefef;
+      input{ margin:0px; padding:3px; }
+    }
     #changeTrack{ height:35px; width: auto; }
     #changeTrackBtn{ font-weight: bold; font-size: 0.7em; padding: 4px 8px; margin-right:10px; float:left; }
    
@@ -251,9 +253,9 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   h2{ font-size: 15px; color:#333; }
 
   .hltx{ color: #fff; background-color:#333; }
-  p, .content{ font-size: 12px; font-weight:normal; padding:2px 5px; margin:0; }
+  p, .content{ font-size: 12px; font-weight:normal; padding:2px 5px; margin:0; @include calc(width, "100% - 30px"); }
   .label{ font-size:0.8em; color:#999; font-weight:bold; }
-  input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
+  input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; @include calc(width, "100% - 30px"); }
 
   .addDimension{ padding: 7px 0 0; cursor:pointer; color:#999; background-position: center top; vertical-align:bottom;
     background-image:url(../img/editAdd.png); background-repeat:no-repeat; font-size:8px; }
@@ -264,8 +266,8 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   #check{ background-image:url(../img/check.png); margin:2px 5px; padding:1px 13px; }
   #dateEditMode{ }
   #displaySubtitle{
-    input{ font-size: 14px; margin: 1px 0 2px 0; }
-    div, textarea{ font-size:18px; margin: 0 0 5px; @include calc(width, "100% - 100px"); }
+    input{ font-size: 14px; margin: 1px 0 2px 0; @include calc(width, "100% - 30px"); }
+    div, textarea{ font-size:18px; margin: 0 0 5px; @include calc(width, "100% - 30px"); }
   }
 
   #recoverElement{ position:absolute; text-align:left; bottom:10px; left:10px; font-size:10px; }

@@ -383,6 +383,10 @@ html, body {
   width: -moz-calc(100% - 35px);
   width: calc(100% - 35px);
   padding: 10px; }
+  #rightBox .display #displayContent textarea {
+    width: -webkit-calc(100% - 30px);
+    width: -moz-calc(100% - 30px);
+    width: calc(100% - 30px); }
   #rightBox .display #tracks {
     margin-top: 15px; }
     #rightBox .display #tracks .track {
@@ -424,15 +428,15 @@ html, body {
     width: calc(100% - 25px);
     margin: 12px; }
   #rightBox .display .media {
-    margin: 10px;
-    padding: 5px; }
+    margin: 5px;
+    padding: 0px; }
     #rightBox .display .media p {
       font-size: 0.8em;
       margin: 0; }
   #rightBox .display #addMedia {
     width: 80px;
-    height: 35px;
-    margin: 20px 0 0 0px; }
+    height: 25px;
+    margin: 0; }
     #rightBox .display #addMedia #addMediaBtn {
       border: 1px solid #efefef;
       background-color: #fff;
@@ -458,8 +462,11 @@ html, body {
     #rightBox .display #addMedia .hasMedia {
       background-position: right; }
   #rightBox .display #addMediaBox {
-    padding: 1px 10px;
+    padding: 0;
     background-color: #efefef; }
+    #rightBox .display #addMediaBox input {
+      margin: 0px;
+      padding: 3px; }
   #rightBox .display #changeTrack {
     height: 35px;
     width: auto; }
@@ -595,7 +602,10 @@ p, .content {
   font-size: 12px;
   font-weight: normal;
   padding: 2px 5px;
-  margin: 0; }
+  margin: 0;
+  width: -webkit-calc(100% - 30px);
+  width: -moz-calc(100% - 30px);
+  width: calc(100% - 30px); }
 
 .label {
   font-size: 0.8em;
@@ -603,7 +613,10 @@ p, .content {
   font-weight: bold; }
 
 input {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  width: -webkit-calc(100% - 30px);
+  width: -moz-calc(100% - 30px);
+  width: calc(100% - 30px); }
 
 .addDimension {
   padding: 7px 0 0;
@@ -635,13 +648,16 @@ input {
 
 #displaySubtitle input {
   font-size: 14px;
-  margin: 1px 0 2px 0; }
+  margin: 1px 0 2px 0;
+  width: -webkit-calc(100% - 30px);
+  width: -moz-calc(100% - 30px);
+  width: calc(100% - 30px); }
 #displaySubtitle div, #displaySubtitle textarea {
   font-size: 18px;
   margin: 0 0 5px;
-  width: -webkit-calc(100% - 100px);
-  width: -moz-calc(100% - 100px);
-  width: calc(100% - 100px); }
+  width: -webkit-calc(100% - 30px);
+  width: -moz-calc(100% - 30px);
+  width: calc(100% - 30px); }
 
 #recoverElement {
   position: absolute;
