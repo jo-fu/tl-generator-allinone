@@ -165,7 +165,7 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
     #deleteAll{ background-image:url(../img/deleteAll.png); }
   }
   .display{ height:100%; overflow-y:auto; box-sizing: border-box; @include calc(width, "100% - 35px"); padding:10px;
-    #displayContent textarea{ @include calc(width, "100% - 30px") }
+    #displayContent textarea{ @include calc(width, "100% - 30px")  }
     #tracks{ margin-top:15px; 
       .track{ border-width:1px 1px 4px; border-style:solid; border-color:#ddd; @include shadow(); margin:4px 20px 4px 0; width:175px; padding:2px 10px 2px; font-weight:bold; font-size:12px; }
       input{ margin:5px 20px 4px 2px; width:180px; }
@@ -255,7 +255,7 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
   .hltx{ color: #fff; background-color:#333; }
   p, .content{ font-size: 12px; font-weight:normal; padding:2px 5px; margin:0; @include calc(width, "100% - 30px"); }
   .label{ font-size:0.8em; color:#999; font-weight:bold; }
-  input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; @include calc(width, "100% - 30px"); }
+  input{ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
 
   .addDimension{ padding: 7px 0 0; cursor:pointer; color:#999; background-position: center top; vertical-align:bottom;
     background-image:url(../img/editAdd.png); background-repeat:no-repeat; font-size:8px; }

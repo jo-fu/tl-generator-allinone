@@ -613,10 +613,7 @@ p, .content {
   font-weight: bold; }
 
 input {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  width: -webkit-calc(100% - 30px);
-  width: -moz-calc(100% - 30px);
-  width: calc(100% - 30px); }
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; }
 
 .addDimension {
   padding: 7px 0 0;
