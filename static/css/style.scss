@@ -344,11 +344,15 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
 #inputOverlay{ display:none; position:absolute;top:0; right:0; bottom:0; left:0; background-color:rgba(255,255,255,0.9); z-index:11; padding:20px;
   #closeInput{ position:absolute; top:0px; right:0; height:50px; width:50px; background-image:url(../img/closeInput.png); background-repeat:no-repeat; background-position:center; cursor:pointer;}
   #inputContainer{ width:100%; margin: 0 auto; height:100%;
-    #insertText{ background-color:#efefef; padding:20px; margin:0 0 30px 0; @include calc(height, "100% - 140px");}
-    #insertFile{ background-color:#efefef; text-align:center; height:55px; padding:5px; }
-    textarea{ width:100%; min-height:100px; @include calc(height , "100% - 190px"); resize: none; }
+    #insertText{ background-color:#efefef; padding:20px; margin:0 0 30px 0; @include calc(height, "100% - 140px");
+      #url-form { 
+        label{ float:left; padding-right: 10px; }
+      }
   }
-  h1{ font-size:20px; margin:0 0 15px 0; }
+    #insertFile{ background-color:#efefef; text-align:center; height:55px; padding:5px; }
+    textarea{ width:100%; min-height:100px; margin-top:10px; @include calc(height , "100% - 200px"); resize: none; }
+  }
+  h1{ margin:0; }
   .optional{ color:#666; font-style:italic; font-size:0.8em; }
   
   .btn{ margin:0 auto; border:1px solid #efefef; background-color:#fff; cursor:pointer; width: 50px; text-align: center; height: 30px; line-height:30px;

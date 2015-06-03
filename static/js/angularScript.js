@@ -41,6 +41,7 @@ app
 	// PYTHON CALL
 	$scope.getTimexes = function(){
 		var myData = preprocessing()
+
 		if(myData!=""){
 			thisData = { 'myData' : myData }
 			$(".loading").fadeIn(300)
@@ -56,6 +57,34 @@ app
 			    	else{ $scope.addDocument(data.result,"fromInput") }
 			    }
 			})	
+		}
+	}
+
+	// PYTHON CALL for URL SCRAPING
+	$scope.scrapeURL = function(){
+		var url = $('#url-form input[name="URL"]')
+		var myURL = url.val()
+		
+
+		if(myURL!==""){
+			thisURL = { 'myURL' : myURL }
+			$(".loading").fadeIn(300)
+			$.ajax({
+			    type: "POST",
+			    data: JSON.stringify(thisURL),
+			    url: "/scrape",
+			    contentType: 'application/json;charset=UTF-8',
+			    success: function(data){
+			    	$(".loading").fadeOut(300)
+			    	if(data.result=="fetching unsucessful"){ alert("Sorry, fetching was unsucessful. Try copy/pasting text instead.") }
+			    	else{
+			    		url.val("") // Empty input field
+			    		$('#inputOverlay input[name="title"]').val(data.result.title);
+			    		$('#inputOverlay textarea[name="content"]').val(data.result.text);
+			    		// Publication date retrieval not reliable enough to use yet
+			    	}
+			    }
+			})
 		}
 	}
 

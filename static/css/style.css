@@ -814,6 +814,9 @@ input {
       height: -webkit-calc(100% - 140px);
       height: -moz-calc(100% - 140px);
       height: calc(100% - 140px); }
+      #inputOverlay #inputContainer #insertText #url-form label {
+        float: left;
+        padding-right: 10px; }
     #inputOverlay #inputContainer #insertFile {
       background-color: #efefef;
       text-align: center;
@@ -822,13 +825,13 @@ input {
     #inputOverlay #inputContainer textarea {
       width: 100%;
       min-height: 100px;
-      height: -webkit-calc(100% - 190px);
-      height: -moz-calc(100% - 190px);
-      height: calc(100% - 190px);
+      margin-top: 10px;
+      height: -webkit-calc(100% - 200px);
+      height: -moz-calc(100% - 200px);
+      height: calc(100% - 200px);
       resize: none; }
   #inputOverlay h1 {
-    font-size: 20px;
-    margin: 0 0 15px 0; }
+    margin: 0; }
   #inputOverlay .optional {
     color: #666;
     font-style: italic;
