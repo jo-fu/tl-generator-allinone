@@ -112,6 +112,19 @@ html, body {
     margin: 10px 10px 0 0;
     font-weight: normal;
     text-align: right; }
+#topBox #eventlabel {
+  display: none;
+  position: absolute;
+  background-color: #666;
+  font-size: 10px;
+  line-height: 12px;
+  color: #fff;
+  padding: 5px;
+  bottom: 100px;
+  left: 100px;
+  height: auto;
+  max-width: 200px;
+  width: auto; }
 
 #leftBox #tablehead {
   font-size: 0.8em;
