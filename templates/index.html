@@ -27,6 +27,9 @@
 
 
 <body ng-controller="MainCtrl">
+
+
+
   {% raw %}
 
   <!-- topBox: Timeline JS -->
@@ -34,11 +37,16 @@
     <div id="vagueDatesArea"><h1>Vague dates</h1></div>
     <div id="eventlabel"></div>
     <div id="timeline">
-        <p style="text-align:center;"><i>Please select a document or add dates manually.</i></p>
+         <p style="text-align:center; margin-top:10%; font-size:1.5em">
+          <noscript>
+          <i>Sorry, but we need JavaScript for this app.<br>
+            Don't know how? Check out <a href="http://enable-javascript.com/" target="_blank">this site</a>.</i>
+          </noscript>
+        </p>
     </div>
     <!-- Add date + Arrow buttons -->  
     <h1 id="tlc"><b>TimeLineCurator</b> v0.4</h1>
-    
+   
 
   </div>
 
@@ -53,7 +61,7 @@
 
  
  <!-- bottomBox: ListView / TextView / ControlPanel -->
-  <div id="bottomBox">
+  <div ng-cloak id="bottomBox">
  
 
 <!-- leftBox: ListView -->
