@@ -269,7 +269,7 @@ function cleanUpInput(input){
   month.forEach( function(el){
     var abbr = el+"."
     var re = new RegExp(abbr,"g");
-    input = input.replace(re, el)
+    input = input.replace(re, el);
   })
 
   cleanedUp = input
