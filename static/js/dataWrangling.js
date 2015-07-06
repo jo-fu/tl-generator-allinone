@@ -265,12 +265,12 @@ function cleanSubtitle(val){
 function cleanUpInput(input){
   
   // Added because "Jan. 29" broke everything (split into 2 sentences)
-  var month = ["Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sept.","Oct.","Nov.","Dec."]
+  var month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
   month.forEach( function(el){
-    var nodot = el.split(".")[0]
+    //var nodot = el.split(".")[0]
     //console.log(nodot+'\.')
-    var re = new RegExp(nodot,"g");
-    input = input.replace(re+'\.', nodot);
+    var re = new RegExp(el,"g");
+    input = input.replace(re+'\.', el);
   })
 
   cleanedUp = input
