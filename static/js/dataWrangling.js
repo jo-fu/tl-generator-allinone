@@ -269,8 +269,9 @@ function cleanUpInput(input){
   month.forEach( function(el){
     //var nodot = el.split(".")[0]
     //console.log(nodot+'\.')
-    var re = new RegExp(el,"g");
-    input = input.replace(re+'\.', el);
+   // var exp = el+'.'
+    var re = new RegExp(el+"[\.]","g");
+    input = input.replace(re, el);
   })
 
   cleanedUp = input
