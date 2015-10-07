@@ -46,12 +46,12 @@ html, body{
 // Basic Layout
 #topBox{ position:relative; @include calc(height, "50% - 20px"); width: 100%;}
 
-.bgColor_0 { border-bottom-color: $doc0 !important; }
-.bgColor_1 { border-bottom-color: $doc1 !important; }
-.bgColor_2 { border-bottom-color: $doc2 !important; }
-.bgColor_3 { border-bottom-color: $doc3 !important; }
-.bgColor_4 { border-bottom-color: $doc4 !important; }
-.bgColor_5 { border-bottom-color: $doc5 !important; }
+.changeTrack.bgColor_0 { border-bottom-color: $doc0 !important; }
+.changeTrack.bgColor_1 { border-bottom-color: $doc1 !important; }
+.changeTrack.bgColor_2 { border-bottom-color: $doc2 !important; }
+.changeTrack.bgColor_3 { border-bottom-color: $doc3 !important; }
+.changeTrack.bgColor_4 { border-bottom-color: $doc4 !important; }
+.changeTrack.bgColor_5 { border-bottom-color: $doc5 !important; }
 
 #descriptionBox{ height:19px; background-color:#eee; line-height:15px; border-top: 1px solid #999;
   table{ width:100%;}

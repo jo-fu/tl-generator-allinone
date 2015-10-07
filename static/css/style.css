@@ -14,22 +14,22 @@ html, body {
   height: calc(50% - 20px);
   width: 100%; }
 
-.bgColor_0 {
+.changeTrack.bgColor_0 {
   border-bottom-color: #377eb8 !important; }
 
-.bgColor_1 {
+.changeTrack.bgColor_1 {
   border-bottom-color: #4daf4a !important; }
 
-.bgColor_2 {
+.changeTrack.bgColor_2 {
   border-bottom-color: #984ea3 !important; }
 
-.bgColor_3 {
+.changeTrack.bgColor_3 {
   border-bottom-color: #ff7f00 !important; }
 
-.bgColor_4 {
+.changeTrack.bgColor_4 {
   border-bottom-color: #e41a1c !important; }
 
-.bgColor_5 {
+.changeTrack.bgColor_5 {
   border-bottom-color: #a65628 !important; }
 
 #descriptionBox {
