@@ -682,13 +682,13 @@ app.service('DateHandling', function(){
 			(arr[4].length<4 || (arr[7].length<4 && arr[7].length!=0) ||
 			arr[0] > arr[4]))){
 			// Year has less than 4 digits
-			if(arr[0].length<4){ alert("A Year has 4 digits please") }
+			if(arr[0].length<4){ alert("We can only do 4 digit years... sorry.") }
 			// Time is given in the wrong format
 			if(arr[3].length<4 && arr[3].length!=0){
 				alert("Please write the time in the format HHMM") }	
 		
 			if(arr.length>4){
-				if(arr[4].length<4){ alert("A Year has 4 digits please") }
+				if(arr[4].length<4){ alert("We can only do 4 digit years... sorry.") }
 				if(arr[7].length<4 && arr[7].length!=0){
 					alert("Please write the time in the format HHMM") }
 				// Start year is bigger than end date
