@@ -346,7 +346,10 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
      		})
      		
      		d3.select("svg").attr("height",newHeight-10)
-     		d3.select("svg").selectAll("g.axis").attr("transform","translate(0,"+ (parseInt(newHeight)-55) +")").call(xAxis);
+     		d3.select("svg").selectAll("g.axis")
+			.transition().duration(500)
+     			.attr("transform","translate(0,"+ (parseInt(newHeight)-55) +")")
+     			.call(xAxis);
      		$("#timeline").scrollTop(newHeight);
       }
       
@@ -414,7 +417,7 @@ this.updateD3Tl = function(tx, dcts, action, clickFct, nr){
 
 
 	// Update all paths - without transition, if shape changes from circle to span-shape
-	if(action == "move"){
+	if(action != "unitChange" && action != "vagueToDate"){
 		var paths = d3.select("svg").selectAll(".timelineItem").data(d).transition();
 	}
 	else{ var paths = d3.select("svg").selectAll(".timelineItem").data(d); }
