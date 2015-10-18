@@ -905,7 +905,8 @@ input {
   position: fixed;
   bottom: 0;
   right: 0;
-  padding: 5px; }
+  padding: 5px;
+  text-align: right; }
 
 #guide a {
   text-decoration: none;
