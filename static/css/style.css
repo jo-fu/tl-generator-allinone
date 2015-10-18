@@ -907,12 +907,17 @@ input {
   right: 0;
   padding: 5px;
   text-align: right; }
-
-#guide a {
-  text-decoration: none;
-  font-weight: bold;
-  color: #666;
-  font-size: 0.8em; }
+  #guide a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #666;
+    font-size: 0.8em;
+    padding: 0 10px; }
+  #guide a:hover {
+    background-color: #333;
+    color: #fff; }
+  #guide div {
+    height: 25px; }
 
 .help {
   cursor: pointer;
