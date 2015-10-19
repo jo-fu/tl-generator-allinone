@@ -368,9 +368,11 @@ ul{ list-style-type: none; padding: 0px; margin: 0px; cursor:pointer; }
     img{ width:80px; height:85px; position:absolute; top:50%; margin-top:-42px; left:50%; margin-left:-40px; }
   }
 #saved{ display:none; position:fixed; bottom:25px; right:0; color:#999; font-size:10px; padding:3px 5px 3px 25px; font-style:italic; background-image:url(../img/check.png); background-repeat:no-repeat; background-position:left;}
-#guide{ position:fixed; bottom:0; right: 0; padding: 5px; }
-#guide a{ text-decoration: none; font-weight:bold; color:#666; font-size:0.8em; }
-
+#guide{ position:fixed; bottom:0; right: 0; padding: 5px; text-align:right; 
+  a{ text-decoration: none; font-weight:bold; color:#666; font-size:0.8em; padding: 0 10px; }
+  a:hover{ background-color: #333; color:#fff; }
+  div{ height:25px; }
+}
 
 .help{ cursor:pointer; border: 1px solid #999; color:#999; font-size:10px; font-weight:bold; margin:0px; border-radius:50%; padding:1px 7px; @include shadow(); text-align:center; }
 .help:active{  @include noshadow(); margin:2px; }
