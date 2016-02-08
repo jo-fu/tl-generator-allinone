@@ -1,8 +1,8 @@
 # TimeLineCurator
-### A visual timeline authoring tool that extracts temporal information from freeform text
+#### A visual timeline authoring tool that extracts temporal information from freeform text
 _TimeLineCurator was created as part of a Master's thesis at the University of British Columbia, Canada and University of Munich (LMU), Germany._
 
-Go to [www.timelinecurator.org](www.timelinecurator.org) to see it running.
+Go to [www.timelinecurator.org](http://www.timelinecurator.org) to see it running.
 
 Here's a **[short video](https://vimeo.com/123246662)** explaining TLC's purpose and functionality. The application is hosted on [The Heroku Platform](https://www.heroku.com/platform). More information, documentation and examples can be found on the [project's page](http://about.timelinecurator.org). 
 
